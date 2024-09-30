@@ -1,0 +1,12 @@
+[
+  {
+    "name": "US department",
+    "companyId": 1,
+    "countryCode": "US"
+  },
+  {
+    "name": "BG department",
+    "companyId": 1,
+    "countryCode": "BG"
+  }
+]
