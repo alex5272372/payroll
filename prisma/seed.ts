@@ -1,34 +1,22 @@
 import { PrismaClient } from '@prisma/client'
-import bcrypt from 'bcryptjs'
-import * as fs from 'fs'
-import * as path from 'path'
-
-import companies from './data/companies.json'
-import countries from './data/countries.json'
-import departments from './data/departments.json'
-import employees from './data/employees.json'
-import people from './data/people.json'
-import users from './data/users.json'
+import companies from './data/companies'
+import countries from './data/countries'
+import departments from './data/departments'
+import employees from './data/employees'
+import people from './data/people'
+import users from './data/users'
 
 const prisma = new PrismaClient()
 
-const crypt = (pass: string) => bcrypt.hashSync(pass, bcrypt.genSaltSync(10))
-
-const mapElement = (element: any): any => {
+const mapElement = (element: Record<string, unknown>): Record<string, unknown> => {
   const resEl: Record<string, unknown> = {}
 
   for (const key in element) {
-    if (key.substring(0, 1) === '_')
-      resEl[key.substring(1)] = eval(element[key] as string)
-
-    else if (key.substring(0, 1) === '/')
-      resEl[key.substring(1)] = fs.readFileSync(path.join(__dirname, ...element[key]), 'utf8')
-
-    else if (Array.isArray(element[key]))
+    if (Array.isArray(element[key]))
       resEl[key] = mapData(element[key])
 
-    else if (typeof element[key] === 'object' && element[key] !== null)
-      resEl[key] = mapElement(element[key])
+    else if (typeof element[key] === 'object' && element[key] !== null && !(element[key] instanceof Date))
+      resEl[key] = mapElement(element[key] as Record<string, unknown>)
 
     else
       resEl[key] = element[key]
@@ -36,20 +24,20 @@ const mapElement = (element: any): any => {
   return resEl
 }
 
-const mapData = (data: any[]): any[] => {
-  const resData = []
+const mapData = <T>(data: T[]): T[] => {
+  const resData: unknown[] = []
 
   for (const element of data) {
     if (Array.isArray(element))
       resData.push(mapData(element))
 
-    else if (typeof element === 'object' && element !== null)
-      resData.push(mapElement(element))
+    else if (typeof element === 'object' && element !== null && !(element instanceof Date))
+      resData.push(mapElement(element as Record<string, unknown>))
 
     else
       resData.push(element)
   }
-  return resData
+  return resData as T[]
 }
 
 const main = async () => {
@@ -72,7 +60,7 @@ const main = async () => {
   for (const create of peopleData) await prisma.person.upsert({ where: { firstName_lastName_birthdate: {
     firstName: create.firstName,
     lastName: create.lastName,
-    birthdate: create.birthdate
+    birthdate: create.birthdate as Date
   }}, update: {}, create })
   console.log('People creation completed')
 

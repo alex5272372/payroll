@@ -1,3 +1,8 @@
+const d1 = 'M6.22 3.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L9.94 8 6.22'
+  + ' 4.28a.75.75 0 010-1.06z'
+const d2 = 'M8.22 2.97a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06l2.97-2.97H3.'
+  + '75a.75.75 0 010-1.5h7.44L8.22 4.03a.75.75 0 010-1.06z'
+
 export default function ExpandingArrow({ className }: { className?: string }) {
   return (
     <div className="group relative flex items-center">
@@ -13,7 +18,7 @@ export default function ExpandingArrow({ className }: { className?: string }) {
       >
         <path
           fillRule="evenodd"
-          d="M6.22 3.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 010-1.06z"
+          d={d1}
         ></path>
       </svg>
       <svg
@@ -28,7 +33,7 @@ export default function ExpandingArrow({ className }: { className?: string }) {
       >
         <path
           fillRule="evenodd"
-          d="M8.22 2.97a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06l2.97-2.97H3.75a.75.75 0 010-1.5h7.44L8.22 4.03a.75.75 0 010-1.06z"
+          d={d2}
         ></path>
       </svg>
     </div>
