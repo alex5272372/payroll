@@ -1,7 +1,7 @@
 import Main from '@/components/Main'
 import Layout from '@/components/Layout'
 
-export default async function Home() {
+const Home = async () => {
 
   return (
     <Layout>
@@ -9,3 +9,5 @@ export default async function Home() {
     </Layout>
   )
 }
+
+export default Home

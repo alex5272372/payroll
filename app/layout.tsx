@@ -3,11 +3,11 @@ import './globals.css'
 import React, { useEffect, useState } from 'react'
 import Loader from '@/components/Loader'
 
-export default function RootLayout({
+const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) => {
   const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
@@ -24,3 +24,5 @@ export default function RootLayout({
     </html>
   )
 }
+
+export default RootLayout

@@ -33,4 +33,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  callbacks: {
+    session: ({ session, token }) => {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id as string
+        }
+      }
+    },
+    jwt: ({ token, user }) => {
+      if (user) return {
+        ...token,
+        id: user.id
+      }
+      return token
+    },
+    authorized: async ({ auth }) => {
+      return !!auth
+    },
+  }
 })
