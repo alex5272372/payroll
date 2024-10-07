@@ -15,11 +15,9 @@ const RootLayout = ({
   }, [])
 
   return (
-    <html lang="en">
-      <body suppressHydrationWarning={true}>
-        <div className="dark:bg-boxdark-2 dark:text-bodydark">
-          {loading ? <Loader /> : children}
-        </div>
+    <html lang="en" className="h-full bg-gray-100">
+      <body className="h-full">
+        {loading ? <Loader /> : children}
       </body>
     </html>
   )
