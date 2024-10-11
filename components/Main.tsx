@@ -1,12 +1,9 @@
-import { auth } from '@/auth'
 import Image from 'next/image'
 import Link from 'next/link'
 
 const Main = async () => {
-  const session = await auth()
-
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center">
+    <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       <Link
         href="https://github.com/alex5272372/payroll"
         className="flex items-center space-x-2"
@@ -20,7 +17,6 @@ const Main = async () => {
         />
         <p className="font-light">Source</p>
       </Link>
-      <pre>{JSON.stringify(session)}</pre>
     </main>
   )
 }
