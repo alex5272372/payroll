@@ -1,25 +1,25 @@
 import { classNames } from '@/lib/utils'
 import { DisclosureButton, DisclosurePanel } from '@headlessui/react'
+import { User } from 'next-auth'
 import Image from 'next/image'
-import { auth } from '@/auth'
+import { userNavigationAction } from './actions'
 
-const MobileMenu = async ({ navigation, userNavigation }: {
-  navigation: { name: string, current: boolean }[],
-  userNavigation: { name: string }[]
+const MobileMenu = async ({ navigation, userNavigation, user }: {
+  navigation: { id: string, name: string }[],
+  userNavigation: { id: string, name: string }[],
+  user?: User
 }) => {
-  const session = await auth()
-
   return (
     <DisclosurePanel className="md:hidden">
       <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
         {navigation.map((item) => (
           <DisclosureButton
-            key={item.name}
+            key={item.id}
             as="a"
             href=""
-            aria-current={item.current ? 'page' : undefined}
+            aria-current={item.id === 'calendar' ? 'page' : undefined}
             className={classNames(
-              item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+              item.id === 'calendar' ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
               'block rounded-md px-3 py-2 text-base font-medium',
             )}
           >
@@ -28,11 +28,11 @@ const MobileMenu = async ({ navigation, userNavigation }: {
         ))}
       </div>
       <div className="border-t border-gray-700 pb-3 pt-4">
-        <div className="flex items-center px-5">
+        {user && <div className="flex items-center px-5">
           <div className="flex-shrink-0">
             <Image
               alt=""
-              src={session && session.user && session.user.image ? session.user.image : '/user.png'}
+              src={user.image ? user.image : '/user.png'}
               className="h-10 w-10 rounded-full"
               height={32}
               width={32}
@@ -40,24 +40,28 @@ const MobileMenu = async ({ navigation, userNavigation }: {
           </div>
           <div className="ml-3">
             <div className="text-base font-medium leading-none text-white">
-              {session && session.user && session.user.name ? session.user.name : '<Name>'}
+              {user.name ? user.name : '<name>'}
             </div>
             <div className="text-sm font-medium leading-none text-gray-400">
-              {session && session.user && session.user.email ? session.user.email : '<Email>'}
+              {user.email ? user.email : '<email>'}
             </div>
           </div>
-        </div>
+        </div>}
         <div className="mt-3 space-y-1 px-2">
-          {userNavigation.map((item) => (
-            <DisclosureButton
-              key={item.name}
-              as="a"
-              href=""
-              className=
-                "block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+          {userNavigation.map(item => (
+            <form
+              key={item.id}
+              action={userNavigationAction.bind(null, item.id)}
             >
-              {item.name}
-            </DisclosureButton>
+              <DisclosureButton
+                as="button"
+                type="submit"
+                className={`w-full rounded-md px-3 py-2 text-left text-base font-medium text-gray-400 hover:bg-gray-700
+                  hover:text-white`}
+              >
+                {item.name}
+              </DisclosureButton>
+            </form>
           ))}
         </div>
       </div>

@@ -1,16 +1,12 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { auth } from '@/auth'
-import { MouseEventHandler } from 'react'
-import SignIn from '../auth/signin-button'
-import SignOut from '../auth/signout-button'
+import { userNavigationAction } from './actions'
+import { User } from 'next-auth'
 
-const ProfileDropdown = async ({ userNavigation }: {
-  userNavigation: { name: string, onClick: MouseEventHandler<HTMLAnchorElement> }[]
+const ProfileDropdown = async ({ navigation, user }: {
+  navigation: { id: string, name: string }[],
+  user?: User
 }) => {
-  const session = await auth()
-
   return (
     <div className="ml-4 md:ml-6 hidden md:flex items-center">
       <Menu as="div" className="relative ml-3">
@@ -21,7 +17,7 @@ const ProfileDropdown = async ({ userNavigation }: {
             <span className="sr-only">Open user menu</span>
             <Image
               alt=""
-              src={session && session.user && session.user.image ? session.user.image : '/user.png'}
+              src={user && user.image ? user.image : '/user.png'}
               className="h-8 w-8 rounded-full"
               height={32}
               width={32}
@@ -35,18 +31,20 @@ const ProfileDropdown = async ({ userNavigation }: {
               data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100
               data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in`}
         >
-          {userNavigation.map((item) => (
-            <MenuItem key={item.name}>
-              <Link
-                href=""
-                className="block px-4 py-2 text-sm text-gray-800 data-[focus]:bg-gray-200"
+          {navigation.map(item => (
+            <form
+              key={item.id}
+              action={userNavigationAction.bind(null, item.id)}
+            >
+              <MenuItem
+                as="button"
+                type="submit"
+                className="w-full px-4 py-2 text-left text-sm text-gray-800 data-[focus]:bg-gray-200"
               >
                 {item.name}
-              </Link>
-            </MenuItem>
+              </MenuItem>
+            </form>
           ))}
-          <SignIn></SignIn>
-          <SignOut></SignOut>
         </MenuItems>
       </Menu>
     </div>

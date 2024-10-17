@@ -5,37 +5,43 @@ import MainMenu from './MainMenu'
 import ProfileDropdown from './ProfileDropdown'
 import MobileMenuButton from './MobileMenuButton'
 import MobileMenu from './MobileMenu'
-import { signIn } from '@/auth'
-import { signOut } from '@/auth'
-
-const navigation = [
-  { name: 'Calendar', current: true },
-  { name: 'Catalogs', current: false },
-  { name: 'Documents', current: false },
-  { name: 'Reports', current: false },
-]
+import { auth } from '@/auth'
 
 const userNavigation = [
-  { name: 'Profile', onClick: () => {} },
-  { name: 'Sign in', onClick: async () => {
-    await signIn()
-  } },
-  { name: 'Sign out', onClick: async () => {
-    await signOut()
-  } },
+  { id: 'profile', name: 'Profile', auth: true },
+  { id: 'signOut', name: 'Sign out', auth: true },
+  { id: 'signIn', name: 'Sign in', auth: false },
+]
+
+const navigation = [
+  { id: 'calendar', name: 'Calendar' },
+  { id: 'catalogs', name: 'Catalogs', auth: true },
+  { id: 'documents', name: 'Documents', auth: true },
+  { id: 'reports', name: 'Reports', auth: true },
 ]
 
 const Layout = async ({ children }: { children: React.ReactNode; }) => {
+  const session = await auth()
+  const authUserNavigation = userNavigation.filter(item => session?.user ? item.auth !== false : !item.auth)
+  const authNavigation = navigation.filter(item => session?.user ? item.auth !== false : !item.auth)
+
   return (
     <div className="min-h-full">
       <Disclosure as="nav" className="bg-gray-800">
         <div className="h-16 mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          <MainMenu navigation={navigation}></MainMenu>
-          <ProfileDropdown userNavigation={userNavigation}></ProfileDropdown>
+          <MainMenu navigation={authNavigation}></MainMenu>
+          <ProfileDropdown
+            navigation={authUserNavigation}
+            user={session?.user}
+          ></ProfileDropdown>
           <MobileMenuButton></MobileMenuButton>
         </div>
 
-        <MobileMenu navigation={navigation} userNavigation={userNavigation}></MobileMenu>
+        <MobileMenu
+          navigation={authNavigation}
+          userNavigation={authUserNavigation}
+          user={session?.user}
+        ></MobileMenu>
       </Disclosure>
 
       <Header />
