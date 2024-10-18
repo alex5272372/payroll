@@ -16,7 +16,7 @@ const ProfileDropdown = async ({ navigation, user }: {
             <span className="absolute -inset-1.5" />
             <span className="sr-only">Open user menu</span>
             <Image
-              alt=""
+              alt="Avatar"
               src={user && user.image ? user.image : '/user.png'}
               className="h-8 w-8 rounded-full"
               height={32}

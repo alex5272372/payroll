@@ -1,8 +1,9 @@
 import { classNames } from '@/lib/utils'
-import { DisclosureButton, DisclosurePanel } from '@headlessui/react'
+import { CloseButton, DisclosurePanel } from '@headlessui/react'
 import { User } from 'next-auth'
 import Image from 'next/image'
 import { userNavigationAction } from './actions'
+import Link from 'next/link'
 
 const MobileMenu = async ({ navigation, userNavigation, user }: {
   navigation: { id: string, name: string }[],
@@ -13,10 +14,10 @@ const MobileMenu = async ({ navigation, userNavigation, user }: {
     <DisclosurePanel className="md:hidden">
       <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
         {navigation.map((item) => (
-          <DisclosureButton
+          <CloseButton
             key={item.id}
-            as="a"
-            href=""
+            as={Link}
+            href={`/${item.id}`}
             aria-current={item.id === 'calendar' ? 'page' : undefined}
             className={classNames(
               item.id === 'calendar' ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
@@ -24,14 +25,14 @@ const MobileMenu = async ({ navigation, userNavigation, user }: {
             )}
           >
             {item.name}
-          </DisclosureButton>
+          </CloseButton>
         ))}
       </div>
       <div className="border-t border-gray-700 pb-3 pt-4">
         {user && <div className="flex items-center px-5">
           <div className="flex-shrink-0">
             <Image
-              alt=""
+              alt="Avatar"
               src={user.image ? user.image : '/user.png'}
               className="h-10 w-10 rounded-full"
               height={32}
@@ -53,14 +54,13 @@ const MobileMenu = async ({ navigation, userNavigation, user }: {
               key={item.id}
               action={userNavigationAction.bind(null, item.id)}
             >
-              <DisclosureButton
-                as="button"
+              <button
                 type="submit"
                 className={`w-full rounded-md px-3 py-2 text-left text-base font-medium text-gray-400 hover:bg-gray-700
                   hover:text-white`}
               >
                 {item.name}
-              </DisclosureButton>
+              </button>
             </form>
           ))}
         </div>
