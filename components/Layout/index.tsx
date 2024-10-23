@@ -28,7 +28,7 @@ const Layout = async ({ children }: { children: React.ReactNode; }) => {
   return (
     <div className="min-h-full">
       <Disclosure as="nav" className="bg-gray-800">
-        <div className="h-16 mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <div className="py-2 mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <MainMenu navigation={authNavigation}></MainMenu>
           <ProfileDropdown
             navigation={authUserNavigation}
