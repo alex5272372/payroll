@@ -1,4 +1,3 @@
-import { classNames } from '@/lib/utils'
 import { CloseButton, DisclosurePanel } from '@headlessui/react'
 import { User } from 'next-auth'
 import Image from 'next/image'
@@ -19,10 +18,7 @@ const MobileMenu = async ({ navigation, userNavigation, user }: {
             as={Link}
             href={`/${item.id}`}
             aria-current={item.id === 'calendar' ? 'page' : undefined}
-            className={classNames(
-              item.id === 'calendar' ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-              'block rounded-md px-3 py-2 text-base font-medium',
-            )}
+            className="block px-3 py-1 rounded-md bg-gray-900 text-gray-300 hover:bg-gray-700 hover:text-white"
           >
             {item.name}
           </CloseButton>

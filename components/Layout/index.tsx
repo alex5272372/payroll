@@ -1,5 +1,5 @@
 import React from 'react'
-import Header from '@/components/Header'
+import Header from './Header'
 import { Disclosure } from '@headlessui/react'
 import MainMenu from './MainMenu'
 import ProfileDropdown from './ProfileDropdown'
@@ -20,6 +20,11 @@ const navigation = [
   { id: 'reports', name: 'Reports', auth: true },
 ]
 
+const tabs = [
+  { id: 'calendar', name: 'Calendar', active: true },
+  { id: 'users', name: 'Users' },
+]
+
 const Layout = async ({ children }: { children: React.ReactNode; }) => {
   const session = await auth()
   const authUserNavigation = userNavigation.filter(item => session?.user ? item.auth !== false : !item.auth)
@@ -28,7 +33,7 @@ const Layout = async ({ children }: { children: React.ReactNode; }) => {
   return (
     <div className="min-h-full">
       <Disclosure as="nav" className="bg-gray-800">
-        <div className="py-2 mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <div className="py-2 px-4 flex items-center justify-between">
           <MainMenu navigation={authNavigation}></MainMenu>
           <ProfileDropdown
             navigation={authUserNavigation}
@@ -44,7 +49,7 @@ const Layout = async ({ children }: { children: React.ReactNode; }) => {
         ></MobileMenu>
       </Disclosure>
 
-      <Header />
+      <Header tabs={tabs} />
       {children}
     </div>
   )
