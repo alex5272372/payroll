@@ -15,8 +15,8 @@ const RootLayout = ({
   }, [])
 
   return (
-    <html lang="en" className="h-full bg-gray-100">
-      <body className="h-full">
+    <html lang="en">
+      <body className="h-full bg-gray-100">
         {loading ? <Loader /> : children}
       </body>
     </html>
