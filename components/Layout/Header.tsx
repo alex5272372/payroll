@@ -6,7 +6,7 @@ const Header = ({ tabs }: { tabs: { id: string, name: string, active?: boolean }
       <TabGroup>
         <TabList>
           {tabs.map(tab => (
-            <Tab key={tab.id} className="px-3 py-1 bg-gray-700 text-gray-100 ">
+            <Tab key={tab.id} className="py-1 px-3 bg-gray-700 text-gray-100 ">
               {tab.name}
             </Tab>))
           }
