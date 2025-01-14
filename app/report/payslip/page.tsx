@@ -1,11 +1,11 @@
 import Layout from '@/components/Layout'
 
-const Dashboard = () => {
+const Payslip = () => {
   return (
     <Layout>
-      <div>Super Secret Page</div>
+      <div>Report Payslip Page</div>
     </Layout>
   )
 }
 
-export default Dashboard
+export default Payslip

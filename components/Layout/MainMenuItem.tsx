@@ -20,14 +20,14 @@ const MainMenuItem = async ({ item }: { item: MenuItemType}) => {
         anchor={{ to: 'bottom start', gap: 8 }}
         className="rounded-md bg-gray-900 text-gray-300"
       >
-        {item.items?.map(item => (
-          <MenuItem key={item.id}>
+        {item.items?.map(subItem => (
+          <MenuItem key={subItem.id}>
             <Link
-              href={`/${item.id}`}
+              href={`/${item.id}/${subItem.id}`}
               className="flex w-full py-2 px-4 text-left hover:bg-gray-700 hover:text-white"
             >
-              <item.icon className='h-6'></item.icon>
-              <p className='ml-2'>{item.name}</p>
+              <subItem.icon className='h-6'></subItem.icon>
+              <p className='ml-2'>{subItem.name}</p>
             </Link>
           </MenuItem>
         ))}

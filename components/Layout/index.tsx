@@ -13,6 +13,7 @@ import {
   CalendarIcon,
   ChartBarIcon,
   DocumentIcon,
+  DocumentTextIcon,
   HomeModernIcon,
   GlobeEuropeAfricaIcon,
   IdentificationIcon,
@@ -29,13 +30,13 @@ const userNavigation: MenuItem[] = [
 ]
 
 const navigation: MenuItem[] = [
-  { id: 'calendar', name: 'Calendar', icon: CalendarIcon, items: [
-    { id: 'countryCalendar', name: 'Country calendar', icon: GlobeEuropeAfricaIcon },
-    { id: 'companyCalendar', name: 'Company calendar', icon: HomeModernIcon },
-    { id: 'departmentCalendar', name: 'Department calendar', icon: UserGroupIcon },
-    { id: 'employeeCalendar', name: 'Employee calendar', icon: IdentificationIcon },
+  { id: 'calendar', name: 'Calendars', icon: CalendarIcon, items: [
+    { id: 'country', name: 'Country calendar', icon: GlobeEuropeAfricaIcon },
+    { id: 'company', name: 'Company calendar', icon: HomeModernIcon },
+    { id: 'department', name: 'Department calendar', icon: UserGroupIcon },
+    { id: 'employee', name: 'Employee calendar', icon: IdentificationIcon },
   ] },
-  { id: 'catalogs', name: 'Catalogs', icon: ViewColumnsIcon, auth: true, items: [
+  { id: 'catalog', name: 'Catalogs', icon: ViewColumnsIcon, auth: true, items: [
     { id: 'countries', name: 'Countries', icon: ViewColumnsIcon },
     { id: 'companies', name: 'Companies', icon: ViewColumnsIcon },
     { id: 'departments', name: 'Departments', icon: ViewColumnsIcon },
@@ -43,12 +44,14 @@ const navigation: MenuItem[] = [
     { id: 'people', name: 'People', icon: ViewColumnsIcon },
     { id: 'users', name: 'Users', icon: ViewColumnsIcon },
   ] },
-  { id: 'documents', name: 'Documents', icon: DocumentIcon, auth: true, items: [
-    { id: 'calendarFilling', name: 'Calendar filling', icon: DocumentIcon },
-    { id: 'payrollCalculation', name: 'Payroll calculation', icon: DocumentIcon },
+  { id: 'document', name: 'Documents', icon: DocumentTextIcon, auth: true, items: [
+    { id: 'calendarFilling', name: 'Calendar filling', icon: DocumentTextIcon },
+    { id: 'calculationTemplate', name: 'Calculation template', icon: DocumentIcon },
+    { id: 'payrollCalculation', name: 'Payroll calculation', icon: DocumentTextIcon },
   ] },
-  { id: 'reports', name: 'Reports', icon: ChartBarIcon, auth: true, items: [
+  { id: 'report', name: 'Reports', icon: ChartBarIcon, auth: true, items: [
     { id: 'payslip', name: 'Payslip', icon: ChartBarIcon },
+    { id: 'paymentStatement', name: 'Payment statement', icon: ChartBarIcon },
   ] },
 ]
 
