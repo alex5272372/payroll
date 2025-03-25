@@ -12,7 +12,7 @@ import {
   UserGroupIcon,
   ViewColumnsIcon,
 } from '@heroicons/react/24/outline'
-import { MenuItem } from "@/types"
+import { MenuItem } from '@/types'
 
 export const navigation: MenuItem[] = [
   { id: 'calendar', name: 'Calendars', icon: CalendarIcon, align: 'left', items: [
@@ -41,7 +41,7 @@ export const navigation: MenuItem[] = [
     { id: 'payslip', name: 'Payslip', icon: ChartBarIcon },
     { id: 'paymentStatement', name: 'Payment statement', icon: ChartBarIcon },
   ] },
-  
+
   { id: 'user', name: 'User', icon: UserIcon, align: 'right', items: [
     { id: 'profile', name: 'Profile', auth: true, icon: UserIcon },
     { id: 'signOut', name: 'Sign out', auth: true, icon: ArrowRightStartOnRectangleIcon },

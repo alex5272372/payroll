@@ -17,8 +17,10 @@ const tabs: TabItem[] = [
 
 const Layout = async ({ children }: { children: React.ReactNode; }) => {
   const session = await auth()
-  const authUserNavigation = navigation.filter(item => item.align === 'right' && (session?.user ? item.auth !== false : !item.auth))
-  const authNavigation = navigation.filter(item => item.align === 'left' && (session?.user ? item.auth !== false : !item.auth))
+  const authUserNavigation = navigation.filter(item =>
+    item.align === 'right' && (session?.user ? item.auth !== false : !item.auth))
+  const authNavigation = navigation.filter(item =>
+    item.align === 'left' && (session?.user ? item.auth !== false : !item.auth))
 
   return <>
     <Navbar isMobile={false}>
@@ -53,7 +55,8 @@ const Layout = async ({ children }: { children: React.ReactNode; }) => {
         </div>
       </Navbar>
 
-      {authNavigation.map((item: MenuItem) => item.items && <MobileMenuPanel key={item.id} item={item}></MobileMenuPanel>)}
+      {authNavigation.map((item: MenuItem) =>
+        item.items && <MobileMenuPanel key={item.id} item={item}></MobileMenuPanel>)}
       <MobileMenuPanel item={authUserNavigation[0]}></MobileMenuPanel>
     </Disclosure>
 
@@ -77,7 +80,7 @@ export default Layout
 //     }
 
 //     setActiveDisclosurePanel({
-//       ...newPanel, 
+//       ...newPanel,
 //       open: !newPanel.open
 //     });
 //   }
@@ -91,11 +94,12 @@ export default Layout
 //               (panel) => {
 //                 const { open, close } = panel
 //                 return (<>
-//                   <Disclosure.Button onClick={ () => {                        
+//                   <Disclosure.Button onClick={ () => {
 //                     if (!open) {
-//                       // On the first click, the panel is opened but the "open" prop's value is still false. Therefore the falsey verification
-//                       // This will make so the panel close itself when we click it while open 
-//                       close(); 
+//                       // On the first click, the panel is opened but the "open" prop's value is still false.
+//                       // Therefore the falsey verification
+//                       // This will make so the panel close itself when we click it while open
+//                       close();
 //                     }
 
 //                     // Now we call the function to close the other opened panels (if any)
