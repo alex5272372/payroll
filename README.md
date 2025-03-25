@@ -14,7 +14,7 @@ The platform is designed to perform complex periodic calculations
 
 [Vercel Postgres + Prisma Next.js Starter](https://vercel.com/templates/next.js/postgres-prisma)
 
-[Tailwind Application UI Stacked Layout](https://tailwindui.com/components/application-ui/application-shells/stacked)
+[Tailwind Application UI Stacked Layout](https://tailwindcss.com/plus/ui-blocks/application-ui/application-shells/stacked)
 
 [Tailwind CSS Cards](https://tw-elements.com/docs/standard/components/cards/)
 

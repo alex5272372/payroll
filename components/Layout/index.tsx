@@ -21,7 +21,7 @@ import {
   UserGroupIcon,
   ViewColumnsIcon,
 } from '@heroicons/react/24/outline'
-import { MenuItem } from '@/types'
+import { MenuItem, TabItem } from '@/types'
 
 const userNavigation: MenuItem[] = [
   { id: 'profile', name: 'Profile', auth: true, icon: UserIcon },
@@ -55,7 +55,7 @@ const navigation: MenuItem[] = [
   ] },
 ]
 
-const tabs = [
+const tabs: TabItem[] = [
   { id: 'calendar', name: 'Calendar', active: true },
   { id: 'users', name: 'Users' },
 ]
@@ -70,11 +70,11 @@ const Layout = async ({ children }: { children: React.ReactNode; }) => {
       <nav className="flex space-x-4 py-2 px-4 bg-gray-800">
         <Link href="/">
           <Image
-            alt="Company"
-            src="/next.svg"
-            className="h-8 w-32"
+            alt="Logo"
+            src="/logo.png"
+            className="h-8 w-8 rounded-md"
             height={32}
-            width={128}
+            width={32}
           />
         </Link>
 
@@ -95,3 +95,54 @@ const Layout = async ({ children }: { children: React.ReactNode; }) => {
 }
 
 export default Layout
+
+// export default function MyAccordion({ data }) {
+
+//   const [activeDisclosurePanel, setActiveDisclosurePanel] = useState(null);
+
+//   function togglePanels(newPanel) {
+
+//     if (activeDisclosurePanel) {
+//       if (activeDisclosurePanel.key !== newPanel.key && activeDisclosurePanel.open) {
+//         activeDisclosurePanel.close();
+//       }
+//     }
+
+//     setActiveDisclosurePanel({
+//       ...newPanel, 
+//       open: !newPanel.open
+//     });
+//   }
+
+//   return (
+//     <ul>
+//       {
+//         data.map((item, index) => (
+//           <Disclosure as="li" key={ index }>
+//             {
+//               (panel) => {
+//                 const { open, close } = panel
+//                 return (<>
+//                   <Disclosure.Button onClick={ () => {                        
+//                     if (!open) {
+//                       // On the first click, the panel is opened but the "open" prop's value is still false. Therefore the falsey verification
+//                       // This will make so the panel close itself when we click it while open 
+//                       close(); 
+//                     }
+
+//                     // Now we call the function to close the other opened panels (if any)
+//                     togglePanels({ ...panel, key: index });
+//                   }}>
+//                   </Disclosure.Button>
+//                   <Disclosure.Panel>
+//                     { item }
+//                   </Disclosure.Panel>
+//                 </>)
+//               }
+//             }
+//           </Disclosure>
+//         ))
+//       }
+//     </ul>
+//   );
+// }

@@ -7,7 +7,14 @@ const Home = async () => {
   return (
     <Layout>
       <main className="flex flex-col items-center">
-        <h1 className="mt-32 text-center text-6xl font-bold text-gray-800">Payroll platform</h1>
+        <Image
+          alt="Company"
+          src="/logo.png"
+          className="mt-32 rounded-lg"
+          height={128}
+          width={128}
+        />
+        <h1 className="mt-4 text-center text-6xl font-bold text-gray-800">Payroll platform</h1>
         <h2 className="mt-4 text-center text-2xl text-gray-600">designed to perform complex periodic calculations</h2>
         <Link
           href="https://github.com/alex5272372/payroll"

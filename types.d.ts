@@ -8,3 +8,9 @@ export type MenuItem = {
   auth?: boolean;
   items?: MenuItem[];
 }
+
+export type TabItem = {
+  id: string;
+  name: string;
+  active?: boolean;
+}
