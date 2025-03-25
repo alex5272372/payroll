@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { DisclosureButton, Menu, MenuButton, MenuItems } from '@headlessui/react'
+import { Menu, MenuButton, MenuItems } from '@headlessui/react'
 import { userNavigationAction } from './actions'
 import { User } from 'next-auth'
 import { MenuItem } from '@/types'
@@ -9,19 +9,7 @@ const ProfileDropdown = async ({ navigation, user }: {
   user?: User
 }) => {
   return <>
-    <div className="grow flex justify-end  md:hidden rounded-full">
-      <DisclosureButton className="rounded-full">
-        <Image
-          alt="Avatar"
-          src={user && user.image ? user.image : '/user.png'}
-          className="rounded-full"
-          height={32}
-          width={32}
-        />
-      </DisclosureButton>
-    </div>
-
-    <Menu as="div" className="grow hidden md:flex justify-end h-8">
+    <Menu as="div" className="grow flex justify-end h-8">
       <MenuButton className="rounded-full">
         <Image
           alt="Avatar"
