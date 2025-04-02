@@ -7,9 +7,13 @@ export type MenuItem = {
   id: string;
   name: string;
   icon: HeroIcon;
-  align?: AlignMenuItem;
   auth?: boolean;
   items?: MenuItem[];
+}
+
+export type Navigation = {
+  mainMenu: MenuItem[];
+  userMenu: MenuItem[];
 }
 
 export type TabItem = {
