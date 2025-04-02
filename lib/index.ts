@@ -12,7 +12,7 @@ import {
   UserGroupIcon,
   ViewColumnsIcon,
 } from '@heroicons/react/24/outline'
-import { MenuItem, Navigation } from '@/types'
+import { Navigation } from '@/types'
 
 export const navigation: Navigation = {
   mainMenu: [

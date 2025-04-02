@@ -1,16 +1,18 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { CalendarIcon, UserIcon } from '@heroicons/react/24/outline'
 import { auth } from '@/auth'
 import { MenuItem, TabItem } from '@/types'
 import Header from './Header'
 import MainMenuDropdown from './MainMenuDropdown'
 import ProfileDropdown from './ProfileDropdown'
 import { navigation } from '@/lib'
+import { TabGroup } from '@headlessui/react'
 
 const tabs: TabItem[] = [
-  { id: 'calendar', name: 'Calendar', active: true },
-  { id: 'users', name: 'Users' },
+  { id: 'calendar', name: 'Calendar', icon: CalendarIcon, active: true },
+  { id: 'users', name: 'Users', icon: UserIcon },
 ]
 
 const Layout = async ({ children }: { children: React.ReactNode; }) => {
@@ -38,8 +40,10 @@ const Layout = async ({ children }: { children: React.ReactNode; }) => {
       ></ProfileDropdown>
     </nav>
 
-    <Header tabs={tabs} />
-    {children}
+    <TabGroup>
+      <Header tabs={tabs} />
+      {children}
+    </TabGroup>
   </>
 }
 

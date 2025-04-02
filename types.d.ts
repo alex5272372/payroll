@@ -1,5 +1,3 @@
-type AlignMenuItem = 'left' | 'right'
-
 export type HeroIcon = React.ForwardRefExoticComponent<React.PropsWithoutRef<React.SVGProps<SVGSVGElement>>
   & { title?: string, titleId?: string } & React.RefAttributes<SVGSVGElement>>
 
@@ -19,5 +17,6 @@ export type Navigation = {
 export type TabItem = {
   id: string;
   name: string;
+  icon: HeroIcon;
   active?: boolean;
 }

@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { Menu, MenuButton, MenuItems } from '@headlessui/react'
-import { userNavigationAction } from './actions'
+import { userNavigationAction } from '@/actions/userActions'
 import { User } from 'next-auth'
 import { MenuItem } from '@/types'
 
