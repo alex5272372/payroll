@@ -1,10 +1,24 @@
 export type HeroIcon = React.ForwardRefExoticComponent<React.PropsWithoutRef<React.SVGProps<SVGSVGElement>>
   & { title?: string, titleId?: string } & React.RefAttributes<SVGSVGElement>>
 
+export type MenuItemIcon =
+  'ArrowRightEndOnRectangleIcon'
+  | 'ArrowRightStartOnRectangleIcon'
+  | 'CalendarIcon'
+  | 'ChartBarIcon'
+  | 'DocumentIcon'
+  | 'DocumentTextIcon'
+  | 'HomeModernIcon'
+  | 'GlobeEuropeAfricaIcon'
+  | 'IdentificationIcon'
+  | 'UserIcon'
+  | 'UserGroupIcon'
+  | 'ViewColumnsIcon'
+
 export type MenuItem = {
-  id: string;
+  id: MenuItemType;
   name: string;
-  icon: HeroIcon;
+  icon: MenuItemIcon;
   auth?: boolean;
   items?: MenuItem[];
 }
@@ -15,8 +29,13 @@ export type Navigation = {
 }
 
 export type TabItem = {
-  id: string;
+  id: MenuItemType;
+  parentId?: MenuItemType;
   name: string;
-  icon: HeroIcon;
-  active?: boolean;
+  icon: MenuItemIcon;
+}
+
+export type TabState = {
+  tabs: TabItem[];
+  activeTab: number | null;
 }

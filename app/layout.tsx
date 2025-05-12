@@ -1,6 +1,7 @@
 'use client'
 import './globals.css'
 import React, { useEffect, useState } from 'react'
+import { SessionProvider } from 'next-auth/react'
 import Loader from '@/components/Loader'
 
 const RootLayout = ({
@@ -17,7 +18,9 @@ const RootLayout = ({
   return (
     <html lang="en">
       <body className="h-full bg-gray-100">
-        {loading ? <Loader /> : children}
+        <SessionProvider>
+          {loading ? <Loader /> : children}
+        </SessionProvider>
       </body>
     </html>
   )
