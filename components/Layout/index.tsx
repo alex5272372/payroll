@@ -12,7 +12,7 @@ import { useSession } from 'next-auth/react'
 
 const Layout = ({ children }: { children: React.ReactNode; }) => {
   const [tabState, setTabState] = React.useState<TabState>({ tabs: [], activeTab: null })
-  
+
   const { data: session } = useSession()
   const authNavigation = navigation.mainMenu.filter(item => (session?.user ? item.auth !== false : !item.auth))
   const authUserNavigation = navigation.userMenu.filter(item => (session?.user ? item.auth !== false : !item.auth))
@@ -46,7 +46,7 @@ const Layout = ({ children }: { children: React.ReactNode; }) => {
     </nav>
 
     <TabGroup>
-      <Header tabState={tabState} />
+      <Header tabState={tabState} setTabState={setTabState} />
       {children}
     </TabGroup>
   </>

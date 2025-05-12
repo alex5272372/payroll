@@ -23,8 +23,7 @@ const MainMenuDropdown = ({ item, tabState }: { item: MenuItemType, tabState: Ta
           return (<MenuItem key={subItem.id}>
             <button
               className="flex w-full py-2 px-4 text-left hover:bg-gray-700 hover:text-white"
-              onClick={e => {
-                debugger
+              onClick={() => {
                 localStorage.setItem('tabState', JSON.stringify({
                   tabs: [...tabState.tabs,
                     { id: subItem.id, parentId: item.id, name: subItem.name, icon: subItem.icon }],
