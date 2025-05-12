@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from './generated/client'
 import companies from './data/companies'
 import countries from './data/countries'
 import departments from './data/departments'
