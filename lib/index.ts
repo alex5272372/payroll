@@ -12,7 +12,7 @@ import {
   UserGroupIcon,
   ViewColumnsIcon,
 } from '@heroicons/react/24/outline'
-import { HeroIcon, MenuItemIcon, Navigation } from '@/types'
+import { MenuItem, Navigation } from '@/types'
 
 export enum MenuItemType {
   CALENDAR = 'calendar',
@@ -39,53 +39,52 @@ export enum MenuItemType {
   PAYMENT_STATEMENT = 'paymentStatement',
 }
 
-export const menuItemIcons: Record<MenuItemIcon, HeroIcon> = {
-  ArrowRightEndOnRectangleIcon,
-  ArrowRightStartOnRectangleIcon,
-  CalendarIcon,
-  ChartBarIcon,
-  DocumentIcon,
-  DocumentTextIcon,
-  HomeModernIcon,
-  GlobeEuropeAfricaIcon,
-  IdentificationIcon,
-  UserIcon,
-  UserGroupIcon,
-  ViewColumnsIcon,
+export const navigation: Navigation = {
+  main: [
+    { id: MenuItemType.CALENDAR, name: 'Calendars', icon: CalendarIcon, items: [
+      { id: MenuItemType.COUNTRY_CALENDAR, name: 'Country calendar', icon: GlobeEuropeAfricaIcon },
+      { id: MenuItemType.COMPANY_CALENDAR, name: 'Company calendar', icon: HomeModernIcon },
+      { id: MenuItemType.DEPARTMENT_CALENDAR, name: 'Department calendar', icon: UserGroupIcon },
+      { id: MenuItemType.EMPLOYEE_CALENDAR, name: 'Employee calendar', icon: IdentificationIcon },
+    ] },
+
+    { id: MenuItemType.CATALOG, name: 'Catalogs', icon: ViewColumnsIcon, auth: true, items: [
+      { id: MenuItemType.COUNTRIES, name: 'Countries', icon: ViewColumnsIcon },
+      { id: MenuItemType.COMPANIES, name: 'Companies', icon: ViewColumnsIcon },
+      { id: MenuItemType.DEPARTMENTS, name: 'Departments', icon: ViewColumnsIcon },
+      { id: MenuItemType.EMPLOYEES, name: 'Employees', icon: ViewColumnsIcon },
+      { id: MenuItemType.PEOPLE, name: 'People', icon: ViewColumnsIcon },
+      { id: MenuItemType.USERS, name: 'Users', icon: ViewColumnsIcon },
+    ] },
+
+    { id: MenuItemType.DOCUMENT, name: 'Documents', icon: DocumentTextIcon, auth: true, items: [
+      { id: MenuItemType.CALENDAR_FILLING, name: 'Calendar filling', icon: DocumentTextIcon },
+      { id: MenuItemType.CALCULATION_TEMPLATE, name: 'Calculation template', icon: DocumentIcon },
+      { id: MenuItemType.PAYROLL_CALCULATION, name: 'Payroll calculation', icon: DocumentTextIcon },
+    ] },
+
+    { id: MenuItemType.REPORT, name: 'Reports', icon: ChartBarIcon, auth: true, items: [
+      { id: MenuItemType.PAYSLIP, name: 'Payslip', icon: ChartBarIcon },
+      { id: MenuItemType.PAYMENT_STATEMENT, name: 'Payment statement', icon: ChartBarIcon },
+    ] },
+  ],
+
+  user: [
+    { id: MenuItemType.PROFILE, name: 'Profile', icon: UserIcon },
+    { id: MenuItemType.SIGN_OUT, name: 'Sign out', icon: ArrowRightStartOnRectangleIcon },
+    { id: MenuItemType.SIGN_IN, name: 'Sign in', icon: ArrowRightEndOnRectangleIcon },
+  ],
 }
 
-export const navigation: Navigation = {
-  mainMenu: [
-    { id: MenuItemType.CALENDAR, name: 'Calendars', icon: 'CalendarIcon', items: [
-      { id: MenuItemType.COUNTRY_CALENDAR, name: 'Country calendar', icon: 'GlobeEuropeAfricaIcon' },
-      { id: MenuItemType.COMPANY_CALENDAR, name: 'Company calendar', icon: 'HomeModernIcon' },
-      { id: MenuItemType.DEPARTMENT_CALENDAR, name: 'Department calendar', icon: 'UserGroupIcon' },
-      { id: MenuItemType.EMPLOYEE_CALENDAR, name: 'Employee calendar', icon: 'IdentificationIcon' },
-    ] },
+export const getMenuItem = (menu: string, id: string, parentId?: string): MenuItem | null => {
+  if (parentId) {
+    const parentMenuItem = navigation[menu as keyof Navigation].find((item: MenuItem) => item.id === parentId)
+    if (parentMenuItem && parentMenuItem.items) {
+      return parentMenuItem.items.find((item: MenuItem) => item.id === id) || null
+    }
+    return null
 
-    { id: MenuItemType.CATALOG, name: 'Catalogs', icon: 'ViewColumnsIcon', auth: true, items: [
-      { id: MenuItemType.COUNTRIES, name: 'Countries', icon: 'ViewColumnsIcon' },
-      { id: MenuItemType.COMPANIES, name: 'Companies', icon: 'ViewColumnsIcon' },
-      { id: MenuItemType.DEPARTMENTS, name: 'Departments', icon: 'ViewColumnsIcon' },
-      { id: MenuItemType.EMPLOYEES, name: 'Employees', icon: 'ViewColumnsIcon' },
-      { id: MenuItemType.PEOPLE, name: 'People', icon: 'ViewColumnsIcon' },
-      { id: MenuItemType.USERS, name: 'Users', icon: 'ViewColumnsIcon' },
-    ] },
-
-    { id: MenuItemType.DOCUMENT, name: 'Documents', icon: 'DocumentTextIcon', auth: true, items: [
-      { id: MenuItemType.CALENDAR_FILLING, name: 'Calendar filling', icon: 'DocumentTextIcon' },
-      { id: MenuItemType.CALCULATION_TEMPLATE, name: 'Calculation template', icon: 'DocumentIcon' },
-      { id: MenuItemType.PAYROLL_CALCULATION, name: 'Payroll calculation', icon: 'DocumentTextIcon' },
-    ] },
-
-    { id: MenuItemType.REPORT, name: 'Reports', icon: 'ChartBarIcon', auth: true, items: [
-      { id: MenuItemType.PAYSLIP, name: 'Payslip', icon: 'ChartBarIcon' },
-      { id: MenuItemType.PAYMENT_STATEMENT, name: 'Payment statement', icon: 'ChartBarIcon' },
-    ] },
-  ],
-  userMenu: [
-    { id: MenuItemType.PROFILE, name: 'Profile', icon: 'UserIcon' },
-    { id: MenuItemType.SIGN_OUT, name: 'Sign out', icon: 'ArrowRightStartOnRectangleIcon' },
-    { id: MenuItemType.SIGN_IN, name: 'Sign in', icon: 'ArrowRightEndOnRectangleIcon' },
-  ],
+  } else {
+    return navigation[menu as keyof Navigation].find((item: MenuItem) => item.id === id) || null
+  }
 }

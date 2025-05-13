@@ -14,8 +14,8 @@ const Layout = ({ children }: { children: React.ReactNode; }) => {
   const [tabState, setTabState] = React.useState<TabState>({ tabs: [], activeTab: null })
 
   const { data: session } = useSession()
-  const authNavigation = navigation.mainMenu.filter(item => (session?.user ? item.auth !== false : !item.auth))
-  const authUserNavigation = navigation.userMenu.filter(item => (session?.user ? item.auth !== false : !item.auth))
+  const authNavigation = navigation.main.filter(item => (session?.user ? item.auth !== false : !item.auth))
+  const authUserNavigation = navigation.user.filter(item => (session?.user ? item.auth !== false : !item.auth))
 
   React.useEffect(() => {
     const storedTabState = localStorage.getItem('tabState')
