@@ -7,7 +7,10 @@ const MainMenuDropdown = ({ item, tabState }: { item: MenuItemType, tabState: Ta
 
   return (
     <Menu as="div" className="h-8">
-      <MenuButton className="flex py-1 px-2 rounded-md bg-gray-900 text-gray-300 hover:bg-gray-700 hover:text-white">
+      <MenuButton
+        className={`flex py-1 px-2 rounded-md bg-gray-900 text-gray-300 hover:bg-gray-700 hover:text-white
+          cursor-pointer`}
+      >
         <item.icon className='h-6' />
         <p className='hidden md:block ml-2'>{item.name}</p>
       </MenuButton>
@@ -19,7 +22,7 @@ const MainMenuDropdown = ({ item, tabState }: { item: MenuItemType, tabState: Ta
         {item.items?.map(subItem => {
           return (<MenuItem key={subItem.id}>
             <button
-              className="flex w-full py-2 px-4 text-left hover:bg-gray-700 hover:text-white"
+              className="flex w-full py-2 px-4 text-left hover:bg-gray-700 hover:text-white cursor-pointer"
               onClick={() => {
                 localStorage.setItem('tabState', JSON.stringify({
                   tabs: [...tabState.tabs,

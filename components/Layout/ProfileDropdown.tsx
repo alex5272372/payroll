@@ -10,7 +10,7 @@ const ProfileDropdown = ({ navigation, user }: {
 }) => {
   return <>
     <Menu as="div" className="grow flex justify-end h-8">
-      <MenuButton className="rounded-full">
+      <MenuButton className="rounded-full cursor-pointer">
         <Image
           alt="Avatar"
           src={user && user.image ? user.image : '/user.png'}
@@ -28,7 +28,7 @@ const ProfileDropdown = ({ navigation, user }: {
           return (<form key={item.id} action={userNavigationAction.bind(null, item.id)}>
             <button
               type="submit"
-              className="flex w-full py-2 px-4 text-left hover:bg-gray-700 hover:text-white"
+              className="flex w-full py-2 px-4 text-left hover:bg-gray-700 hover:text-white cursor-pointer"
             >
               <item.icon className='h-6' />
               <p className='ml-2'>{item.name}</p>
