@@ -14,6 +14,11 @@ import {
 } from '@heroicons/react/24/outline'
 import { MenuItem, Navigation } from '@/types'
 
+export enum MenuType {
+  MAIN = 'main',
+  USER = 'user',
+}
+
 export enum MenuItemType {
   CALENDAR = 'calendar',
   CATALOG = 'catalog',
@@ -76,15 +81,27 @@ export const navigation: Navigation = {
   ],
 }
 
-export const getMenuItem = (menu: string, id: string, parentId?: string): MenuItem | null => {
-  if (parentId) {
-    const parentMenuItem = navigation[menu as keyof Navigation].find((item: MenuItem) => item.id === parentId)
-    if (parentMenuItem && parentMenuItem.items) {
-      return parentMenuItem.items.find((item: MenuItem) => item.id === id) || null
-    }
-    return null
+export const getMenuItem = (menuPath: MenuItemType[]): MenuItem | null => {
+  const menuTypes = Object.keys(MenuType).map((key) => MenuType[key as keyof typeof MenuType])
 
-  } else {
-    return navigation[menu as keyof Navigation].find((item: MenuItem) => item.id === id) || null
+  let menuTypeIndex = 0
+  let menuItemTypeIndex = 0
+  let menuItems: MenuItem[] = navigation[menuTypes[menuTypeIndex] as keyof Navigation]
+  let menuItem: MenuItem | undefined
+
+  while (menuTypeIndex < menuTypes.length && menuItemTypeIndex < menuPath.length) {
+    menuItem = menuItems.find((item: MenuItem) => item.id === menuPath[menuItemTypeIndex])
+
+    if (menuItem) {
+      menuItemTypeIndex++
+      menuItems = menuItem.items || []
+
+    } else {
+      menuTypeIndex++
+      menuItemTypeIndex = 0
+      menuItems = navigation[menuTypes[menuTypeIndex] as keyof Navigation]
+    }
   }
+
+  return menuItem || null
 }

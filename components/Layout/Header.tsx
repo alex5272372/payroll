@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { MenuItem, TabItem, TabState } from '@/types'
@@ -9,44 +10,41 @@ const Header = (
 ) => {
   const router = useRouter()
 
-  const activateTab = (index: number) => {
-    const newTabState = { ...tabState, activeTab: index }
-    localStorage.setItem('tabState', JSON.stringify(newTabState))
-    router.push(`/${tabState.tabs[index].parentId}/${tabState.tabs[index].id}`)
-  }
-
   const closeTab = (event: React.MouseEvent, index: number) => {
     event.stopPropagation()
 
-    const newTabs = tabState.tabs.filter((t: TabItem) => t.id !== tabState.tabs[index].id)
-    const newActiveTab = newTabs.length > 0 ? newTabs.length - 1 : null
-    const newTabState = { tabs: newTabs, activeTab: newActiveTab }
+    const tabs: TabItem[] = tabState.tabs.filter((_, i: number) => i !== index)
+    const activeTab: number | null =
+      tabState.activeTab === null || tabs.length === 0 ? null
+        : tabState.activeTab > 0 || tabState.activeTab > index || tabState.activeTab === tabs.length
+          ? tabState.activeTab - 1 : tabState.activeTab
+
+    const newTabState: TabState = { tabs, activeTab }
     localStorage.setItem('tabState', JSON.stringify(newTabState))
 
     if (index === tabState.activeTab)
-      router.push(newActiveTab === null
-        ? '/' : `/${newTabs[newActiveTab].parentId}/${newTabs[newActiveTab].id}`)
+      router.push(activeTab === null ? '/' : `/${tabs[activeTab].menuPath.join('/')}`)
     else
       setTabState(newTabState)
   }
 
   const mapTabs = (tab: TabItem, index: number) => {
-    const menuItem: MenuItem | null = getMenuItem(tab.menu, tab.id, tab.parentId)
+    const menuItem: MenuItem | null = getMenuItem(tab.menuPath)
 
     return <div
-      key={tab.id}
+      key={index}
       className={`flex items-center h-8 py-1 px-2 rounded-t-md ${
         index === tabState.activeTab
           ? 'bg-gray-100 text-gray-900'
           : 'bg-gray-700 text-gray-100 hover:bg-gray-500'}`}
     >
-      <button
+      <Link
+        href={`/${tab.menuPath.join('/')}`}
         className={`flex ${index !== tabState.activeTab && 'cursor-pointer'}`}
-        onClick={() => activateTab(index)}
       >
         {menuItem && <menuItem.icon className='h-6' />}
         <p className='hidden md:block ml-2'>{menuItem?.name || '#'}</p>
-      </button>
+      </Link>
 
       <XMarkIcon
         className={`ml-2 h-5 cursor-pointer ${index === tabState.activeTab

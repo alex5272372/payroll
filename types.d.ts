@@ -9,13 +9,11 @@ export type MenuItem = {
   items?: MenuItem[];
 }
 
-export type MenuType = 'main' | 'user';
 export type Navigation = Record<MenuType, MenuItem[]>;
 
 export type TabItem = {
-  menu: MenuType;
-  id: MenuItemType;
-  parentId?: MenuItemType;
+  menuPath: MenuItemType[];
+  objectId?: number;
 }
 
 export type TabState = {

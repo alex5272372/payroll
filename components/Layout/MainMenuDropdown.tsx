@@ -1,10 +1,8 @@
-import { MenuItem as MenuItemType, TabState } from '@/types'
+import { MenuItem as MenuItemType } from '@/types'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
-const MainMenuDropdown = ({ item, tabState }: { item: MenuItemType, tabState: TabState}) => {
-  const router = useRouter()
-
+const MainMenuDropdown = ({ item }: { item: MenuItemType }) => {
   return (
     <Menu as="div" className="h-8">
       <MenuButton
@@ -21,20 +19,13 @@ const MainMenuDropdown = ({ item, tabState }: { item: MenuItemType, tabState: Ta
       >
         {item.items?.map(subItem => {
           return (<MenuItem key={subItem.id}>
-            <button
+            <Link
               className="flex w-full py-2 px-4 text-left hover:bg-gray-700 hover:text-white cursor-pointer"
-              onClick={() => {
-                localStorage.setItem('tabState', JSON.stringify({
-                  tabs: [...tabState.tabs,
-                    { menu: 'main', id: subItem.id, parentId: item.id }],
-                  activeTab: tabState.activeTab === null ? 0 : tabState.activeTab + 1
-                }))
-                router.push(`/${item.id}/${subItem.id}`)
-              }}
+              href={`/${item.id}/${subItem.id}`}
             >
               <subItem.icon className='h-6' />
               <p className='ml-2'>{subItem.name}</p>
-            </button>
+            </Link>
           </MenuItem>)
         })}
       </MenuItems>
