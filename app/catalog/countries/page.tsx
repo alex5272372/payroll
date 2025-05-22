@@ -1,11 +1,11 @@
 import Layout from '@/components/Layout'
 
 const CountriesCatalog = () => {
-  return (
-    <Layout>
+  return <Layout>
+    <main>
       <div>Catalog Countries Page</div>
-    </Layout>
-  )
+    </main>
+  </Layout>
 }
 
 export default CountriesCatalog

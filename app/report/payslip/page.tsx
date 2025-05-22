@@ -1,11 +1,11 @@
 import Layout from '@/components/Layout'
 
 const Payslip = () => {
-  return (
-    <Layout>
+  return <Layout>
+    <main>
       <div>Report Payslip Page</div>
-    </Layout>
-  )
+    </main>
+  </Layout>
 }
 
 export default Payslip
