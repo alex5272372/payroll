@@ -18,10 +18,10 @@ const MainMenuDropdown = ({ item }: { item: MenuItemType }) => {
         className="rounded-md bg-gray-900 text-gray-300"
       >
         {item.items?.map(subItem => {
-          return (<MenuItem key={subItem.id}>
+          return (<MenuItem key={subItem.path}>
             <Link
               className="flex w-full py-2 px-4 text-left hover:bg-gray-700 hover:text-white cursor-pointer"
-              href={`/${item.id}/${subItem.id}`}
+              href={`/${item.path}/${subItem.path}`}
             >
               <subItem.icon className='h-6' />
               <p className='ml-2'>{subItem.name}</p>

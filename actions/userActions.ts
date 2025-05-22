@@ -1,12 +1,12 @@
 'use server'
-import { MenuItemType } from '@/lib'
+import { MenuItemPath } from '@/lib'
 import { signIn, signOut } from '@/lib/auth'
 
 const userNavigationAction = async (actionId: string): Promise<void> => {
-  if (actionId === MenuItemType.SIGN_OUT) {
+  if (actionId === MenuItemPath.SIGN_OUT) {
     await signOut()
 
-  } else if (actionId === MenuItemType.SIGN_IN) {
+  } else if (actionId === MenuItemPath.SIGN_IN) {
     await signIn()
   }
 }

@@ -4,7 +4,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { MenuItem, TabItem, TabState } from '@/types'
 import { getMenuItem } from '@/lib'
 
-const Header = (
+const MainTabs = (
   { tabState, setTabState }:
   { tabState: TabState, setTabState: React.Dispatch<React.SetStateAction<TabState>> }
 ) => {
@@ -60,4 +60,4 @@ const Header = (
   </header>
 }
 
-export default Header
+export default MainTabs

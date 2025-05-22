@@ -1,14 +1,11 @@
 'use client'
 import React from 'react'
-import Image from 'next/image'
-import { MenuItem, TabItem, TabState } from '@/types'
-import Header from './Header'
-import MainMenuDropdown from './MainMenuDropdown'
-import ProfileDropdown from './ProfileDropdown'
+import { TabItem, TabState } from '@/types'
+import MainTabs from './MainTabs'
+import MainMenu from './MainMenu'
 import { navigation } from '@/lib'
 import { useSession } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
-import Link from 'next/link'
 
 const Layout = ({ children }: { children: React.ReactNode; }) => {
   const [tabState, setTabState] = React.useState<TabState>({ tabs: [], activeTab: null })
@@ -41,27 +38,8 @@ const Layout = ({ children }: { children: React.ReactNode; }) => {
   }, [pathname])
 
   return <>
-    <nav className={'flex space-x-4 py-2 px-4 bg-gray-800'}>
-      <Link href="/">
-        <Image
-          alt="Logo"
-          src="/logo.png"
-          className="h-8 w-8 rounded-md cursor-pointer"
-          height={32}
-          width={32}
-        />
-      </Link>
-
-      {authNavigation.map((item: MenuItem) =>
-        <MainMenuDropdown key={item.id} item={item}></MainMenuDropdown>)}
-
-      <ProfileDropdown
-        navigation={authUserNavigation || []}
-        user={session?.user}
-      ></ProfileDropdown>
-    </nav>
-
-    <Header tabState={tabState} setTabState={setTabState} />
+    <MainMenu authNavigation={authNavigation} authUserNavigation={authUserNavigation} />
+    <MainTabs tabState={tabState} setTabState={setTabState} />
     {children}
   </>
 }

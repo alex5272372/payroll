@@ -25,7 +25,7 @@ const ProfileDropdown = ({ navigation, user }: {
         className="rounded-md bg-gray-900 text-gray-300"
       >
         {navigation.map(item => {
-          return (<form key={item.id} action={userNavigationAction.bind(null, item.id)}>
+          return (<form key={item.path} action={userNavigationAction.bind(null, item.path)}>
             <button
               type="submit"
               className="flex w-full py-2 px-4 text-left hover:bg-gray-700 hover:text-white cursor-pointer"

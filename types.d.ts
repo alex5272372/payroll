@@ -2,7 +2,7 @@ export type HeroIcon = React.ForwardRefExoticComponent<React.PropsWithoutRef<Rea
   & { title?: string, titleId?: string } & React.RefAttributes<SVGSVGElement>>
 
 export type MenuItem = {
-  id: MenuItemType;
+  path: MenuItemPath;
   name: string;
   icon: HeroIcon;
   auth?: boolean;
@@ -12,7 +12,7 @@ export type MenuItem = {
 export type Navigation = Record<MenuType, MenuItem[]>;
 
 export type TabItem = {
-  menuPath: MenuItemType[];
+  menuPath: MenuItemPath[];
   objectId?: number;
 }
 
