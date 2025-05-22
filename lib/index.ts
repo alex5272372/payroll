@@ -24,7 +24,7 @@ export enum MenuItemPath {
   CATALOG = 'catalog',
   DOCUMENT = 'document',
   REPORT = 'report',
-  PROFILE = 'profile',
+  USER_PROFILE = 'user-profile',
   SIGN_OUT = 'sign-out',
   SIGN_IN = 'sign-in',
   COUNTRY_CALENDAR = 'country-calendar',
@@ -75,9 +75,9 @@ export const navigation: Navigation = {
   ],
 
   user: [
-    { path: MenuItemPath.PROFILE, name: 'Profile', icon: UserIcon },
-    { path: MenuItemPath.SIGN_OUT, name: 'Sign out', icon: ArrowRightStartOnRectangleIcon },
-    { path: MenuItemPath.SIGN_IN, name: 'Sign in', icon: ArrowRightEndOnRectangleIcon },
+    { path: MenuItemPath.USER_PROFILE, name: 'Profile', icon: UserIcon, auth: true },
+    { path: MenuItemPath.SIGN_OUT, name: 'Sign out', icon: ArrowRightStartOnRectangleIcon, auth: true },
+    { path: MenuItemPath.SIGN_IN, name: 'Sign in', icon: ArrowRightEndOnRectangleIcon, auth: false },
   ],
 }
 

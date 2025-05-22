@@ -1,16 +1,19 @@
 'use server'
-import { MenuItemPath } from '@/lib'
 import { signIn, signOut } from '@/lib/auth'
 
-const userNavigationAction = async (actionId: string): Promise<void> => {
-  if (actionId === MenuItemPath.SIGN_OUT) {
-    await signOut()
+const signInAction = async (formData: FormData): Promise<void> => {
+  await signIn('credentials', {
+    email: formData.get('email'),
+    password: formData.get('password'),
+    redirectTo: '/',
+  })
+}
 
-  } else if (actionId === MenuItemPath.SIGN_IN) {
-    await signIn()
-  }
+const signOutAction = async (): Promise<void> => {
+  await signOut({ redirectTo: '/' })
 }
 
 export {
-  userNavigationAction,
+  signInAction,
+  signOutAction
 }

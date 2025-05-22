@@ -1,14 +1,36 @@
+import React from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { MenuItem, TabItem, TabState } from '@/types'
 import { getMenuItem } from '@/lib'
 
-const MainTabs = (
-  { tabState, setTabState }:
-  { tabState: TabState, setTabState: React.Dispatch<React.SetStateAction<TabState>> }
-) => {
+const MainTabs = () => {
+  const [tabState, setTabState] = React.useState<TabState>({ tabs: [], activeTab: null })
+
+  const pathname = usePathname()
   const router = useRouter()
+
+  React.useEffect(() => {
+    let newTabState: TabState = { tabs: [], activeTab: null }
+    const storedTabState = localStorage.getItem('tabState')
+    if (storedTabState) newTabState = { ...JSON.parse(storedTabState), activeTab: null }
+
+    const menuPath = pathname.split('/').filter(Boolean)
+    if (menuPath.length) {
+      let activeTab = newTabState.tabs.findIndex((tab: TabItem) =>
+        tab.menuPath.every((item: string, index: number) => item === menuPath[index]))
+
+      if (activeTab === -1) {
+        newTabState.tabs.push({ menuPath })
+        activeTab = newTabState.tabs.length - 1
+      }
+      newTabState.activeTab = activeTab
+    }
+
+    setTabState(newTabState)
+    localStorage.setItem('tabState', JSON.stringify(newTabState))
+  }, [pathname])
 
   const closeTab = (event: React.MouseEvent, index: number) => {
     event.stopPropagation()

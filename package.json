@@ -1,6 +1,7 @@
 {
   "name": "payroll",
   "repository": "https://github.com/alex5272372/payroll.git",
+  "author": "Oleksii Nikolaienko <alex5272372@gmail.com>",
   "license": "MIT",
   "version": "0.1.0",
   "private": true,
@@ -19,7 +20,7 @@
     "@prisma/client": "6.8.2",
     "bcryptjs": "^3.0.2",
     "next": "15.3.2",
-    "next-auth": "5.0.0-beta.25",
+    "next-auth": "5.0.0-beta.28",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },
@@ -37,7 +38,7 @@
     "ts-node": "^10.9.2",
     "typescript": "5.8.3"
   },
-  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39",
+  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977",
   "pnpm": {
     "onlyBuiltDependencies": [
       "@prisma/client",

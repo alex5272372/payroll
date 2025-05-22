@@ -1,19 +1,19 @@
+import Link from 'next/link'
 import Image from 'next/image'
-import { Menu, MenuButton, MenuItems } from '@headlessui/react'
-import { userNavigationAction } from '@/actions/userActions'
-import { User } from 'next-auth'
-import { MenuItem } from '@/types'
+import { useSession } from 'next-auth/react'
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+import { navigation } from '@/lib'
 
-const ProfileDropdown = ({ navigation, user }: {
-  navigation: MenuItem[],
-  user?: User
-}) => {
+const ProfileDropdown = () => {
+  const { data: session } = useSession()
+  const authNavigation = navigation.user.filter(item => (session?.user ? item.auth !== false : !item.auth))
+
   return <>
     <Menu as="div" className="grow flex justify-end h-8">
       <MenuButton className="rounded-full cursor-pointer">
         <Image
           alt="Avatar"
-          src={user && user.image ? user.image : '/user.png'}
+          src={session?.user?.image ?? '/user.png'}
           className="rounded-full"
           height={32}
           width={32}
@@ -24,17 +24,17 @@ const ProfileDropdown = ({ navigation, user }: {
         anchor={{ to: 'bottom end', gap: 8 }}
         className="rounded-md bg-gray-900 text-gray-300"
       >
-        {navigation.map(item => {
-          return (<form key={item.path} action={userNavigationAction.bind(null, item.path)}>
-            <button
-              type="submit"
+        {authNavigation.map(item =>
+          <MenuItem key={item.path}>
+            <Link
               className="flex w-full py-2 px-4 text-left hover:bg-gray-700 hover:text-white cursor-pointer"
+              href={`/${item.path}`}
             >
               <item.icon className='h-6' />
               <p className='ml-2'>{item.name}</p>
-            </button>
-          </form>)
-        })}
+            </Link>
+          </MenuItem>
+        )}
       </MenuItems>
     </Menu>
   </>
