@@ -1,29 +1,22 @@
 'use client'
 import { useState } from 'react'
-import { signIn } from 'next-auth/react'
 import { Field, Input, Label } from '@headlessui/react'
-import { ArrowRightEndOnRectangleIcon, EyeIcon, EyeSlashIcon, IdentificationIcon } from '@heroicons/react/24/outline'
+import { UserPlusIcon, EyeIcon, EyeSlashIcon, IdentificationIcon } from '@heroicons/react/24/outline'
 import MainDialog from '@/components/MainDialog'
 import { DialogButtonState } from '@/types'
+import { signUpAction } from '@/actions/userActions'
 
-const SignIn = () => {
-  const [email, setEmail] = useState('')
+const SignUp = () => {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
-
-  const handleSignIn = async () => {
-    await signIn('credentials', {
-      email,
-      password,
-      redirectTo: '/',
-    })
-  }
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const buttons: DialogButtonState[] = [
     {
-      Icon: ArrowRightEndOnRectangleIcon,
-      title: 'Sign In',
-      onClick: handleSignIn,
+      Icon: UserPlusIcon,
+      title: 'Sign Up',
+      action: signUpAction
     },
   ]
 
@@ -38,7 +31,6 @@ const SignIn = () => {
         name="email"
         type="email"
         className="ml-2 mr-8 py-1 px-2 rounded-md bg-gray-100"
-        onChange={(e) => setEmail(e.target.value)}
       />
     </Field>
 
@@ -59,7 +51,29 @@ const SignIn = () => {
         onClick={() => setShowPassword(false)}
       />}
     </Field>
+
+    <Field className="flex items-center">
+      <Label className="text-gray-100">Confirm password:</Label>
+      <Input
+        name="confirmPassword"
+        type={showConfirmPassword ? 'text' : 'password'}
+        className="ml-2 py-1 px-2 rounded-md bg-gray-100"
+        onChange={(e) => setConfirmPassword(e.target.value)}
+      />
+      {!showConfirmPassword && <EyeIcon
+        className="h-6 ml-2 cursor-pointer bg-gray-700 text-gray-300 hover:bg-gray-500"
+        onClick={() => setShowConfirmPassword(true)}
+      />}
+      {showConfirmPassword && <EyeSlashIcon
+        className="h-6 ml-2 cursor-pointer bg-gray-700 text-gray-300 hover:bg-gray-500"
+        onClick={() => setShowConfirmPassword(false)}
+      />}
+    </Field>
+
+    <p className="text-yellow-300" hidden={password === confirmPassword}>
+      Password and confirmation do not match
+    </p>
   </MainDialog>
 }
 
-export default SignIn
+export default SignUp

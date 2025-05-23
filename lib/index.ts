@@ -1,4 +1,5 @@
 import {
+  ArrowPathIcon,
   ArrowRightEndOnRectangleIcon,
   ArrowRightStartOnRectangleIcon,
   CalendarIcon,
@@ -10,6 +11,7 @@ import {
   IdentificationIcon,
   UserIcon,
   UserGroupIcon,
+  UserPlusIcon,
   ViewColumnsIcon,
 } from '@heroicons/react/24/outline'
 import { MenuItem, Navigation } from '@/types'
@@ -27,6 +29,8 @@ export enum MenuItemPath {
   USER_PROFILE = 'user-profile',
   SIGN_OUT = 'sign-out',
   SIGN_IN = 'sign-in',
+  SIGN_UP = 'sign-up',
+  RESET_PASSWORD = 'reset-password',
   COUNTRY_CALENDAR = 'country-calendar',
   COMPANY_CALENDAR = 'company-calendar',
   DEPARTMENT_CALENDAR = 'department-calendar',
@@ -76,8 +80,10 @@ export const navigation: Navigation = {
 
   user: [
     { path: MenuItemPath.USER_PROFILE, name: 'Profile', icon: UserIcon, auth: true },
-    { path: MenuItemPath.SIGN_OUT, name: 'Sign out', icon: ArrowRightStartOnRectangleIcon, auth: true },
-    { path: MenuItemPath.SIGN_IN, name: 'Sign in', icon: ArrowRightEndOnRectangleIcon, auth: false },
+    { path: MenuItemPath.SIGN_OUT, name: 'Sign Out', icon: ArrowRightStartOnRectangleIcon, auth: true },
+    { path: MenuItemPath.SIGN_IN, name: 'Sign In', icon: ArrowRightEndOnRectangleIcon, auth: false },
+    { path: MenuItemPath.SIGN_UP, name: 'Sign Up', icon: UserPlusIcon, auth: false },
+    { path: MenuItemPath.RESET_PASSWORD, name: 'Reset password', icon: ArrowPathIcon, auth: false },
   ],
 }
 

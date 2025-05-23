@@ -20,3 +20,10 @@ export type TabState = {
   tabs: TabItem[];
   activeTab: number | null;
 }
+
+export type DialogButtonState = {
+  Icon: HeroIcon;
+  title: string;
+  action?: (formData: FormData) => void;
+  onClick?: () => void;
+}
