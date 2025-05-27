@@ -1,22 +1,54 @@
 import NextAuth, { User } from 'next-auth'
+import { encode as defaultEncode } from 'next-auth/jwt'
+import { PrismaAdapter } from '@auth/prisma-adapter'
+import { Prisma } from '@/prisma/generated/client'
+import { Adapter, AdapterSession } from 'next-auth/adapters'
 import Credentials from 'next-auth/providers/credentials'
-import prisma from './prisma'
+import SendGrid from 'next-auth/providers/sendgrid'
 import { compare } from 'bcryptjs'
+import prisma from '@/lib/prisma'
+import crypto from 'crypto'
 
-export const { handlers, auth } = NextAuth({
+const CustomPrismaAdapter = (prismaClient: typeof prisma): Adapter => {
+  const prismaAdapter: Adapter = PrismaAdapter(prismaClient)
+
+  return {
+    ...prismaAdapter,
+    createSession: async (session): Promise<AdapterSession> => {
+      const data: Prisma.SessionUncheckedCreateInput = {
+        ...session,
+        userId: Number(session.userId),
+      }
+
+      const dbSession = await prismaClient.session.create({ data })
+      return {
+        ...dbSession,
+        userId: String(dbSession.userId)
+      } as AdapterSession
+    },
+  }
+}
+
+const adapter = CustomPrismaAdapter(prisma)
+
+export const { handlers, signIn, signOut, auth } = NextAuth({
+  debug: process.env.NODE_ENV === 'development',
+  adapter,
+  session: {
+    strategy: 'database',
+  },
+  pages: {
+    signIn: '/sign-in',
+    signOut: '/sign-out',
+    newUser: '/sign-up',
+    verifyRequest: '/verify-request',
+  },
+
   providers: [
     Credentials({
       credentials: {
-        email: {
-          type: 'email',
-          label: 'Email',
-          placeholder: 'johndoe@gmail.com',
-        },
-        password: {
-          type: 'password',
-          label: 'Password',
-          placeholder: '*****',
-        },
+        email: {},
+        password: {},
       },
       authorize: async (credentials) => {
         if (!credentials.email || !credentials.password) return null
@@ -32,34 +64,49 @@ export const { handlers, auth } = NextAuth({
         if (!isPasswordValid) return null
 
         const user: User = {
-          id: dbUser.id.toString(),
-          name: dbUser.person.firstName + ' ' + dbUser.person.lastName,
+          id: String(dbUser.id),
+          name: dbUser.person?.firstName + ' ' + dbUser.person?.lastName,
           email: dbUser.email,
           image: dbUser.image
         }
         return user
       },
     }),
+
+    SendGrid({}),
   ],
+
   callbacks: {
-    session: ({ session, token }) => {
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          id: token.id as string
-        }
-      }
-    },
-    jwt: ({ token, user }) => {
-      if (user) return {
-        ...token,
-        id: user.id
+    jwt: ({ token, account }) => {
+      if (account?.provider === 'credentials') {
+        token.credentials = true
       }
       return token
     },
-    authorized: async ({ auth }) => {
-      return !!auth
+  },
+
+  jwt: {
+    encode: async (params) => {
+      if (params.token?.credentials) {
+        const sessionToken = crypto.randomUUID()
+
+        if (!params.token.sub) {
+          throw new Error('User ID not found in token')
+        }
+
+        const createdSession = await adapter?.createSession?.({
+          sessionToken,
+          userId: params.token.sub,
+          expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+        })
+
+        if (!createdSession) {
+          throw new Error('Failed to create session in database')
+        }
+
+        return sessionToken
+      }
+      return defaultEncode(params)
     },
-  }
+  },
 })

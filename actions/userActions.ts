@@ -1,7 +1,29 @@
 'use server'
+import prisma from '@/lib/prisma'
+import { signIn } from "@/lib/auth"
+import bcrypt from 'bcryptjs'
+
+const crypt = (pass: string) => bcrypt.hashSync(pass, bcrypt.genSaltSync(10))
 
 const signUpAction = async (formData: FormData): Promise<void> => {
-  // TODO: implement sign up action
+  await prisma.user.create({
+    data: {
+      email: formData.get('email') as string,
+      password: crypt(formData.get('password') as string),
+      person: { create: {
+        firstName: formData.get('firstName') as string,
+        lastName: formData.get('lastName') as string,
+      }},
+      userRoles: { create: [
+        { role: 'USER' }
+      ]}
+    }
+  })
+  
+  await signIn('sendgrid', {
+    email: formData.get('email'),
+    redirectTo: '/email-verified',
+  })
 }
 
 const resetPasswordAction = async (): Promise<void> => {

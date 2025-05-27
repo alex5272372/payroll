@@ -8,18 +8,20 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  url       = env("POSTGRES_URL")
+  url       = env("DATABASE_URL")
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  email     String     @db.VarChar(100) @unique
-  password  String?    @db.VarChar(80)
-  image     String?    @db.VarChar(500)
-  personId  Int        @map("person_id")
+  id            Int        @id @default(autoincrement())
+  email         String     @db.VarChar(100) @unique
+  emailVerified DateTime?  @map("email_verified")
+  password      String?    @db.VarChar(80)
+  image         String?    @db.VarChar(500)
+  personId      Int        @map("person_id")
 
-  person    Person     @relation(fields: [personId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  userRoles UserRole[]
+  person        Person     @relation(fields: [personId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  userRoles     UserRole[]
+  sessions      Session[]
 
   @@map("user")
 }
@@ -32,6 +34,25 @@ model UserRole {
 
   @@id([userId, role])
   @@map("user_role")
+}
+
+model Session {
+  sessionToken String   @db.Uuid @id @map("session_token")
+  userId       Int      @map("user_id")
+  expires      DateTime
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+ 
+  @@map("session")
+}
+ 
+model VerificationToken {
+  identifier String   @db.VarChar(100)
+  token      String   @db.VarChar(80)
+  expires    DateTime
+ 
+  @@id([identifier, token])
+  @@map("verification_token")
 }
 
 model Person {

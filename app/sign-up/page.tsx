@@ -26,6 +26,24 @@ const SignUp = () => {
     buttons={buttons}
   >
     <Field>
+      <Label className="text-gray-100">First name:</Label>
+      <Input
+        name="firstName"
+        type="text"
+        className="ml-2 mr-8 py-1 px-2 rounded-md bg-gray-100"
+      />
+    </Field>
+
+    <Field>
+      <Label className="text-gray-100">Last name:</Label>
+      <Input
+        name="lastName"
+        type="text"
+        className="ml-2 mr-8 py-1 px-2 rounded-md bg-gray-100"
+      />
+    </Field>
+
+    <Field>
       <Label className="text-gray-100">Email:</Label>
       <Input
         name="email"
