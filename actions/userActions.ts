@@ -26,8 +26,21 @@ const signUpAction = async (formData: FormData): Promise<void> => {
   })
 }
 
-const resetPasswordAction = async (): Promise<void> => {
-  // TODO: implement reset password action
+const resetPasswordAction = async (email: string, password: string): Promise<void> => {
+  const user = await prisma.user.findUnique({
+    where: { email }
+  })
+
+  if (!user) {
+    throw new Error('User not found')
+  }
+
+  await prisma.user.update({
+    where: { email },
+    data: {
+      password: crypt(password)
+    }
+  })
 }
 
 export {

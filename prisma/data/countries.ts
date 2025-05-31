@@ -1,4 +1,4 @@
-import { Prisma } from '@/prisma/generated/client'
+import { Prisma } from '@prisma/client'
 
 const data: Prisma.CountryUncheckedCreateInput[] = [
   { name: 'Afghanistan', code: 'AF' },

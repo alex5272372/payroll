@@ -32,8 +32,9 @@ const MainDialog = (
           <Button
             key={index}
             type={button.action ? 'submit' : 'button'}
-            className={`flex self-center py-1 px-2 rounded-md bg-gray-900 text-gray-300 hover:bg-gray-700 
-              hover:text-white cursor-pointer`}
+            className={`flex self-center py-1 px-2 rounded-md bg-gray-900 text-gray-300
+              ${!button.disabled && 'hover:bg-gray-700 hover:text-white cursor-pointer'}`}
+            disabled={button.disabled}
             onClick={button.onClick}
           >
             <button.Icon className="h-6" />

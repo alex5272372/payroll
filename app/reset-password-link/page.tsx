@@ -2,27 +2,24 @@
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { Field, Input, Label } from '@headlessui/react'
-import { ArrowRightEndOnRectangleIcon, IdentificationIcon } from '@heroicons/react/24/outline'
+import { ArrowPathIcon, IdentificationIcon } from '@heroicons/react/24/outline'
 import MainDialog from '@/components/MainDialog'
 import { DialogButtonState } from '@/types'
-import PasswordField from '@/components/inputs/PasswordField'
 
-const SignIn = () => {
+const ResetPasswordLink = () => {
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
 
   const handleSignIn = async () => {
-    await signIn('credentials', {
+    await signIn('sendgrid', {
       email,
-      password,
-      redirectTo: '/',
+      redirectTo: '/reset-password?email=' + encodeURIComponent(email),
     })
   }
 
   const buttons: DialogButtonState[] = [
     {
-      Icon: ArrowRightEndOnRectangleIcon,
-      title: 'Sign In',
+      Icon: ArrowPathIcon,
+      title: 'Send reset password link',
       onClick: handleSignIn,
     },
   ]
@@ -37,13 +34,11 @@ const SignIn = () => {
       <Input
         name="email"
         type="email"
-        className="ml-2 mr-8 py-1 px-2 rounded-md bg-gray-100"
+        className="ml-2 py-1 px-2 rounded-md bg-gray-100"
         onChange={(e) => setEmail(e.target.value)}
       />
     </Field>
-
-    <PasswordField setPassword={setPassword} />
   </MainDialog>
 }
 
-export default SignIn
+export default ResetPasswordLink

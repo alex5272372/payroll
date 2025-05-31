@@ -1,7 +1,7 @@
 import NextAuth, { User } from 'next-auth'
 import { encode as defaultEncode } from 'next-auth/jwt'
 import { PrismaAdapter } from '@auth/prisma-adapter'
-import { Prisma } from '@/prisma/generated/client'
+import { Prisma } from '@prisma/client'
 import { Adapter, AdapterSession } from 'next-auth/adapters'
 import Credentials from 'next-auth/providers/credentials'
 import SendGrid from 'next-auth/providers/sendgrid'
@@ -32,11 +32,8 @@ const CustomPrismaAdapter = (prismaClient: typeof prisma): Adapter => {
 const adapter = CustomPrismaAdapter(prisma)
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  debug: process.env.NODE_ENV === 'development',
+  // debug: process.env.NODE_ENV === 'development',
   adapter,
-  session: {
-    strategy: 'database',
-  },
   pages: {
     signIn: '/sign-in',
     signOut: '/sign-out',

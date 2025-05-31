@@ -30,7 +30,7 @@ export enum MenuItemPath {
   SIGN_OUT = 'sign-out',
   SIGN_IN = 'sign-in',
   SIGN_UP = 'sign-up',
-  RESET_PASSWORD = 'reset-password',
+  RESET_PASSWORD = 'reset-password-link',
   COUNTRY_CALENDAR = 'country-calendar',
   COMPANY_CALENDAR = 'company-calendar',
   DEPARTMENT_CALENDAR = 'department-calendar',

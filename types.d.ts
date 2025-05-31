@@ -24,6 +24,7 @@ export type TabState = {
 export type DialogButtonState = {
   Icon: HeroIcon;
   title: string;
+  disabled?: boolean;
   action?: (formData: FormData) => void;
   onClick?: () => void;
 }

@@ -10,6 +10,13 @@ The platform is designed to perform complex periodic calculations
    - Run migrations: `npx prisma migrate dev`.
 4. Start the development server: `pnpm dev`.
 
+### Dropping All Connections to a PostgreSQL Database
+```
+SELECT pg_terminate_backend(pid)
+FROM pg_stat_activity 
+WHERE datname = 'TARGET_DB_NAME' AND leader_pid IS NULL;
+```
+
 ## Used templates
 
 [Vercel Postgres + Prisma Next.js Starter](https://vercel.com/templates/next.js/postgres-prisma)

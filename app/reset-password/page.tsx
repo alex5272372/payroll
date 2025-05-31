@@ -1,33 +1,56 @@
 'use client'
-import { Field, Input, Label } from '@headlessui/react'
+import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { ArrowPathIcon, IdentificationIcon } from '@heroicons/react/24/outline'
 import MainDialog from '@/components/MainDialog'
 import { DialogButtonState } from '@/types'
 import { resetPasswordAction } from '@/actions/userActions'
+import PasswordField from '@/components/inputs/PasswordField'
+import PasswordPolicy from '@/components/dataDisplay/PasswordPolicy'
+import ErrorDialog from '@/components/MainDialog/ErrorDialog'
+import OkDialog from '@/components/MainDialog/OkDialog'
 
 const ResetPassword = () => {
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [passwordValid, setPasswordValid] = useState(false)
+  const [success, setSuccess] = useState(false)
+
+  const searchParams = useSearchParams()
+
+  const email = searchParams.get('email')
+  if (!email) {
+    return <ErrorDialog header='Reset Password' message='Email parameter is missing.' />
+  }
+
+  const handleResetPassword = async () => {
+    await resetPasswordAction(email, password)
+    setSuccess(true)
+  }
+
   const buttons: DialogButtonState[] = [
     {
       Icon: ArrowPathIcon,
-      title: 'Send reset password link',
-      action: resetPasswordAction
+      title: 'Reset password',
+      disabled: !passwordValid,
+      onClick: handleResetPassword,
     },
   ]
 
-  return <MainDialog
-    Icon={IdentificationIcon}
-    title="User"
-    buttons={buttons}
-  >
-    <Field>
-      <Label className="text-gray-100">Email:</Label>
-      <Input
-        name="email"
-        type="email"
-        className="ml-2 py-1 px-2 rounded-md bg-gray-100"
-      />
-    </Field>
-  </MainDialog>
+  if (success) {
+    return <OkDialog header="Password changed" message="Your password has been successfully changed." />
+
+  } else {
+    return <MainDialog
+      Icon={IdentificationIcon}
+      title="User"
+      buttons={buttons}
+    >
+      <PasswordField setPassword={setPassword} />
+      <PasswordField name="confirmPassword" label="Confirm password" setPassword={setConfirmPassword} />
+      <PasswordPolicy password={password} confirmPassword={confirmPassword} setPasswordValid={setPasswordValid} />
+    </MainDialog>
+  }
 }
 
 export default ResetPassword
