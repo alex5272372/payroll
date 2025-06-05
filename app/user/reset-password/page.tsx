@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { ArrowPathIcon, IdentificationIcon } from '@heroicons/react/24/outline'
 import MainDialog from '@/components/MainDialog'
-import { DialogButtonState } from '@/types'
+import { ActionResult, DialogButtonState } from '@/types'
 import { resetPasswordAction } from '@/actions/userActions'
 import PasswordField from '@/components/inputs/PasswordField'
 import PasswordPolicy from '@/components/dataDisplay/PasswordPolicy'
@@ -24,8 +24,8 @@ const ResetPassword = () => {
   }
 
   const handleResetPassword = async () => {
-    await resetPasswordAction(email, password)
-    setSuccess(true)
+    const result: ActionResult = await resetPasswordAction(email, password)
+    setSuccess(result.success)
   }
 
   const buttons: DialogButtonState[] = [

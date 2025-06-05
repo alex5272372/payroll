@@ -29,3 +29,15 @@ export type DialogButtonState = {
   action?: (formData: FormData) => void;
   onClick?: () => void;
 }
+
+export type ActionResult = {
+  success: boolean;
+  error?: string;
+}
+
+export type SignUpData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}

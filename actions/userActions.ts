@@ -2,17 +2,21 @@
 import prisma from '@/lib/prisma'
 import { signIn } from "@/lib/auth"
 import bcrypt from 'bcryptjs'
+import { ActionResult, SignUpData } from '@/types'
 
 const crypt = (pass: string) => bcrypt.hashSync(pass, bcrypt.genSaltSync(10))
 
-const signUpAction = async (formData: FormData): Promise<void> => {
+const signUpAction = async (data: SignUpData): Promise<ActionResult> => {
+  const dbUser = await prisma.user.findFirst({ where: { email: data.email }})
+  if (dbUser) return { success: false, error: 'User already exists' }
+
   await prisma.user.create({
     data: {
-      email: formData.get('email') as string,
-      password: crypt(formData.get('password') as string),
+      email: data.email,
+      password: crypt(data.password),
       person: { create: {
-        firstName: formData.get('firstName') as string,
-        lastName: formData.get('lastName') as string,
+        firstName: data.firstName,
+        lastName: data.lastName,
       }},
       userRoles: { create: [
         { role: 'USER' }
@@ -21,12 +25,14 @@ const signUpAction = async (formData: FormData): Promise<void> => {
   })
   
   await signIn('sendgrid-signup', {
-    email: formData.get('email'),
+    email: data.email,
     redirectTo: '/email-verified',
   })
+
+  return { success: true }
 }
 
-const resetPasswordAction = async (email: string, password: string): Promise<void> => {
+const resetPasswordAction = async (email: string, password: string): Promise<ActionResult> => {
   const user = await prisma.user.findUnique({
     where: { email }
   })
@@ -41,6 +47,8 @@ const resetPasswordAction = async (email: string, password: string): Promise<voi
       password: crypt(password)
     }
   })
+
+  return { success: true }
 }
 
 export {

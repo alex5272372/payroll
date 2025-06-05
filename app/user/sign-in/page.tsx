@@ -1,15 +1,29 @@
 'use client'
 import { useState } from 'react'
-import { signIn } from 'next-auth/react'
+import { useSearchParams } from 'next/navigation'
+import { signIn, useSession } from 'next-auth/react'
 import { Field, Input, Label } from '@headlessui/react'
 import { ArrowRightEndOnRectangleIcon, IdentificationIcon } from '@heroicons/react/24/outline'
 import MainDialog from '@/components/MainDialog'
 import { DialogButtonState } from '@/types'
 import PasswordField from '@/components/inputs/PasswordField'
+import ErrorDialog from '@/components/MainDialog/ErrorDialog'
 
 const SignIn = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  const searchParams = useSearchParams()
+  const { data: session } = useSession()
+
+  if (session) {
+    return <ErrorDialog header='User already authorized' />
+  }
+
+  const error = searchParams.get('error')
+  if (error) {
+    return <ErrorDialog header='Invalid credentials' message='Incorrect email address or password.' />
+  }
 
   const handleSignIn = async () => {
     await signIn('credentials', {

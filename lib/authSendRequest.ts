@@ -1,8 +1,16 @@
+import { EmailProviderSendVerificationRequestParams } from 'next-auth/providers'
+
+interface Theme {
+  colorScheme?: 'auto' | 'dark' | 'light'
+  logo?: string
+  brandColor?: string
+  buttonText?: string
+}
 
 const html = (params: {
   url: string;
   host: string,
-  theme: Record<string, unknown>,
+  theme: Theme,
   providerName: string
 }) => {
   const { url, host, theme, providerName } = params
@@ -76,12 +84,7 @@ const text = ({ url, host }: { url: string; host: string }) => {
 }
 
 export const sendVerificationRequest = async (
-  params: {
-    identifier: string
-    provider: Record<string, string>
-    url: string
-    theme: Record<string, unknown>
-  }
+  params: EmailProviderSendVerificationRequestParams
 ) => {
   const { identifier: to, provider, url, theme } = params
   const { host } = new URL(url)
