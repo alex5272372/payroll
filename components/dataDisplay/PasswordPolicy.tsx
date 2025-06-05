@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useCallback, useEffect } from 'react'
 import { CheckIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 const PasswordPolicyItem = ({
@@ -26,19 +26,37 @@ const PasswordPolicy = ({
   confirmPassword: string
   setPasswordValid: Dispatch<SetStateAction<boolean>>
 }) => {
-  const confirmPasswordCheck = () => password === confirmPassword
-  const minLengthCheck = () => password.length >= 8
-  const lowercaseCheck = () => /[a-z]/.test(password)
-  const uppercaseCheck = () => /[A-Z]/.test(password)
-  const numberCheck = () => /\d/.test(password)
 
-  setPasswordValid(
-    confirmPasswordCheck()
-    && minLengthCheck()
-    && lowercaseCheck()
-    && uppercaseCheck()
-    && numberCheck()
+  const confirmPasswordCheck = useCallback(
+    () => password === confirmPassword,
+    [password, confirmPassword]
   )
+  const minLengthCheck = useCallback(
+    () => password.length >= 8,
+    [password]
+  )
+  const lowercaseCheck = useCallback(
+    () => /[a-z]/.test(password),
+    [password]
+  )
+  const uppercaseCheck = useCallback(
+    () => /[A-Z]/.test(password),
+    [password]
+  )
+  const numberCheck = useCallback(
+    () => /\d/.test(password),
+    [password]
+  )
+
+  useEffect(() => {
+    setPasswordValid(
+      confirmPasswordCheck()
+      && minLengthCheck()
+      && lowercaseCheck()
+      && uppercaseCheck()
+      && numberCheck()
+    )
+  }, [confirmPasswordCheck, minLengthCheck, lowercaseCheck, uppercaseCheck, numberCheck, setPasswordValid])
 
   return <ul>
     <PasswordPolicyItem isValid={confirmPasswordCheck()}>

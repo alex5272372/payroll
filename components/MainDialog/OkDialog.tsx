@@ -1,20 +1,13 @@
-import { useRouter } from 'next/navigation'
 import { CheckIcon, InformationCircleIcon } from '@heroicons/react/24/outline'
 import MainDialog from '.'
 import { DialogButtonState } from '@/types'
 
 const OkDialog = ({ header, message }: { header: string; message?: string }) => {
-  const router = useRouter()
-
-  const handleOk = async () => {
-    router.push('/')
-  }
-
   const buttons: DialogButtonState[] = [
     {
       Icon: CheckIcon,
       title: 'OK',
-      onClick: handleOk,
+      href: '/',
     },
   ]
 

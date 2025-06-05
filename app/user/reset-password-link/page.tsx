@@ -10,9 +10,9 @@ const ResetPasswordLink = () => {
   const [email, setEmail] = useState('')
 
   const handleSignIn = async () => {
-    await signIn('sendgrid', {
+    await signIn('sendgrid-reset', {
       email,
-      redirectTo: '/reset-password?email=' + encodeURIComponent(email),
+      redirectTo: '/user/reset-password?email=' + encodeURIComponent(email),
     })
   }
 

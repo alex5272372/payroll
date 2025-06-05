@@ -4,10 +4,10 @@ import { PrismaAdapter } from '@auth/prisma-adapter'
 import { Prisma } from '@prisma/client'
 import { Adapter, AdapterSession } from 'next-auth/adapters'
 import Credentials from 'next-auth/providers/credentials'
-import SendGrid from 'next-auth/providers/sendgrid'
 import { compare } from 'bcryptjs'
-import prisma from '@/lib/prisma'
 import crypto from 'crypto'
+import prisma from '@/lib/prisma'
+import { sendVerificationRequest } from '@/lib/authSendRequest'
 
 const CustomPrismaAdapter = (prismaClient: typeof prisma): Adapter => {
   const prismaAdapter: Adapter = PrismaAdapter(prismaClient)
@@ -35,10 +35,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   // debug: process.env.NODE_ENV === 'development',
   adapter,
   pages: {
-    signIn: '/sign-in',
-    signOut: '/sign-out',
-    newUser: '/sign-up',
-    verifyRequest: '/verify-request',
+    error: '/user/error',
+    signIn: '/user/sign-in',
+    signOut: '/user/sign-out',
+    newUser: '/user/sign-up',
+    verifyRequest: '/user/verify-request',
   },
 
   providers: [
@@ -70,7 +71,29 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
 
-    SendGrid({}),
+    {
+      id: 'sendgrid-signup',
+      type: 'email',
+      name: 'SendGrid Sign Up',
+      maxAge: 24 * 60 * 60,
+      sendVerificationRequest,
+      options: {
+        apiKey: process.env.AUTH_SENDGRID_KEY,
+        from: 'no-reply@payroll8.net',
+      },
+    },
+
+    {
+      id: 'sendgrid-reset',
+      type: 'email',
+      name: 'SendGrid Reset Password',
+      maxAge: 24 * 60 * 60,
+      sendVerificationRequest,
+      options: {
+        apiKey: process.env.AUTH_SENDGRID_KEY,
+        from: 'no-reply@payroll8.net',
+      },
+    },
   ],
 
   callbacks: {

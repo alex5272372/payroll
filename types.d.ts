@@ -25,6 +25,7 @@ export type DialogButtonState = {
   Icon: HeroIcon;
   title: string;
   disabled?: boolean;
+  href?: string;
   action?: (formData: FormData) => void;
   onClick?: () => void;
 }

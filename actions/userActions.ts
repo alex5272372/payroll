@@ -20,7 +20,7 @@ const signUpAction = async (formData: FormData): Promise<void> => {
     }
   })
   
-  await signIn('sendgrid', {
+  await signIn('sendgrid-signup', {
     email: formData.get('email'),
     redirectTo: '/email-verified',
   })
