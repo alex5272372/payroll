@@ -64,13 +64,13 @@ model Person {
   birthdate  DateTime? @db.Date
 
   users     User[]
-  employees Epmloyee[]
+  employees Employee[]
 
   @@unique([firstName, lastName, birthdate])
   @@map("person")
 }
 
-model Epmloyee {
+model Employee {
   id           Int        @id @default(autoincrement())
   departmentId Int        @map("department_id")
   personId     Int        @map("person_id")
@@ -90,7 +90,7 @@ model Department {
 
   company   Company    @relation(fields: [companyId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   country   Country    @relation(fields: [countryCode], references: [code], onDelete: NoAction, onUpdate: NoAction)
-  employees Epmloyee[]
+  employees Employee[]
 
   @@unique([name, companyId])
   @@map("department")

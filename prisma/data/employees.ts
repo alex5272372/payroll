@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client'
 
-const data: Prisma.EpmloyeeUncheckedCreateInput[] = [
+const data: Prisma.EmployeeUncheckedCreateInput[] = [
   {
     departmentId: 1,
     personId: 1

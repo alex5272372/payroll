@@ -69,7 +69,7 @@ const main = async () => {
   console.log('Users creation completed')
 
   const employeesData = mapData(employees)
-  for (const create of employeesData) await prisma.epmloyee.upsert({ where: { departmentId_personId: {
+  for (const create of employeesData) await prisma.employee.upsert({ where: { departmentId_personId: {
     departmentId: create.departmentId,
     personId: create.personId
   }}, update: {}, create })

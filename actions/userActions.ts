@@ -3,8 +3,36 @@ import prisma from '@/lib/prisma'
 import { signIn } from "@/lib/auth"
 import bcrypt from 'bcryptjs'
 import { ActionResult, SignUpData } from '@/types'
+import { Prisma } from '@prisma/client'
 
 const crypt = (pass: string) => bcrypt.hashSync(pass, bcrypt.genSaltSync(10))
+
+export type UserWithPerson = Prisma.UserGetPayload<{
+  select: {
+    id: boolean,
+    email: boolean,
+    personId: boolean,
+    person: { select: { firstName: boolean, lastName: boolean }}
+    emailVerified: boolean,
+  }
+}>
+
+const getAllUsers = async (): Promise<ActionResult<UserWithPerson[]>> => {
+  const users: UserWithPerson[] = await prisma.user.findMany({
+    select: {
+      id: true,
+      email: true,
+      personId: true,
+      person: { select: {firstName: true, lastName: true }},
+      emailVerified: true,
+    }
+  })
+  
+  return {
+    success: true,
+    value: users,
+  }
+}
 
 const signUpAction = async (data: SignUpData): Promise<ActionResult> => {
   const dbUser = await prisma.user.findFirst({ where: { email: data.email }})
@@ -52,6 +80,7 @@ const resetPasswordAction = async (email: string, password: string): Promise<Act
 }
 
 export {
+  getAllUsers,
   signUpAction,
   resetPasswordAction
 }

@@ -30,14 +30,25 @@ export type DialogButtonState = {
   onClick?: () => void;
 }
 
-export type ActionResult = {
-  success: boolean;
-  error?: string;
-}
-
 export type SignUpData = {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
+}
+
+export type ActionResult<T = undefined> = {
+  success: boolean;
+  error?: string;
+  value?: T;
+}
+
+export type TableDataColumn = {
+  header: string;
+  width: number;
+}
+
+export type TableData = {
+  columns: TableDataColumn[];
+  rows: string[][];
 }
