@@ -9,12 +9,15 @@ import {
   HomeModernIcon,
   GlobeEuropeAfricaIcon,
   IdentificationIcon,
+  PencilIcon,
+  PlusIcon,
+  TrashIcon,
   UserIcon,
   UserGroupIcon,
   UserPlusIcon,
   ViewColumnsIcon,
 } from '@heroicons/react/24/outline'
-import { MenuItem, Navigation } from '@/types'
+import { MenuItem, Navigation, ToolbarItem } from '@/types'
 
 export enum MenuType {
   MAIN = 'main',
@@ -111,3 +114,9 @@ export const getMenuItem = (menuPath: MenuItemPath[]): MenuItem | null => {
 
   return menuItem || null
 }
+
+export const catalogToolbar: ToolbarItem[] = [
+  { name: 'New', icon: PlusIcon, onClick: () => {} },
+  { name: 'Edit', icon: PencilIcon, onClick: () => {} },
+  { name: 'Delete', icon: TrashIcon, onClick: () => {} },
+]

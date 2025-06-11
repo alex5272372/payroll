@@ -1,6 +1,8 @@
 import { getAllPeople } from '@/actions/personActions'
 import Layout from '@/components/Layout'
+import Toolbar from '@/components/Toolbar'
 import DataTable from '@/components/dataDisplay/DataTable'
+import { catalogToolbar } from '@/lib'
 import { ActionResult } from '@/types'
 import { Person } from '@prisma/client'
 
@@ -9,6 +11,7 @@ const PeopleCatalog = async () => {
 
   return <Layout>
     <main>
+      <Toolbar items={catalogToolbar} />
       <DataTable
         data={{
           columns: [

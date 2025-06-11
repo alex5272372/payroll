@@ -1,6 +1,8 @@
 import { UserWithPerson, getAllUsers } from '@/actions/userActions'
 import Layout from '@/components/Layout'
+import Toolbar from '@/components/Toolbar'
 import DataTable from '@/components/dataDisplay/DataTable'
+import { catalogToolbar } from '@/lib'
 import { ActionResult } from '@/types'
 
 const UsersCatalog = async () => {
@@ -8,6 +10,7 @@ const UsersCatalog = async () => {
 
   return <Layout>
     <main>
+      <Toolbar items={catalogToolbar} />
       <DataTable
         data={{
           columns: [

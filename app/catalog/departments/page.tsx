@@ -1,6 +1,8 @@
 import { DepartmentWithCompany, getAllDepartments } from '@/actions/departmentActions'
 import Layout from '@/components/Layout'
+import Toolbar from '@/components/Toolbar'
 import DataTable from '@/components/dataDisplay/DataTable'
+import { catalogToolbar } from '@/lib'
 import { ActionResult } from '@/types'
 
 const DepartmentsCatalog = async () => {
@@ -8,6 +10,7 @@ const DepartmentsCatalog = async () => {
 
   return <Layout>
     <main>
+      <Toolbar items={catalogToolbar} />
       <DataTable
         data={{
           columns: [

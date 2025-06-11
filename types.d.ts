@@ -21,6 +21,12 @@ export type TabState = {
   activeTab: number | null;
 }
 
+export type ToolbarItem = {
+  name: string;
+  icon: HeroIcon;
+  onClick: () => void;
+}
+
 export type DialogButtonState = {
   Icon: HeroIcon;
   title: string;
