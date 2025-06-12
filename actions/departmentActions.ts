@@ -11,7 +11,7 @@ const getAllDepartments = async (): Promise<ActionResult<DepartmentWithCompany[]
   const departments: DepartmentWithCompany[] = await prisma.department.findMany({
     include: { company: { select: { name: true }}}
   })
-  
+
   return {
     success: true,
     value: departments,

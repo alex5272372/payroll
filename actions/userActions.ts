@@ -1,6 +1,6 @@
 'use server'
 import prisma from '@/lib/prisma'
-import { signIn } from "@/lib/auth"
+import { signIn } from '@/lib/auth'
 import bcrypt from 'bcryptjs'
 import { ActionResult, SignUpData } from '@/types'
 import { Prisma } from '@prisma/client'
@@ -14,6 +14,7 @@ export type UserWithPerson = Prisma.UserGetPayload<{
     personId: boolean,
     person: { select: { firstName: boolean, lastName: boolean }}
     emailVerified: boolean,
+    userRoles: { select: { role: boolean }},
   }
 }>
 
@@ -23,11 +24,12 @@ const getAllUsers = async (): Promise<ActionResult<UserWithPerson[]>> => {
       id: true,
       email: true,
       personId: true,
-      person: { select: {firstName: true, lastName: true }},
+      person: { select: { firstName: true, lastName: true }},
       emailVerified: true,
+      userRoles: { select: { role: true }}
     }
   })
-  
+
   return {
     success: true,
     value: users,
@@ -48,10 +50,10 @@ const signUpAction = async (data: SignUpData): Promise<ActionResult> => {
       }},
       userRoles: { create: [
         { role: 'USER' }
-      ]}
+      ] }
     }
   })
-  
+
   await signIn('sendgrid-signup', {
     email: data.email,
     redirectTo: '/email-verified',

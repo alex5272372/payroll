@@ -54,7 +54,12 @@ export type TableDataColumn = {
   width: number;
 }
 
+export type TableDataRow = {
+  cells: string[];
+  selected?: boolean;
+}
+
 export type TableData = {
   columns: TableDataColumn[];
-  rows: string[][];
+  rows: TableDataRow[];
 }

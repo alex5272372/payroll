@@ -17,7 +17,7 @@ const getAllEmployees = async (): Promise<ActionResult<EmployeeWithPersonAndDepa
       department: { select: { name: true }}
     }
   })
-  
+
   return {
     success: true,
     value: employees,

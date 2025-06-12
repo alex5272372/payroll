@@ -5,7 +5,7 @@ import { ActionResult } from '@/types'
 
 const getAllCountries = async (): Promise<ActionResult<Country[]>> => {
   const countries: Country[] = await prisma.country.findMany()
-  
+
   return {
     success: true,
     value: countries,
