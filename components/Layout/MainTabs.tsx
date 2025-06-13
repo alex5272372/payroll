@@ -2,8 +2,8 @@ import React from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { MenuItem, TabItem, TabState } from '@/types'
-import { getMenuItem } from '@/lib'
+import { TabItem, TabState } from '@/types'
+import { MenuItem, getMenuItem } from '@/lib/data/navigation'
 
 const MainTabs = () => {
   const [tabState, setTabState] = React.useState<TabState>({ tabs: [], activeTab: null })
