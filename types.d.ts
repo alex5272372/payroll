@@ -1,3 +1,11 @@
+import { UserRole } from '@/lib/data/roleMatrix'
+
+declare module 'next-auth' {
+  interface Session {
+    roles?: UserRole[]
+  }
+}
+
 export type HeroIcon = React.ForwardRefExoticComponent<React.PropsWithoutRef<React.SVGProps<SVGSVGElement>>
   & { title?: string, titleId?: string } & React.RefAttributes<SVGSVGElement>>
 

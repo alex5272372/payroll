@@ -1,19 +1,25 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { useSession } from 'next-auth/react'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { navigation } from '@/lib/data/navigation'
+import { User } from 'next-auth'
+import { CRUD, roleMatrix, UserRole } from '@/lib/data/roleMatrix'
 
-const ProfileDropdown = () => {
-  const { data: session } = useSession()
-  const authNavigation = navigation.user.filter(item => (session?.user ? item.auth !== false : !item.auth))
+const ProfileDropdown = ({ user, roles }: { user?: User, roles?: UserRole[] }) => {
+  const authNavigation = navigation.user.filter(item => {
+    if (roles) {
+      return roles.some((value: UserRole) => roleMatrix[item.path][value][CRUD.READ])
+    } else {
+      return roleMatrix[item.path][UserRole.UNAUTHORIZED][CRUD.READ]
+    }
+  })
 
   return <>
     <Menu as="div" className="grow flex justify-end h-8">
       <MenuButton className="rounded-full cursor-pointer">
         <Image
           alt="Avatar"
-          src={session?.user?.image ?? '/user.png'}
+          src={user?.image ?? '/user.png'}
           className="rounded-full"
           height={32}
           width={32}

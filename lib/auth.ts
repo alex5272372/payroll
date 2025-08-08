@@ -8,6 +8,7 @@ import { compare } from 'bcryptjs'
 import crypto from 'crypto'
 import prisma from '@/lib/prisma'
 import { sendVerificationRequest } from '@/lib/authSendRequest'
+import { UserRole } from './data/roleMatrix'
 
 const CustomPrismaAdapter = (prismaClient: typeof prisma): Adapter => {
   const prismaAdapter: Adapter = PrismaAdapter(prismaClient)
@@ -102,6 +103,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.credentials = true
       }
       return token
+    },
+    session: async ({ session, user }) => {
+      const userRoles = await prisma.userRole.findMany({
+        where: { userId: Number(user.id) },
+      })
+      session.roles = userRoles.map(role => UserRole[role.role as keyof typeof UserRole])
+      return session
     },
   },
 

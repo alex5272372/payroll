@@ -20,7 +20,6 @@ export type MenuItem = {
   path: MenuItemPath;
   name: string;
   icon: HeroIcon;
-  auth?: boolean;
   items?: MenuItem[];
 }
 
@@ -67,7 +66,7 @@ export const navigation: Navigation = {
       { path: MenuItemPath.EMPLOYEE_CALENDAR, name: 'Employee calendar', icon: IdentificationIcon },
     ] },
 
-    { path: MenuItemPath.CATALOG, name: 'Catalogs', icon: ViewColumnsIcon, auth: true, items: [
+    { path: MenuItemPath.CATALOG, name: 'Catalogs', icon: ViewColumnsIcon, items: [
       { path: MenuItemPath.COUNTRIES, name: 'Countries', icon: ViewColumnsIcon },
       { path: MenuItemPath.COMPANIES, name: 'Companies', icon: ViewColumnsIcon },
       { path: MenuItemPath.DEPARTMENTS, name: 'Departments', icon: ViewColumnsIcon },
@@ -76,24 +75,24 @@ export const navigation: Navigation = {
       { path: MenuItemPath.USERS, name: 'Users', icon: ViewColumnsIcon },
     ] },
 
-    { path: MenuItemPath.DOCUMENT, name: 'Documents', icon: DocumentTextIcon, auth: true, items: [
+    { path: MenuItemPath.DOCUMENT, name: 'Documents', icon: DocumentTextIcon, items: [
       { path: MenuItemPath.CALENDAR_FILLING, name: 'Calendar filling', icon: DocumentTextIcon },
       { path: MenuItemPath.CALCULATION_TEMPLATE, name: 'Calculation template', icon: DocumentIcon },
       { path: MenuItemPath.PAYROLL_CALCULATION, name: 'Payroll calculation', icon: DocumentTextIcon },
     ] },
 
-    { path: MenuItemPath.REPORT, name: 'Reports', icon: ChartBarIcon, auth: true, items: [
+    { path: MenuItemPath.REPORT, name: 'Reports', icon: ChartBarIcon, items: [
       { path: MenuItemPath.PAYSLIP, name: 'Payslip', icon: ChartBarIcon },
       { path: MenuItemPath.PAYMENT_STATEMENT, name: 'Payment statement', icon: ChartBarIcon },
     ] },
   ],
 
   user: [
-    { path: MenuItemPath.USER_PROFILE, name: 'Profile', icon: UserIcon, auth: true },
-    { path: MenuItemPath.SIGN_OUT, name: 'Sign Out', icon: ArrowRightStartOnRectangleIcon, auth: true },
-    { path: MenuItemPath.SIGN_IN, name: 'Sign In', icon: ArrowRightEndOnRectangleIcon, auth: false },
-    { path: MenuItemPath.SIGN_UP, name: 'Sign Up', icon: UserPlusIcon, auth: false },
-    { path: MenuItemPath.RESET_PASSWORD, name: 'Reset password', icon: ArrowPathIcon, auth: false },
+    { path: MenuItemPath.USER_PROFILE, name: 'Profile', icon: UserIcon },
+    { path: MenuItemPath.SIGN_OUT, name: 'Sign Out', icon: ArrowRightStartOnRectangleIcon },
+    { path: MenuItemPath.SIGN_IN, name: 'Sign In', icon: ArrowRightEndOnRectangleIcon },
+    { path: MenuItemPath.SIGN_UP, name: 'Sign Up', icon: UserPlusIcon },
+    { path: MenuItemPath.RESET_PASSWORD, name: 'Reset password', icon: ArrowPathIcon },
   ],
 }
 

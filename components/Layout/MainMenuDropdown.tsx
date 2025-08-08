@@ -1,8 +1,17 @@
 import Link from 'next/link'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { MenuItem as MenuItemType } from '@/types'
+import { MenuItem as MenuItemType } from '@/lib/data/navigation'
+import { CRUD, roleMatrix, UserRole } from '@/lib/data/roleMatrix'
 
-const MainMenuDropdown = ({ item }: { item: MenuItemType }) => {
+const MainMenuDropdown = ({ item, roles }: { item: MenuItemType, roles?: UserRole[] }) => {
+  const authNavigation = item.items?.filter(item => {
+    if (roles) {
+      return roles.some((value: UserRole) => roleMatrix[item.path][value][CRUD.READ])
+    } else {
+      return roleMatrix[item.path][UserRole.UNAUTHORIZED][CRUD.READ]
+    }
+  })
+
   return (
     <Menu as="div" className="h-8">
       <MenuButton
@@ -17,7 +26,7 @@ const MainMenuDropdown = ({ item }: { item: MenuItemType }) => {
         anchor={{ to: 'bottom start', gap: 8 }}
         className="rounded-md bg-gray-900 text-gray-300"
       >
-        {item.items?.map(subItem =>
+        {authNavigation?.map(subItem =>
           <MenuItem key={subItem.path}>
             <Link
               className="flex w-full py-2 px-4 text-left hover:bg-gray-700 hover:text-white cursor-pointer"

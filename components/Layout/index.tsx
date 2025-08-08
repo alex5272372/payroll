@@ -6,10 +6,17 @@ import { MenuItem, navigation } from '@/lib/data/navigation'
 import MainTabs from './MainTabs'
 import MainMenuDropdown from './MainMenuDropdown'
 import ProfileDropdown from './ProfileDropdown'
+import { CRUD, roleMatrix, UserRole } from '@/lib/data/roleMatrix'
 
 const Layout = ({ children }: { children: React.ReactNode; }) => {
   const { data: session } = useSession()
-  const authNavigation = navigation.main.filter(item => (session?.user ? item.auth !== false : !item.auth))
+  const authNavigation = navigation.main.filter(item => {
+    if (session?.roles) {
+      return session.roles.some((value: UserRole) => roleMatrix[item.path][value][CRUD.READ])
+    } else {
+      return roleMatrix[item.path][UserRole.UNAUTHORIZED][CRUD.READ]
+    }
+  })
 
   return <>
     <nav className={'flex space-x-4 py-2 px-4 bg-gray-800'}>
@@ -23,8 +30,9 @@ const Layout = ({ children }: { children: React.ReactNode; }) => {
         />
       </Link>
 
-      {authNavigation.map((item: MenuItem) => <MainMenuDropdown key={item.path} item={item}></MainMenuDropdown>)}
-      <ProfileDropdown />
+      {authNavigation.map((item: MenuItem) =>
+        <MainMenuDropdown key={item.path} item={item} roles={session?.roles}></MainMenuDropdown>)}
+      <ProfileDropdown user={session?.user} roles={session?.roles} />
     </nav>
 
     <MainTabs />
