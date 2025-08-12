@@ -14,7 +14,7 @@ export const GET = async () => {
       sessionToken: sessionToken,
     },
     include: {
-      user: true,
+      user: { include: { userRoles: true }},
     },
   })
 

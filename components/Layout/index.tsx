@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
-import { MenuItem, navigation } from '@/lib/data/navigation'
+import { MenuItem, MenuSection, navigation } from '@/lib/data/navigation'
 import MainTabs from './MainTabs'
 import MainMenuDropdown from './MainMenuDropdown'
 import ProfileDropdown from './ProfileDropdown'
@@ -10,8 +10,10 @@ import { CRUD, roleMatrix, UserRole } from '@/lib/data/roleMatrix'
 
 const Layout = ({ children }: { children: React.ReactNode; }) => {
   const { data: session } = useSession()
-  const authNavigation = navigation.main.filter(item => {
-    if (session?.roles) {
+  const authNavigation = navigation.filter((item: MenuItem) => {
+    if (item.section !== MenuSection.MAIN || item.parent)
+      return false
+    else if (session?.roles) {
       return session.roles.some((value: UserRole) => roleMatrix[item.path][value][CRUD.READ])
     } else {
       return roleMatrix[item.path][UserRole.UNAUTHORIZED][CRUD.READ]
@@ -31,7 +33,7 @@ const Layout = ({ children }: { children: React.ReactNode; }) => {
       </Link>
 
       {authNavigation.map((item: MenuItem) =>
-        <MainMenuDropdown key={item.path} item={item} roles={session?.roles}></MainMenuDropdown>)}
+        <MainMenuDropdown key={item.path} menuItem={item} roles={session?.roles}></MainMenuDropdown>)}
       <ProfileDropdown user={session?.user} roles={session?.roles} />
     </nav>
 

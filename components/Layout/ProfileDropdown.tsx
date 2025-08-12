@@ -1,13 +1,15 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { navigation } from '@/lib/data/navigation'
+import { MenuSection, navigation } from '@/lib/data/navigation'
 import { User } from 'next-auth'
 import { CRUD, roleMatrix, UserRole } from '@/lib/data/roleMatrix'
 
 const ProfileDropdown = ({ user, roles }: { user?: User, roles?: UserRole[] }) => {
-  const authNavigation = navigation.user.filter(item => {
-    if (roles) {
+  const authNavigation = navigation.filter(item => {
+    if (item.section !== MenuSection.USER)
+      return false
+    else if (roles) {
       return roles.some((value: UserRole) => roleMatrix[item.path][value][CRUD.READ])
     } else {
       return roleMatrix[item.path][UserRole.UNAUTHORIZED][CRUD.READ]
@@ -34,7 +36,7 @@ const ProfileDropdown = ({ user, roles }: { user?: User, roles?: UserRole[] }) =
           <MenuItem key={item.path}>
             <Link
               className="flex w-full py-2 px-4 text-left hover:bg-gray-700 hover:text-white cursor-pointer"
-              href={`/${item.path}`}
+              href={item.path}
             >
               <item.icon className='h-6' />
               <p className='ml-2'>{item.name}</p>

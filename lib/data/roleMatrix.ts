@@ -43,7 +43,7 @@ export const roleMatrix: RoleMatrix = {
       [CRUD.READ]: true,
     },
     [UserRole.USER]: {
-      [CRUD.READ]: true,
+      [CRUD.READ]: false,
     },
     [UserRole.UNAUTHORIZED]: {
       [CRUD.READ]: false,
@@ -57,7 +57,7 @@ export const roleMatrix: RoleMatrix = {
       [CRUD.READ]: true,
     },
     [UserRole.USER]: {
-      [CRUD.READ]: true,
+      [CRUD.READ]: false,
     },
     [UserRole.UNAUTHORIZED]: {
       [CRUD.READ]: false,
@@ -471,7 +471,7 @@ export const roleMatrix: RoleMatrix = {
       [CRUD.READ]: true,
     },
     [UserRole.USER]: {
-      [CRUD.READ]: true,
+      [CRUD.READ]: false,
     },
     [UserRole.UNAUTHORIZED]: {
       [CRUD.READ]: false,

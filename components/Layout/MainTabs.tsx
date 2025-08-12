@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { TabItem, TabState } from '@/types'
-import { MenuItem, getMenuItem } from '@/lib/data/navigation'
+import { MenuItem, MenuItemPath, navigation } from '@/lib/data/navigation'
 
 const MainTabs = () => {
   const [tabState, setTabState] = React.useState<TabState>({ tabs: [], activeTab: null })
@@ -12,21 +12,20 @@ const MainTabs = () => {
   const router = useRouter()
 
   React.useEffect(() => {
+    const menuPath = pathname as MenuItemPath
+    if (!menuPath || pathname === '/') return
+
     let newTabState: TabState = { tabs: [], activeTab: null }
     const storedTabState = localStorage.getItem('tabState')
     if (storedTabState) newTabState = { ...JSON.parse(storedTabState), activeTab: null }
 
-    const menuPath = pathname.split('/').filter(Boolean)
-    if (menuPath.length) {
-      let activeTab = newTabState.tabs.findIndex((tab: TabItem) =>
-        tab.menuPath.every((item: string, index: number) => item === menuPath[index]))
+    let activeTab = newTabState.tabs.findIndex((tab: TabItem) => tab.menuPath === menuPath)
 
-      if (activeTab === -1) {
-        newTabState.tabs.push({ menuPath })
-        activeTab = newTabState.tabs.length - 1
-      }
-      newTabState.activeTab = activeTab
+    if (activeTab === -1) {
+      newTabState.tabs.push({ menuPath })
+      activeTab = newTabState.tabs.length - 1
     }
+    newTabState.activeTab = activeTab
 
     setTabState(newTabState)
     localStorage.setItem('tabState', JSON.stringify(newTabState))
@@ -51,7 +50,7 @@ const MainTabs = () => {
   }
 
   const mapTabs = (tab: TabItem, index: number) => {
-    const menuItem: MenuItem | null = getMenuItem(tab.menuPath)
+    const menuItem: MenuItem | undefined = navigation.find((item: MenuItem) => tab.menuPath === item.path)
 
     return <div
       key={index}
@@ -61,7 +60,7 @@ const MainTabs = () => {
           : 'bg-gray-700 text-gray-100 hover:bg-gray-500'}`}
     >
       <Link
-        href={`/${tab.menuPath.join('/')}`}
+        href={tab.menuPath}
         className={`flex ${index !== tabState.activeTab && 'cursor-pointer'}`}
       >
         {menuItem && <menuItem.icon className='h-6' />}

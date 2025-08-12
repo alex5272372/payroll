@@ -10,7 +10,7 @@ export type HeroIcon = React.ForwardRefExoticComponent<React.PropsWithoutRef<Rea
   & { title?: string, titleId?: string } & React.RefAttributes<SVGSVGElement>>
 
 export type TabItem = {
-  menuPath: MenuItemPath[];
+  menuPath: MenuItemPath;
   objectId?: number;
 }
 
