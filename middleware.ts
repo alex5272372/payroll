@@ -27,6 +27,10 @@ export const middleware = async (request: NextRequest) => {
     return NextResponse.redirect(new URL('/user/sign-in', request.url))
   }
 
+  if (!user.emailVerified) {
+    return NextResponse.redirect(new URL('/user/verify-email', request.url))
+  }
+
   const path = request.nextUrl.pathname as MenuItemPath
   const userRoles = user.userRoles.map((role: Record<string, unknown>) => UserRole[role.role as keyof typeof UserRole])
   if (path && !userRoles.some((role: UserRole) => roleMatrix[path][role][CRUD.READ])) {
@@ -43,6 +47,5 @@ export const config = {
     '/document/:path*',
     '/report/:path*',
     '/user/profile',
-    '/user/sign-out',
   ],
 }

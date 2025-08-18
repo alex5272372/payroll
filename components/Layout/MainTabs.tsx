@@ -44,7 +44,7 @@ const MainTabs = () => {
     localStorage.setItem('tabState', JSON.stringify(newTabState))
 
     if (index === tabState.activeTab)
-      router.push(activeTab === null ? '/' : `/${tabs[activeTab].menuPath.join('/')}`)
+      router.push(activeTab === null ? '/' : tabs[activeTab].menuPath)
     else
       setTabState(newTabState)
   }
