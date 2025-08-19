@@ -22,13 +22,13 @@ export type TabState = {
 export type ToolbarItem = {
   name: string;
   icon: HeroIcon;
-  onClick: () => void;
   permission: CRUD;
 }
 
-export type DialogButtonState = {
+export type ButtonState = {
   Icon: HeroIcon;
   title: string;
+  permission?: CRUD;
   disabled?: boolean;
   href?: string;
   action?: (formData: FormData) => void;

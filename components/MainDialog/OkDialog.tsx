@@ -1,9 +1,9 @@
 import { CheckIcon, InformationCircleIcon } from '@heroicons/react/24/outline'
 import MainDialog from '.'
-import { DialogButtonState } from '@/types'
+import { ButtonState } from '@/types'
 
 const OkDialog = ({ header, message }: { header: string; message?: string }) => {
-  const buttons: DialogButtonState[] = [
+  const buttons: ButtonState[] = [
     {
       Icon: CheckIcon,
       title: 'OK',

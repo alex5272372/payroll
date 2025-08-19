@@ -42,7 +42,9 @@ export const middleware = async (request: NextRequest) => {
 
 export const config = {
   matcher: [
-    '/calendar/:path*',
+    '/calendar/company-calendar',
+    '/calendar/department-calendar',
+    '/calendar/employee-calendar',
     '/catalog/:path*',
     '/document/:path*',
     '/report/:path*',

@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react'
 import { Field, Input, Label } from '@headlessui/react'
 import { UserPlusIcon, IdentificationIcon } from '@heroicons/react/24/outline'
 import MainDialog from '@/components/MainDialog'
-import { ActionResult, DialogButtonState } from '@/types'
+import { ActionResult, ButtonState } from '@/types'
 import { signUpAction } from '@/actions/userActions'
 import PasswordField from '@/components/inputs/PasswordField'
 import PasswordPolicy from '@/components/dataDisplay/PasswordPolicy'
@@ -34,7 +34,7 @@ const SignUp = () => {
     if (!result.success) setError(result.error || '')
   }
 
-  const buttons: DialogButtonState[] = [
+  const buttons: ButtonState[] = [
     {
       Icon: UserPlusIcon,
       title: 'Sign Up',

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { ArrowPathIcon, IdentificationIcon } from '@heroicons/react/24/outline'
 import MainDialog from '@/components/MainDialog'
-import { ActionResult, DialogButtonState } from '@/types'
+import { ActionResult, ButtonState } from '@/types'
 import { resetPasswordAction } from '@/actions/userActions'
 import PasswordField from '@/components/inputs/PasswordField'
 import PasswordPolicy from '@/components/dataDisplay/PasswordPolicy'
@@ -28,7 +28,7 @@ const ResetPassword = () => {
     setSuccess(result.success)
   }
 
-  const buttons: DialogButtonState[] = [
+  const buttons: ButtonState[] = [
     {
       Icon: ArrowPathIcon,
       title: 'Reset password',

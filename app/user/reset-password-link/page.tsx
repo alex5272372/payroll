@@ -4,7 +4,7 @@ import { signIn } from 'next-auth/react'
 import { Field, Input, Label } from '@headlessui/react'
 import { ArrowPathIcon, IdentificationIcon } from '@heroicons/react/24/outline'
 import MainDialog from '@/components/MainDialog'
-import { DialogButtonState } from '@/types'
+import { ButtonState } from '@/types'
 
 const ResetPasswordLink = () => {
   const [email, setEmail] = useState('')
@@ -16,7 +16,7 @@ const ResetPasswordLink = () => {
     })
   }
 
-  const buttons: DialogButtonState[] = [
+  const buttons: ButtonState[] = [
     {
       Icon: ArrowPathIcon,
       title: 'Send reset password link',

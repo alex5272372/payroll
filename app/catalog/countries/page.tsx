@@ -4,11 +4,18 @@ import { getAllCountries } from '@/actions/countryActions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import DataTable from '@/components/dataDisplay/DataTable'
-import { catalogToolbar } from '@/lib'
-import { ActionResult, TableData } from '@/types'
+import { ActionResult, ButtonState, TableData } from '@/types'
 import { Country } from '@prisma/client'
 import { MenuItemPath } from '@/lib/data/navigation'
 import ErrorDialog from '@/components/MainDialog/ErrorDialog'
+import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { CRUD } from '@/lib/data/roleMatrix'
+
+const buttons: ButtonState[] = [
+  { title: 'New', Icon: PlusIcon, href: '/catalog/countries/create', permission: CRUD.CREATE },
+  { title: 'Edit', Icon: PencilIcon, onClick: () => {}, permission: CRUD.UPDATE },
+  { title: 'Delete', Icon: TrashIcon, onClick: () => {}, permission: CRUD.DELETE },
+]
 
 const initialData: TableData = {
   columns: [
@@ -45,7 +52,7 @@ const CountriesCatalog = () => {
 
   return <Layout>
     <main>
-      <Toolbar items={catalogToolbar} menuPath={MenuItemPath.COUNTRIES} />
+      <Toolbar buttons={buttons} menuPath={MenuItemPath.COUNTRIES} />
       <DataTable
         tableData={tableData}
         setTableData={setTableData}

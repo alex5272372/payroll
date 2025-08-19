@@ -5,7 +5,7 @@ import { signIn, useSession } from 'next-auth/react'
 import { Field, Input, Label } from '@headlessui/react'
 import { ArrowRightEndOnRectangleIcon, IdentificationIcon } from '@heroicons/react/24/outline'
 import MainDialog from '@/components/MainDialog'
-import { DialogButtonState } from '@/types'
+import { ButtonState } from '@/types'
 import PasswordField from '@/components/inputs/PasswordField'
 import ErrorDialog from '@/components/MainDialog/ErrorDialog'
 
@@ -33,7 +33,7 @@ const SignIn = () => {
     })
   }
 
-  const buttons: DialogButtonState[] = [
+  const buttons: ButtonState[] = [
     {
       Icon: ArrowRightEndOnRectangleIcon,
       title: 'Sign In',

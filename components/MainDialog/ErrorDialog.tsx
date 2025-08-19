@@ -1,9 +1,9 @@
 import { XMarkIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import MainDialog from '.'
-import { DialogButtonState } from '@/types'
+import { ButtonState } from '@/types'
 
 const ErrorDialog = ({ header, message }: { header: string; message?: string }) => {
-  const buttons: DialogButtonState[] = [
+  const buttons: ButtonState[] = [
     {
       Icon: XMarkIcon,
       title: 'Close',

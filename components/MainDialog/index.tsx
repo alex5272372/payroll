@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Button } from '@headlessui/react'
 import { InformationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { DialogButtonState, HeroIcon } from '@/types'
+import { ButtonState, HeroIcon } from '@/types'
 
 const MainDialog = ({
   children, Icon, title, buttons, closeHref
@@ -9,7 +9,7 @@ const MainDialog = ({
   children: React.ReactNode;
   Icon?: HeroIcon;
   title?: string;
-  buttons: DialogButtonState[];
+  buttons: ButtonState[];
   closeHref?: string
 }) => {
   const submitButton = buttons.find((button) => button.action)
