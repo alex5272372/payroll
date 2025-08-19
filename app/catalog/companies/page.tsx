@@ -8,6 +8,7 @@ import Toolbar from '@/components/Toolbar'
 import { ActionResult, TableData } from '@/types'
 import { catalogToolbar } from '@/lib'
 import { MenuItemPath } from '@/lib/data/navigation'
+import ErrorDialog from '@/components/MainDialog/ErrorDialog'
 
 const initialData: TableData = {
   columns: [
@@ -20,9 +21,15 @@ const initialData: TableData = {
 
 const CompaniesCatalog = () => {
   const [tableData, setTableData] = useState<TableData>(initialData)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     getAllCompanies().then((companies: ActionResult<Company[]>) => {
+      if (!companies.success) {
+        setError(companies.error || '')
+        return
+      }
+
       setTableData((prev: TableData) => ({
         ...prev,
         rows: companies.value?.map((company: Company) => ({ cells: [
@@ -32,6 +39,10 @@ const CompaniesCatalog = () => {
       }))
     })
   }, [])
+
+  if (error) {
+    return <ErrorDialog header='Server error' message={error} />
+  }
 
   return <Layout>
     <main>

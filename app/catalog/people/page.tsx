@@ -8,6 +8,7 @@ import { catalogToolbar } from '@/lib'
 import { ActionResult, TableData } from '@/types'
 import { Person } from '@prisma/client'
 import { MenuItemPath } from '@/lib/data/navigation'
+import ErrorDialog from '@/components/MainDialog/ErrorDialog'
 
 const initialData: TableData = {
   columns: [
@@ -23,9 +24,15 @@ const initialData: TableData = {
 
 const PeopleCatalog = () => {
   const [tableData, setTableData] = useState<TableData>(initialData)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     getAllPeople().then((people: ActionResult<Person[]>) => {
+      if (!people.success) {
+        setError(people.error || '')
+        return
+      }
+
       setTableData((prev: TableData) => ({
         ...prev,
         rows: people.value?.map((person: Person) => ({ cells: [
@@ -39,6 +46,10 @@ const PeopleCatalog = () => {
       }))
     })
   }, [])
+
+  if (error) {
+    return <ErrorDialog header='Server error' message={error} />
+  }
 
   return <Layout>
     <main>

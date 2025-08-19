@@ -8,6 +8,7 @@ import { catalogToolbar } from '@/lib'
 import { ActionResult, TableData } from '@/types'
 import { Country } from '@prisma/client'
 import { MenuItemPath } from '@/lib/data/navigation'
+import ErrorDialog from '@/components/MainDialog/ErrorDialog'
 
 const initialData: TableData = {
   columns: [
@@ -19,9 +20,15 @@ const initialData: TableData = {
 
 const CountriesCatalog = () => {
   const [tableData, setTableData] = useState<TableData>(initialData)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     getAllCountries().then((countries: ActionResult<Country[]>) => {
+      if (!countries.success) {
+        setError(countries.error || '')
+        return
+      }
+
       setTableData((prev: TableData) => ({
         ...prev,
         rows: countries.value?.map((country: Country) => ({ cells: [
@@ -31,6 +38,10 @@ const CountriesCatalog = () => {
       }))
     })
   }, [])
+
+  if (error) {
+    return <ErrorDialog header='Server error' message={error} />
+  }
 
   return <Layout>
     <main>

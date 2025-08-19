@@ -1,9 +1,11 @@
 'use server'
 import prisma from '@/lib/prisma'
-import { signIn } from '@/lib/auth'
+import { auth, signIn } from '@/lib/auth'
 import bcrypt from 'bcryptjs'
 import { ActionResult, SignUpData } from '@/types'
 import { Prisma } from '@prisma/client'
+import { roleMatrix, UserRole } from '@/lib/data/roleMatrix'
+import { MenuItemPath } from '@/lib/data/navigation'
 
 const crypt = (pass: string) => bcrypt.hashSync(pass, bcrypt.genSaltSync(10))
 
@@ -19,6 +21,13 @@ export type UserWithPerson = Prisma.UserGetPayload<{
 }>
 
 const getAllUsers = async (): Promise<ActionResult<UserWithPerson[]>> => {
+  const session = await auth()
+  if (!session || !session.roles) {
+    return { success: false, error: 'Unauthorized' }
+  } else if (!session.roles.some((role: UserRole) => roleMatrix[MenuItemPath.USERS][role]?.READ)) {
+    return { success: false, error: 'Forbidden' }
+  }
+
   const users: UserWithPerson[] = await prisma.user.findMany({
     select: {
       id: true,

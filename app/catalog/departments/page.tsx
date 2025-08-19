@@ -7,6 +7,7 @@ import DataTable from '@/components/dataDisplay/DataTable'
 import { catalogToolbar } from '@/lib'
 import { ActionResult, TableData } from '@/types'
 import { MenuItemPath } from '@/lib/data/navigation'
+import ErrorDialog from '@/components/MainDialog/ErrorDialog'
 
 const initialData: TableData = {
   columns: [
@@ -20,9 +21,15 @@ const initialData: TableData = {
 
 const DepartmentsCatalog = () => {
   const [tableData, setTableData] = useState<TableData>(initialData)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     getAllDepartments().then((departments: ActionResult<DepartmentWithCompany[]>) => {
+      if (!departments.success) {
+        setError(departments.error || '')
+        return
+      }
+
       setTableData((prev: TableData) => ({
         ...prev,
         rows: departments.value?.map((department: DepartmentWithCompany) => ({ cells: [
@@ -34,6 +41,10 @@ const DepartmentsCatalog = () => {
       }))
     })
   }, [])
+
+  if (error) {
+    return <ErrorDialog header='Server error' message={error} />
+  }
 
   return <Layout>
     <main>
