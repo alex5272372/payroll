@@ -7,6 +7,7 @@ import DataTable from '@/components/dataDisplay/DataTable'
 import { catalogToolbar } from '@/lib'
 import { ActionResult, TableData } from '@/types'
 import { Person } from '@prisma/client'
+import { MenuItemPath } from '@/lib/data/navigation'
 
 const initialData: TableData = {
   columns: [
@@ -41,7 +42,7 @@ const PeopleCatalog = () => {
 
   return <Layout>
     <main>
-      <Toolbar items={catalogToolbar} />
+      <Toolbar items={catalogToolbar} menuPath={MenuItemPath.PEOPLE} />
       <DataTable
         tableData={tableData}
         setTableData={setTableData}

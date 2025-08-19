@@ -7,6 +7,7 @@ import DataTable from '@/components/dataDisplay/DataTable'
 import Toolbar from '@/components/Toolbar'
 import { ActionResult, TableData } from '@/types'
 import { catalogToolbar } from '@/lib'
+import { MenuItemPath } from '@/lib/data/navigation'
 
 const initialData: TableData = {
   columns: [
@@ -34,7 +35,7 @@ const CompaniesCatalog = () => {
 
   return <Layout>
     <main>
-      <Toolbar items={catalogToolbar} />
+      <Toolbar items={catalogToolbar} menuPath={MenuItemPath.COMPANIES} />
       <DataTable
         tableData={tableData}
         setTableData={setTableData}

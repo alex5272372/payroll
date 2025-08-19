@@ -14,7 +14,7 @@ export enum UserRole {
   UNAUTHORIZED = 'UNAUTHORIZED',
 }
 
-type AllPermissions = { [K in keyof typeof CRUD]: boolean }
+export type AllPermissions = { [K in keyof typeof CRUD]: boolean }
 type ReadOnlyPermission = { [K in 'READ']: boolean }
 type Permission = AllPermissions | ReadOnlyPermission
 type RolePermission = Record<UserRole, Permission>
@@ -223,10 +223,10 @@ export const roleMatrix: RoleMatrix = {
       [CRUD.DELETE]: true,
     },
     [UserRole.MODERATOR]: {
-      [CRUD.CREATE]: true,
+      [CRUD.CREATE]: false,
       [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
+      [CRUD.UPDATE]: false,
+      [CRUD.DELETE]: false,
     },
     [UserRole.USER]: {
       [CRUD.CREATE]: false,
@@ -353,10 +353,10 @@ export const roleMatrix: RoleMatrix = {
       [CRUD.DELETE]: true,
     },
     [UserRole.MODERATOR]: {
-      [CRUD.CREATE]: true,
+      [CRUD.CREATE]: false,
       [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
+      [CRUD.UPDATE]: false,
+      [CRUD.DELETE]: false,
     },
     [UserRole.USER]: {
       [CRUD.CREATE]: false,

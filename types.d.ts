@@ -1,4 +1,4 @@
-import { UserRole } from '@/lib/data/roleMatrix'
+import { CRUD, UserRole } from '@/lib/data/roleMatrix'
 
 declare module 'next-auth' {
   interface Session {
@@ -23,6 +23,7 @@ export type ToolbarItem = {
   name: string;
   icon: HeroIcon;
   onClick: () => void;
+  permission: CRUD;
 }
 
 export type DialogButtonState = {
