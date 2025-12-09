@@ -1,20 +1,17 @@
-import { dirname } from 'path'
-import { fileURLToPath } from 'url'
-import { FlatCompat } from '@eslint/eslintrc'
+import { defineConfig, globalIgnores } from 'eslint/config'
+import nextVitals from 'eslint-config-next/core-web-vitals'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-})
-
-const eslintConfig = [
-  ...compat.config({
-    extends: [
-      'next/core-web-vitals',
-      'next/typescript',
-    ],
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    '.next/**',
+    'out/**',
+    'build/**',
+    'next-env.d.ts',
+  ]),
+  {
     rules: {
       indent: ['error', 2, { 'SwitchCase': 1 }],
       'linebreak-style': ['error', 'unix'],
@@ -29,7 +26,7 @@ const eslintConfig = [
       'array-bracket-spacing': ['error', 'never'],
       'object-curly-spacing': ['error', 'always', { 'arraysInObjects': true, 'objectsInObjects': false }]
     },
-  }),
-]
+  },
+])
 
 export default eslintConfig
