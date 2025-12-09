@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { CRUD, roleMatrix, UserRole } from './lib/data/roleMatrix'
 import { MenuItemPath } from './lib/data/navigation'
 
-export const middleware = async (request: NextRequest) => {
+export const proxy = async (request: NextRequest) => {
   let sessionToken = request.cookies.get('__Secure-authjs.session-token')
   if (!sessionToken) {
     sessionToken = request.cookies.get('authjs.session-token')
