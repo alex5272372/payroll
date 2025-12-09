@@ -17,7 +17,7 @@
     "@heroicons/react": "^2.2.0",
     "@prisma/client": "6.14.0",
     "bcryptjs": "^3.0.2",
-    "next": "15.4.6",
+    "next": "^16.0.8",
     "next-auth": "5.0.0-beta.28",
     "react": "19.1.1",
     "react-dom": "19.1.1"
@@ -38,17 +38,5 @@
     "tailwindcss": "4.1.12",
     "ts-node": "^10.9.2",
     "typescript": "5.8.3"
-  },
-  "packageManager": "pnpm@10.14.0+sha512.ad27a79641b49c3e481a16a805baa71817a04bbe06a38d17e60e2eaee83f6a146c6a688125f5792e48dd5ba30e7da52a5cda4c3992b9ccf333f9ce223af84748",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@prisma/client",
-      "@prisma/engines",
-      "@tailwindcss/oxide",
-      "esbuild",
-      "prisma",
-      "sharp",
-      "unrs-resolver"
-    ]
   }
 }
