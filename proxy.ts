@@ -31,9 +31,17 @@ export const proxy = async (request: NextRequest) => {
     return NextResponse.redirect(new URL('/user/verify-email', request.url))
   }
 
-  const path = request.nextUrl.pathname as MenuItemPath
+  const pathname = request.nextUrl.pathname
   const userRoles = user.userRoles.map((role: Record<string, unknown>) => UserRole[role.role as keyof typeof UserRole])
-  if (path && !userRoles.some((role: UserRole) => roleMatrix[path][role][CRUD.READ])) {
+
+  const menuPaths = Object.values(MenuItemPath) as string[]
+  const matched = menuPaths
+    .sort((a, b) => b.length - a.length)
+    .find(p => pathname === p || pathname.startsWith(p + '/') || pathname.startsWith(p))
+
+  const path = matched as MenuItemPath | undefined
+
+  if (path && !userRoles.some((role: UserRole) => !!roleMatrix[path]?.[role]?.[CRUD.READ])) {
     const errorUrl = new URL('/user/error', request.url)
     errorUrl.searchParams.set('error', 'AccessDenied')
     return NextResponse.redirect(errorUrl)

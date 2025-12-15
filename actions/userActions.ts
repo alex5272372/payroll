@@ -4,7 +4,7 @@ import { auth, signIn } from '@/lib/auth'
 import bcrypt from 'bcryptjs'
 import { ActionResult, SignUpData } from '@/types'
 import { Prisma } from '@prisma/client'
-import { roleMatrix, UserRole } from '@/lib/data/roleMatrix'
+import { CRUD, roleMatrix, UserRole } from '@/lib/data/roleMatrix'
 import { MenuItemPath } from '@/lib/data/navigation'
 
 const crypt = (pass: string) => bcrypt.hashSync(pass, bcrypt.genSaltSync(10))
@@ -24,7 +24,7 @@ const getAllUsers = async (): Promise<ActionResult<UserWithPerson[]>> => {
   const session = await auth()
   if (!session || !session.roles) {
     return { success: false, error: 'Unauthorized' }
-  } else if (!session.roles.some((role: UserRole) => roleMatrix[MenuItemPath.USERS][role]?.READ)) {
+  } else if (!session.roles.some((role: UserRole) => !!roleMatrix[MenuItemPath.USERS]?.[role]?.[CRUD.READ])) {
     return { success: false, error: 'Forbidden' }
   }
 

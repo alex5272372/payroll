@@ -20,461 +20,158 @@ type Permission = AllPermissions | ReadOnlyPermission
 type RolePermission = Record<UserRole, Permission>
 export type RoleMatrix = Record<MenuItemPath, RolePermission>
 
+const allPerms = (v: boolean) => ({
+  [CRUD.CREATE]: v,
+  [CRUD.READ]: v,
+  [CRUD.UPDATE]: v,
+  [CRUD.DELETE]: v,
+} as AllPermissions)
+
+const readOnly = (v = true) => ({ [CRUD.READ]: v } as ReadOnlyPermission)
+
 export const roleMatrix: RoleMatrix = {
   [MenuItemPath.CALENDAR]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.USER]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.READ]: true,
-    },
+    [UserRole.ADMINISTRATOR]: readOnly(true),
+    [UserRole.MODERATOR]: readOnly(true),
+    [UserRole.USER]: readOnly(true),
+    [UserRole.UNAUTHORIZED]: readOnly(true),
   },
   [MenuItemPath.CATALOG]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.USER]: {
-      [CRUD.READ]: false,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.READ]: false,
-    },
+    [UserRole.ADMINISTRATOR]: readOnly(true),
+    [UserRole.MODERATOR]: readOnly(true),
+    [UserRole.USER]: readOnly(false),
+    [UserRole.UNAUTHORIZED]: readOnly(false),
   },
   [MenuItemPath.DOCUMENT]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.USER]: {
-      [CRUD.READ]: false,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.READ]: false,
-    },
+    [UserRole.ADMINISTRATOR]: readOnly(true),
+    [UserRole.MODERATOR]: readOnly(true),
+    [UserRole.USER]: readOnly(false),
+    [UserRole.UNAUTHORIZED]: readOnly(false),
   },
   [MenuItemPath.REPORT]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.USER]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.READ]: false,
-    },
+    [UserRole.ADMINISTRATOR]: readOnly(true),
+    [UserRole.MODERATOR]: readOnly(true),
+    [UserRole.USER]: readOnly(true),
+    [UserRole.UNAUTHORIZED]: readOnly(false),
   },
   [MenuItemPath.USER_PROFILE]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.CREATE]: true,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.CREATE]: true,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
-    },
-    [UserRole.USER]: {
-      [CRUD.CREATE]: true,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: false,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
+    [UserRole.ADMINISTRATOR]: allPerms(true),
+    [UserRole.MODERATOR]: allPerms(true),
+    [UserRole.USER]: allPerms(true),
+    [UserRole.UNAUTHORIZED]: allPerms(false),
   },
   [MenuItemPath.SIGN_OUT]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.USER]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.READ]: false,
-    },
+    [UserRole.ADMINISTRATOR]: readOnly(true),
+    [UserRole.MODERATOR]: readOnly(true),
+    [UserRole.USER]: readOnly(true),
+    [UserRole.UNAUTHORIZED]: readOnly(false),
   },
   [MenuItemPath.SIGN_IN]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.READ]: false,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.READ]: false,
-    },
-    [UserRole.USER]: {
-      [CRUD.READ]: false,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.READ]: true,
-    },
+    [UserRole.ADMINISTRATOR]: readOnly(false),
+    [UserRole.MODERATOR]: readOnly(false),
+    [UserRole.USER]: readOnly(false),
+    [UserRole.UNAUTHORIZED]: readOnly(true),
   },
   [MenuItemPath.SIGN_UP]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.READ]: false,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.READ]: false,
-    },
-    [UserRole.USER]: {
-      [CRUD.READ]: false,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.READ]: true,
-    },
+    [UserRole.ADMINISTRATOR]: readOnly(false),
+    [UserRole.MODERATOR]: readOnly(false),
+    [UserRole.USER]: readOnly(false),
+    [UserRole.UNAUTHORIZED]: readOnly(true),
   },
   [MenuItemPath.RESET_PASSWORD]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.READ]: false,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.READ]: false,
-    },
-    [UserRole.USER]: {
-      [CRUD.READ]: false,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.READ]: true,
-    },
+    [UserRole.ADMINISTRATOR]: readOnly(false),
+    [UserRole.MODERATOR]: readOnly(false),
+    [UserRole.USER]: readOnly(false),
+    [UserRole.UNAUTHORIZED]: readOnly(true),
   },
   [MenuItemPath.COUNTRY_CALENDAR]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.USER]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.READ]: true,
-    },
+    [UserRole.ADMINISTRATOR]: readOnly(true),
+    [UserRole.MODERATOR]: readOnly(true),
+    [UserRole.USER]: readOnly(true),
+    [UserRole.UNAUTHORIZED]: readOnly(true),
   },
   [MenuItemPath.COMPANY_CALENDAR]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.USER]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.READ]: false,
-    },
+    [UserRole.ADMINISTRATOR]: readOnly(true),
+    [UserRole.MODERATOR]: readOnly(true),
+    [UserRole.USER]: readOnly(true),
+    [UserRole.UNAUTHORIZED]: readOnly(false),
   },
   [MenuItemPath.DEPARTMENT_CALENDAR]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.USER]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.READ]: false,
-    },
+    [UserRole.ADMINISTRATOR]: readOnly(true),
+    [UserRole.MODERATOR]: readOnly(true),
+    [UserRole.USER]: readOnly(true),
+    [UserRole.UNAUTHORIZED]: readOnly(false),
   },
   [MenuItemPath.EMPLOYEE_CALENDAR]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.USER]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.READ]: false,
-    },
+    [UserRole.ADMINISTRATOR]: readOnly(true),
+    [UserRole.MODERATOR]: readOnly(true),
+    [UserRole.USER]: readOnly(true),
+    [UserRole.UNAUTHORIZED]: readOnly(false),
   },
   [MenuItemPath.COUNTRIES]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.CREATE]: true,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
-    [UserRole.USER]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: false,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: false,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
+    [UserRole.ADMINISTRATOR]: allPerms(true),
+    [UserRole.MODERATOR]: { ...allPerms(false), [CRUD.READ]: true },
+    [UserRole.USER]: allPerms(false),
+    [UserRole.UNAUTHORIZED]: allPerms(false),
   },
   [MenuItemPath.COMPANIES]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.CREATE]: true,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.CREATE]: true,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
-    },
-    [UserRole.USER]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: false,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: false,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
+    [UserRole.ADMINISTRATOR]: allPerms(true),
+    [UserRole.MODERATOR]: allPerms(true),
+    [UserRole.USER]: allPerms(false),
+    [UserRole.UNAUTHORIZED]: allPerms(false),
   },
   [MenuItemPath.DEPARTMENTS]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.CREATE]: true,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.CREATE]: true,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
-    },
-    [UserRole.USER]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: false,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: false,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
+    [UserRole.ADMINISTRATOR]: allPerms(true),
+    [UserRole.MODERATOR]: allPerms(true),
+    [UserRole.USER]: allPerms(false),
+    [UserRole.UNAUTHORIZED]: allPerms(false),
   },
   [MenuItemPath.EMPLOYEES]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.CREATE]: true,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.CREATE]: true,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
-    },
-    [UserRole.USER]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: false,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: false,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
+    [UserRole.ADMINISTRATOR]: allPerms(true),
+    [UserRole.MODERATOR]: allPerms(true),
+    [UserRole.USER]: allPerms(false),
+    [UserRole.UNAUTHORIZED]: allPerms(false),
   },
   [MenuItemPath.PEOPLE]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.CREATE]: true,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.CREATE]: true,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
-    },
-    [UserRole.USER]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: false,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: false,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
+    [UserRole.ADMINISTRATOR]: allPerms(true),
+    [UserRole.MODERATOR]: allPerms(true),
+    [UserRole.USER]: allPerms(false),
+    [UserRole.UNAUTHORIZED]: allPerms(false),
   },
   [MenuItemPath.USERS]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.CREATE]: true,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
-    [UserRole.USER]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: false,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: false,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
+    [UserRole.ADMINISTRATOR]: allPerms(true),
+    [UserRole.MODERATOR]: { ...allPerms(false), [CRUD.READ]: true },
+    [UserRole.USER]: allPerms(false),
+    [UserRole.UNAUTHORIZED]: allPerms(false),
   },
   [MenuItemPath.CALENDAR_FILLING]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.CREATE]: true,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.CREATE]: true,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
-    },
-    [UserRole.USER]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: false,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: false,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
+    [UserRole.ADMINISTRATOR]: allPerms(true),
+    [UserRole.MODERATOR]: allPerms(true),
+    [UserRole.USER]: allPerms(false),
+    [UserRole.UNAUTHORIZED]: allPerms(false),
   },
   [MenuItemPath.CALCULATION_TEMPLATE]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.CREATE]: true,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.CREATE]: true,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
-    },
-    [UserRole.USER]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: false,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: false,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
+    [UserRole.ADMINISTRATOR]: allPerms(true),
+    [UserRole.MODERATOR]: allPerms(true),
+    [UserRole.USER]: allPerms(false),
+    [UserRole.UNAUTHORIZED]: allPerms(false),
   },
   [MenuItemPath.PAYROLL_CALCULATION]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.CREATE]: true,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.CREATE]: true,
-      [CRUD.READ]: true,
-      [CRUD.UPDATE]: true,
-      [CRUD.DELETE]: true,
-    },
-    [UserRole.USER]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: false,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.CREATE]: false,
-      [CRUD.READ]: false,
-      [CRUD.UPDATE]: false,
-      [CRUD.DELETE]: false,
-    },
+    [UserRole.ADMINISTRATOR]: allPerms(true),
+    [UserRole.MODERATOR]: allPerms(true),
+    [UserRole.USER]: allPerms(false),
+    [UserRole.UNAUTHORIZED]: allPerms(false),
   },
   [MenuItemPath.PAYSLIP]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.USER]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.READ]: false,
-    },
+    [UserRole.ADMINISTRATOR]: readOnly(true),
+    [UserRole.MODERATOR]: readOnly(true),
+    [UserRole.USER]: readOnly(true),
+    [UserRole.UNAUTHORIZED]: readOnly(false),
   },
   [MenuItemPath.PAYMENT_STATEMENT]: {
-    [UserRole.ADMINISTRATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.MODERATOR]: {
-      [CRUD.READ]: true,
-    },
-    [UserRole.USER]: {
-      [CRUD.READ]: false,
-    },
-    [UserRole.UNAUTHORIZED]: {
-      [CRUD.READ]: false,
-    },
+    [UserRole.ADMINISTRATOR]: readOnly(true),
+    [UserRole.MODERATOR]: readOnly(true),
+    [UserRole.USER]: readOnly(false),
+    [UserRole.UNAUTHORIZED]: readOnly(false),
   },
 }

@@ -11,7 +11,7 @@ const Toolbar = ({ buttons, menuPath }: { buttons: ButtonState[]; menuPath: Menu
   return <nav className={'flex space-x-2 pt-2 px-2 bg-gray-100'}>
     {buttons.map((button, index) => {
       const disabled = button.disabled || !button.permission || !session?.roles?.some((role: UserRole) =>
-        (roleMatrix[menuPath][role] as AllPermissions)[button.permission as CRUD])
+        !!(roleMatrix[menuPath]?.[role] as AllPermissions | undefined)?.[button.permission as CRUD])
 
       if (button.href) {
         if (disabled) {

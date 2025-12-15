@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
+import TextField from '@/components/inputs/TextField'
 import { MenuItemPath } from '@/lib/data/navigation'
 import ErrorDialog from '@/components/MainDialog/ErrorDialog'
 import { PlusIcon } from '@heroicons/react/24/outline'
@@ -14,6 +15,8 @@ const buttons: ButtonState[] = [
 
 const NewCountry = () => {
   const [error, setError] = useState('')
+  const [code, setCode] = useState('')
+  const [name, setName] = useState('')
 
   const submitButton = buttons.find((button) => button.action)
 
@@ -25,6 +28,21 @@ const NewCountry = () => {
     <main>
       <form action={submitButton?.action}>
         <Toolbar buttons={buttons} menuPath={MenuItemPath.COUNTRIES} />
+
+        <div className="p-4">
+          <TextField
+            name="code"
+            label="Country code"
+            value={code}
+            setValue={setCode}
+          />
+          <TextField
+            name="name"
+            label="Country name"
+            value={name}
+            setValue={setName}
+          />
+        </div>
       </form>
     </main>
   </Layout>

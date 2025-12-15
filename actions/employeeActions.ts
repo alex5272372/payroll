@@ -3,7 +3,7 @@ import prisma from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { ActionResult } from '@/types'
 import { auth } from '@/lib/auth'
-import { roleMatrix, UserRole } from '@/lib/data/roleMatrix'
+import { CRUD, roleMatrix, UserRole } from '@/lib/data/roleMatrix'
 import { MenuItemPath } from '@/lib/data/navigation'
 
 export type EmployeeWithPersonAndDepartment = Prisma.EmployeeGetPayload<{
@@ -17,7 +17,7 @@ const getAllEmployees = async (): Promise<ActionResult<EmployeeWithPersonAndDepa
   const session = await auth()
   if (!session || !session.roles) {
     return { success: false, error: 'Unauthorized' }
-  } else if (!session.roles.some((role: UserRole) => roleMatrix[MenuItemPath.EMPLOYEES][role]?.READ)) {
+  } else if (!session.roles.some((role: UserRole) => !!roleMatrix[MenuItemPath.EMPLOYEES]?.[role]?.[CRUD.READ])) {
     return { success: false, error: 'Forbidden' }
   }
 

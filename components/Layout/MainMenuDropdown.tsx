@@ -8,9 +8,9 @@ const MainMenuDropdown = ({ menuItem, roles }: { menuItem: MenuItemType, roles?:
     if (item.parent !== menuItem.path)
       return false
     else if (roles) {
-      return roles.some((value: UserRole) => roleMatrix[item.path][value][CRUD.READ])
+      return roles.some((value: UserRole) => !!roleMatrix[item.path]?.[value]?.[CRUD.READ])
     } else {
-      return roleMatrix[item.path][UserRole.UNAUTHORIZED][CRUD.READ]
+      return !!roleMatrix[item.path]?.[UserRole.UNAUTHORIZED]?.[CRUD.READ]
     }
   })
 

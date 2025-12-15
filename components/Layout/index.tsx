@@ -14,9 +14,9 @@ const Layout = ({ children }: { children: React.ReactNode; }) => {
     if (item.section !== MenuSection.MAIN || item.parent)
       return false
     else if (session?.roles) {
-      return session.roles.some((value: UserRole) => roleMatrix[item.path][value][CRUD.READ])
+      return session.roles.some((value: UserRole) => !!roleMatrix[item.path]?.[value]?.[CRUD.READ])
     } else {
-      return roleMatrix[item.path][UserRole.UNAUTHORIZED][CRUD.READ]
+      return !!roleMatrix[item.path]?.[UserRole.UNAUTHORIZED]?.[CRUD.READ]
     }
   })
 
