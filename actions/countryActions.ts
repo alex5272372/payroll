@@ -58,6 +58,13 @@ const createCountry = async (formData: FormData): Promise<ActionResult> => {
     return { success: false, error: 'Invalid form data' }
   }
 
+  const existingCountry = await prisma.country.findUnique({
+    where: { code }
+  })
+  if (existingCountry) {
+    return { success: false, error: 'Country with this code already exists' }
+  }
+
   await prisma.country.create({
     data: { code, name },
   })

@@ -1,50 +1,56 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { PencilIcon } from '@heroicons/react/24/outline'
 import { getCountryByCode, updateCountry } from '@/actions/countryActions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
-import OkDialog from '@/components/MainDialog/OkDialog'
 import { ActionResult, ButtonState } from '@/types'
 import { CRUD } from '@/lib/data/roleMatrix'
 import { MenuItemPath } from '@/lib/data/navigation'
 import { Country } from '@prisma/client'
 import { useParams } from 'next/navigation'
+import { useOverlay } from '@/components/OverlayContext'
 
 const CountryUpdate = () => {
-  const [error, setError] = useState('')
   const [name, setName] = useState('')
+  const { showError, showOk, showOkCancel, closeDialog } = useOverlay()
 
   const params = useParams()
 
   useEffect(() => {
     getCountryByCode(params.code as string).then((country: ActionResult<Country>) => {
       if (!country.success) {
-        setError(country.error || '')
+        showError('Server error', country.error || 'Failed to fetch country')
         return
       }
       setName(country.value?.name || '')
     })
-  }, [params.code])
+  }, [params.code, showError])
+
+  const submitConfirmed = useCallback(async (formData: FormData): Promise<void> => {
+    closeDialog()
+    const result = await updateCountry(formData)
+
+    if (result.success) {
+      showOk('Country updated', 'Country has been updated successfully')
+    } else {
+      showError('Server error', result.error || 'Failed to update country')
+    }
+  }, [closeDialog, showError, showOk])
 
   const handleSubmit = async (formData: FormData) => {
-    const result = await updateCountry(formData)
-    if (!result.success) {
-      setError(result.error || 'Unknown error')
-    } else {
-      // redirect('/catalog/countries') --- IGNORE ---
-    }
+    showOkCancel(
+      () => submitConfirmed(formData),
+      'Update country',
+      `Are you sure you want to update country ${params.code}?`
+    )
   }
 
   const buttons: ButtonState[] = [
     { title: 'Save', Icon: PencilIcon, action: handleSubmit, permission: CRUD.UPDATE },
   ]
   const submitButton = buttons.find((button) => button.action)
-
-  if (error) {
-    return <OkDialog type="error" header='Server error' message={error} />
-  }
 
   return <Layout>
     <main>

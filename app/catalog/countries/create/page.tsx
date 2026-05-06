@@ -5,22 +5,22 @@ import { createCountry } from '@/actions/countryActions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
-import OkDialog from '@/components/MainDialog/OkDialog'
 import { MenuItemPath } from '@/lib/data/navigation'
 import { CRUD } from '@/lib/data/roleMatrix'
 import { ButtonState } from '@/types'
+import { useOverlay } from '@/components/OverlayContext'
 
 const CountryCreate = () => {
-  const [error, setError] = useState('')
   const [code, setCode] = useState('')
   const [name, setName] = useState('')
+  const { showError, showOk } = useOverlay()
 
   const handleSubmit = async (formData: FormData) => {
     const result = await createCountry(formData)
-    if (!result.success) {
-      setError(result.error || 'Unknown error')
+    if (result.success) {
+      showOk('Create country', `Country ${code} has been created successfully`)
     } else {
-      // redirect('/catalog/countries') --- IGNORE ---
+      showError('Server error', result.error || 'Failed to create country')
     }
   }
 
@@ -28,10 +28,6 @@ const CountryCreate = () => {
     { title: 'Create', Icon: PlusIcon, action: handleSubmit, permission: CRUD.CREATE },
   ]
   const submitButton = buttons.find((button) => button.action)
-
-  if (error) {
-    return <OkDialog type="error" header='Server error' message={error} />
-  }
 
   return <Layout>
     <main>

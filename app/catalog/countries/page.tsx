@@ -24,7 +24,7 @@ const CountriesCatalog = () => {
   const [tableData, setTableData] = useState<TableData>(initialData)
   const [selectedCode, setSelectedCode] = useState('')
   const router = useRouter()
-  const { showError, showOkCancel, closeDialog } = useOverlay()
+  const { showError, showOk, showOkCancel, closeDialog } = useOverlay()
 
   const fetchCountries = useCallback(async (): Promise<void> => {
     const result = await getAllCountries()
@@ -41,16 +41,18 @@ const CountriesCatalog = () => {
   }, [showError])
 
   const deleteConfirmed = useCallback(async (code: string): Promise<void> => {
-    debugger
     closeDialog()
     const deleteResult = await deleteCountry(code)
-    if (!deleteResult.success) {
+
+    if (deleteResult.success) {
+      setSelectedCode('')
+      await fetchCountries()
+      showOk('Delete country', `Country ${code} has been deleted successfully`)
+
+    } else {
       showError('Server error', deleteResult.error || 'Failed to delete country')
-      return
     }
-    setSelectedCode('')
-    await fetchCountries()
-  }, [closeDialog, fetchCountries, showError])
+  }, [closeDialog, fetchCountries, showError, showOk])
 
   const handleDelete = () => {
     if (!selectedCode) return

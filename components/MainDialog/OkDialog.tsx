@@ -19,7 +19,7 @@ const OkDialog = ({
     {
       Icon: CheckIcon,
       title: 'OK',
-      action: onOk,
+      onClick: onOk,
     },
   ]
 
@@ -27,7 +27,7 @@ const OkDialog = ({
     buttons.push({
       Icon: XMarkIcon,
       title: 'Cancel',
-      action: onCancel,
+      onClick: onCancel,
     })
   }
 
