@@ -1,6 +1,6 @@
 'use client'
 import { useSearchParams } from 'next/navigation'
-import ErrorDialog from '@/components/MainDialog/ErrorDialog'
+import OkDialog from '@/components/MainDialog/OkDialog'
 
 enum Error {
   Configuration = 'Configuration',
@@ -32,7 +32,7 @@ const UserError = () => {
   const searchParams = useSearchParams()
   const error: Error = searchParams.get('error') as Error || Error.Default
 
-  return <ErrorDialog header={errorMap[error].header} message={errorMap[error].message} />
+  return <OkDialog type="error" header={errorMap[error].header} message={errorMap[error].message} />
 }
 
 export default UserError

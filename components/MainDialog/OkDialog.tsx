@@ -1,23 +1,43 @@
-import { CheckIcon, InformationCircleIcon } from '@heroicons/react/24/outline'
+import { CheckIcon, XMarkIcon, InformationCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import MainDialog from '.'
-import { ButtonState } from '@/types'
+import { ButtonState, DialogType } from '@/types'
 
-const OkDialog = ({ header, message }: { header: string; message?: string }) => {
+const OkDialog = ({
+  type,
+  header,
+  message,
+  onOk,
+  onCancel,
+}: {
+  type: DialogType
+  header?: string
+  message?: string
+  onOk?: () => void
+  onCancel?: () => void
+}) => {
   const buttons: ButtonState[] = [
     {
       Icon: CheckIcon,
       title: 'OK',
-      href: '/',
+      action: onOk,
     },
   ]
 
+  if (type === 'okCancel') {
+    buttons.push({
+      Icon: XMarkIcon,
+      title: 'Cancel',
+      action: onCancel,
+    })
+  }
+
   return <MainDialog
-    Icon={InformationCircleIcon}
-    title="Information"
+    Icon={type === 'error' ? ExclamationTriangleIcon : InformationCircleIcon}
+    title={type === 'error' ? 'Error' : type === 'okCancel' ? 'Confirmation' : 'Information'}
     buttons={buttons}
   >
     <div className='flex flex-col items-center'>
-      <h2 className="text-2xl text-gray-100">{header}</h2>
+      {header && <h2 className="text-2xl text-gray-100">{header}</h2>}
       {message && <p className="text-gray-100">{message}</p>}
     </div>
   </MainDialog>

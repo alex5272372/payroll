@@ -7,7 +7,6 @@ import { ActionResult, ButtonState } from '@/types'
 import { resetPasswordAction } from '@/actions/userActions'
 import PasswordField from '@/components/inputs/PasswordField'
 import PasswordPolicy from '@/components/dataDisplay/PasswordPolicy'
-import ErrorDialog from '@/components/MainDialog/ErrorDialog'
 import OkDialog from '@/components/MainDialog/OkDialog'
 
 const ResetPassword = () => {
@@ -20,7 +19,7 @@ const ResetPassword = () => {
 
   const email = searchParams.get('email')
   if (!email) {
-    return <ErrorDialog header='Reset Password' message='Email parameter is missing.' />
+    return <OkDialog type="error" header='Reset Password' message='Email parameter is missing.' />
   }
 
   const handleResetPassword = async () => {
@@ -38,7 +37,7 @@ const ResetPassword = () => {
   ]
 
   if (success) {
-    return <OkDialog header="Password changed" message="Your password has been successfully changed." />
+    return <OkDialog type="ok" header="Password changed" message="Your password has been successfully changed." />
 
   } else {
     return <MainDialog

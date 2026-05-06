@@ -5,7 +5,7 @@ import { getCountryByCode, updateCountry } from '@/actions/countryActions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
-import ErrorDialog from '@/components/MainDialog/ErrorDialog'
+import OkDialog from '@/components/MainDialog/OkDialog'
 import { ActionResult, ButtonState } from '@/types'
 import { CRUD } from '@/lib/data/roleMatrix'
 import { MenuItemPath } from '@/lib/data/navigation'
@@ -43,7 +43,7 @@ const CountryUpdate = () => {
   const submitButton = buttons.find((button) => button.action)
 
   if (error) {
-    return <ErrorDialog header='Server error' message={error} />
+    return <OkDialog type="error" header='Server error' message={error} />
   }
 
   return <Layout>

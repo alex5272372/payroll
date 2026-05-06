@@ -8,7 +8,7 @@ import { ActionResult, ButtonState } from '@/types'
 import { signUpAction } from '@/actions/userActions'
 import PasswordField from '@/components/inputs/PasswordField'
 import PasswordPolicy from '@/components/dataDisplay/PasswordPolicy'
-import ErrorDialog from '@/components/MainDialog/ErrorDialog'
+import OkDialog from '@/components/MainDialog/OkDialog'
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState('')
@@ -22,11 +22,11 @@ const SignUp = () => {
   const { data: session } = useSession()
 
   if (session) {
-    return <ErrorDialog header='User already authorized' />
+    return <OkDialog type="error" header='User already authorized' />
   }
 
   if (error) {
-    return <ErrorDialog header='Server error' message={error} />
+    return <OkDialog type="error" header='Server error' message={error} />
   }
 
   const handleSubmit = async () => {

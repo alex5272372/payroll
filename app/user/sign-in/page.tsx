@@ -7,7 +7,7 @@ import { ArrowRightEndOnRectangleIcon, IdentificationIcon } from '@heroicons/rea
 import MainDialog from '@/components/MainDialog'
 import { ButtonState } from '@/types'
 import PasswordField from '@/components/inputs/PasswordField'
-import ErrorDialog from '@/components/MainDialog/ErrorDialog'
+import OkDialog from '@/components/MainDialog/OkDialog'
 
 const SignIn = () => {
   const [email, setEmail] = useState('')
@@ -17,12 +17,12 @@ const SignIn = () => {
   const { data: session } = useSession()
 
   if (session) {
-    return <ErrorDialog header='User already authorized' />
+    return <OkDialog type="error" header='User already authorized' />
   }
 
   const error = searchParams.get('error')
   if (error) {
-    return <ErrorDialog header='Invalid credentials' message='Incorrect email address or password.' />
+    return <OkDialog type="error" header='Invalid credentials' message='Incorrect email address or password.' />
   }
 
   const handleSignIn = async () => {

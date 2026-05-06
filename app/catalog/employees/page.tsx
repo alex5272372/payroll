@@ -6,7 +6,7 @@ import Toolbar from '@/components/Toolbar'
 import DataTable from '@/components/dataDisplay/DataTable'
 import { ActionResult, ButtonState, TableData } from '@/types'
 import { MenuItemPath } from '@/lib/data/navigation'
-import ErrorDialog from '@/components/MainDialog/ErrorDialog'
+import OkDialog from '@/components/MainDialog/OkDialog'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { CRUD } from '@/lib/data/roleMatrix'
 
@@ -48,7 +48,7 @@ const EmployeesCatalog = () => {
   }, [])
 
   if (error) {
-    return <ErrorDialog header='Server error' message={error} />
+    return <OkDialog type="error" header='Server error' message={error} />
   }
 
   return <Layout>

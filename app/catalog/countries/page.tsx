@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { getAllCountries, deleteCountry } from '@/actions/countryActions'
 import Layout from '@/components/Layout'
@@ -8,9 +8,9 @@ import DataTable from '@/components/dataDisplay/DataTable'
 import { ButtonState, TableData, TableDataRow } from '@/types'
 import { Country } from '@prisma/client'
 import { MenuItemPath } from '@/lib/data/navigation'
-import ErrorDialog from '@/components/MainDialog/ErrorDialog'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { CRUD } from '@/lib/data/roleMatrix'
+import { useOverlay } from '@/components/OverlayContext'
 
 const initialData: TableData = {
   columns: [
@@ -22,14 +22,14 @@ const initialData: TableData = {
 
 const CountriesCatalog = () => {
   const [tableData, setTableData] = useState<TableData>(initialData)
-  const [error, setError] = useState('')
   const [selectedCode, setSelectedCode] = useState('')
   const router = useRouter()
+  const { showError, showOkCancel, closeDialog } = useOverlay()
 
-  const fetchCountries = async (): Promise<void> => {
+  const fetchCountries = useCallback(async (): Promise<void> => {
     const result = await getAllCountries()
     if (!result.success) {
-      setError(result.error || 'Failed to fetch countries')
+      showError('Server error', result.error || 'Failed to fetch countries')
     }
     setTableData((prev: TableData) => ({
       ...prev,
@@ -38,17 +38,28 @@ const CountriesCatalog = () => {
         country.name,
       ] })) || []
     }))
-  }
+  }, [showError])
 
-  const handleDelete = async () => {
-    if (!selectedCode) return
-    const deleteResult = await deleteCountry(selectedCode)
+  const deleteConfirmed = useCallback(async (code: string): Promise<void> => {
+    debugger
+    closeDialog()
+    const deleteResult = await deleteCountry(code)
     if (!deleteResult.success) {
-      setError(deleteResult.error || 'Failed to delete country')
+      showError('Server error', deleteResult.error || 'Failed to delete country')
       return
     }
     setSelectedCode('')
     await fetchCountries()
+  }, [closeDialog, fetchCountries, showError])
+
+  const handleDelete = () => {
+    if (!selectedCode) return
+
+    showOkCancel(
+      () => deleteConfirmed(selectedCode),
+      'Delete country',
+      `Are you sure you want to delete country ${selectedCode}?`
+    )
   }
 
   const buttons: ButtonState[] = [
@@ -71,14 +82,10 @@ const CountriesCatalog = () => {
 
   useEffect(() => {
     (async () => await fetchCountries())()
-  }, [])
+  }, [fetchCountries])
 
   const handleRowSelect = (row?: TableDataRow) => {
     setSelectedCode(row?.cells?.[0] || '')
-  }
-
-  if (error) {
-    return <ErrorDialog header='Server error' message={error} />
   }
 
   return <Layout>

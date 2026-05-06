@@ -7,9 +7,12 @@ import MainTabs from './MainTabs'
 import MainMenuDropdown from './MainMenuDropdown'
 import ProfileDropdown from './ProfileDropdown'
 import { CRUD, roleMatrix, UserRole } from '@/lib/data/roleMatrix'
+import OkDialog from '@/components/MainDialog/OkDialog'
+import { useOverlay } from '@/components/OverlayContext'
 
 const Layout = ({ children }: { children: React.ReactNode; }) => {
   const { data: session } = useSession()
+  const { dialog } = useOverlay()
   const authNavigation = navigation.filter((item: MenuItem) => {
     if (item.section !== MenuSection.MAIN || item.parent)
       return false
@@ -39,6 +42,16 @@ const Layout = ({ children }: { children: React.ReactNode; }) => {
 
     <MainTabs />
     {children}
+
+    {dialog.type && (
+      <OkDialog
+        type={dialog.type}
+        header={dialog.header}
+        message={dialog.message}
+        onOk={dialog.onOk}
+        onCancel={dialog.onCancel}
+      />
+    )}
   </>
 }
 

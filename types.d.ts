@@ -9,6 +9,8 @@ declare module 'next-auth' {
 export type HeroIcon = React.ForwardRefExoticComponent<React.PropsWithoutRef<React.SVGProps<SVGSVGElement>>
   & { title?: string, titleId?: string } & React.RefAttributes<SVGSVGElement>>
 
+export type DialogType = 'error' | 'ok' | 'okCancel'
+
 export type TabItem = {
   menuPath: MenuItemPath;
   objectId?: number;

@@ -1,6 +1,7 @@
 import './globals.css'
 import React from 'react'
 import { SessionProvider } from 'next-auth/react'
+import { OverlayProvider } from '@/components/OverlayContext'
 
 const RootLayout = ({
   children,
@@ -11,7 +12,9 @@ const RootLayout = ({
     <html lang="en">
       <body className="h-full bg-gray-100">
         <SessionProvider>
-          {children}
+          <OverlayProvider>
+            {children}
+          </OverlayProvider>
         </SessionProvider>
       </body>
     </html>

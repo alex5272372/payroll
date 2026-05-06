@@ -5,7 +5,7 @@ import { createCountry } from '@/actions/countryActions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
-import ErrorDialog from '@/components/MainDialog/ErrorDialog'
+import OkDialog from '@/components/MainDialog/OkDialog'
 import { MenuItemPath } from '@/lib/data/navigation'
 import { CRUD } from '@/lib/data/roleMatrix'
 import { ButtonState } from '@/types'
@@ -30,7 +30,7 @@ const CountryCreate = () => {
   const submitButton = buttons.find((button) => button.action)
 
   if (error) {
-    return <ErrorDialog header='Server error' message={error} />
+    return <OkDialog type="error" header='Server error' message={error} />
   }
 
   return <Layout>

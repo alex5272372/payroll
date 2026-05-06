@@ -1,8 +1,8 @@
-import ErrorDialog from '@/components/MainDialog/ErrorDialog'
+import OkDialog from '@/components/MainDialog/OkDialog'
 
 const NotFound = () => {
   return (
-    <ErrorDialog header="Not Found" message="This page could not be found." />
+    <OkDialog type="error" header="Not Found" message="This page could not be found." />
   )
 }
 
