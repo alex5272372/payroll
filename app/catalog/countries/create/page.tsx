@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { PlusIcon } from '@heroicons/react/24/outline'
+import { createCountry } from '@/actions/countryActions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
@@ -9,15 +10,23 @@ import { MenuItemPath } from '@/lib/data/navigation'
 import { CRUD } from '@/lib/data/roleMatrix'
 import { ButtonState } from '@/types'
 
-const buttons: ButtonState[] = [
-  { title: 'Create', Icon: PlusIcon, onClick: () => {}, permission: CRUD.CREATE },
-]
-
 const CountryCreate = () => {
   const [error, setError] = useState('')
   const [code, setCode] = useState('')
   const [name, setName] = useState('')
 
+  const handleSubmit = async (formData: FormData) => {
+    const result = await createCountry(formData)
+    if (!result.success) {
+      setError(result.error || 'Unknown error')
+    } else {
+      // redirect('/catalog/countries') --- IGNORE ---
+    }
+  }
+
+  const buttons: ButtonState[] = [
+    { title: 'Create', Icon: PlusIcon, action: handleSubmit, permission: CRUD.CREATE },
+  ]
   const submitButton = buttons.find((button) => button.action)
 
   if (error) {

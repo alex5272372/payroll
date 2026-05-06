@@ -1,11 +1,11 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { getAllCountries } from '@/actions/countryActions'
+import { getAllCountries, deleteCountry } from '@/actions/countryActions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import DataTable from '@/components/dataDisplay/DataTable'
-import { ActionResult, ButtonState, TableData, TableDataRow } from '@/types'
+import { ButtonState, TableData, TableDataRow } from '@/types'
 import { Country } from '@prisma/client'
 import { MenuItemPath } from '@/lib/data/navigation'
 import ErrorDialog from '@/components/MainDialog/ErrorDialog'
@@ -26,6 +26,31 @@ const CountriesCatalog = () => {
   const [selectedCode, setSelectedCode] = useState('')
   const router = useRouter()
 
+  const fetchCountries = async (): Promise<void> => {
+    const result = await getAllCountries()
+    if (!result.success) {
+      setError(result.error || 'Failed to fetch countries')
+    }
+    setTableData((prev: TableData) => ({
+      ...prev,
+      rows: result.value?.map((country: Country) => ({ cells: [
+        country.code,
+        country.name,
+      ] })) || []
+    }))
+  }
+
+  const handleDelete = async () => {
+    if (!selectedCode) return
+    const deleteResult = await deleteCountry(selectedCode)
+    if (!deleteResult.success) {
+      setError(deleteResult.error || 'Failed to delete country')
+      return
+    }
+    setSelectedCode('')
+    await fetchCountries()
+  }
+
   const buttons: ButtonState[] = [
     { title: 'New', Icon: PlusIcon, href: '/catalog/countries/create', permission: CRUD.CREATE },
     {
@@ -35,24 +60,17 @@ const CountriesCatalog = () => {
       permission: CRUD.UPDATE,
       disabled: !selectedCode,
     },
-    { title: 'Delete', Icon: TrashIcon, onClick: () => {}, permission: CRUD.DELETE },
+    {
+      title: 'Delete',
+      Icon: TrashIcon,
+      onClick: handleDelete,
+      permission: CRUD.DELETE,
+      disabled: !selectedCode,
+    },
   ]
 
   useEffect(() => {
-    getAllCountries().then((countries: ActionResult<Country[]>) => {
-      if (!countries.success) {
-        setError(countries.error || '')
-        return
-      }
-
-      setTableData((prev: TableData) => ({
-        ...prev,
-        rows: countries.value?.map((country: Country) => ({ cells: [
-          country.code,
-          country.name,
-        ] })) || []
-      }))
-    })
+    (async () => await fetchCountries())()
   }, [])
 
   const handleRowSelect = (row?: TableDataRow) => {

@@ -38,8 +38,8 @@ const Toolbar = ({ buttons, menuPath }: { buttons: ButtonState[]; menuPath: Menu
         return <Button
           key={index}
           type={button.action ? 'submit' : 'button'}
-          className={`flex py-1 px-2 rounded-md border bg-gray-300 text-gray-900
-            ${!disabled && 'hover:bg-gray-400 cursor-pointer'}`}
+          className={`flex py-1 px-2 rounded-md border ${disabled && 'bg-gray-100 text-gray-600'}
+            ${!disabled && 'bg-gray-300 text-gray-900 hover:bg-gray-400 cursor-pointer'}`}
           disabled={disabled}
           onClick={button.onClick}
         >

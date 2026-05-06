@@ -41,6 +41,30 @@ const getCountryByCode = async (code: string): Promise<ActionResult<Country>> =>
   }
 }
 
+const createCountry = async (formData: FormData): Promise<ActionResult> => {
+  const session = await auth()
+  if (!session || !session.roles) {
+    return { success: false, error: 'Unauthorized' }
+  }
+
+  if (!session.roles.some((role: UserRole) => !!roleMatrix[MenuItemPath.COUNTRIES]?.[role]?.[CRUD.CREATE])) {
+    return { success: false, error: 'Forbidden' }
+  }
+
+  const code = formData.get('code')
+  const name = formData.get('name')
+
+  if (typeof code !== 'string' || typeof name !== 'string') {
+    return { success: false, error: 'Invalid form data' }
+  }
+
+  await prisma.country.create({
+    data: { code, name },
+  })
+
+  return { success: true }
+}
+
 const updateCountry = async (formData: FormData): Promise<ActionResult> => {
   const session = await auth()
   if (!session || !session.roles) {
@@ -66,8 +90,27 @@ const updateCountry = async (formData: FormData): Promise<ActionResult> => {
   return { success: true }
 }
 
+const deleteCountry = async (code: string): Promise<ActionResult> => {
+  const session = await auth()
+  if (!session || !session.roles) {
+    return { success: false, error: 'Unauthorized' }
+  }
+
+  if (!session.roles.some((role: UserRole) => !!roleMatrix[MenuItemPath.COUNTRIES]?.[role]?.[CRUD.DELETE])) {
+    return { success: false, error: 'Forbidden' }
+  }
+
+  await prisma.country.delete({
+    where: { code },
+  })
+
+  return { success: true }
+}
+
 export {
   getAllCountries,
   getCountryByCode,
+  createCountry,
   updateCountry,
+  deleteCountry,
 }
