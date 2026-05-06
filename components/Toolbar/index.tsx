@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { Button } from '@headlessui/react'
 import { MenuItemPath } from '@/lib/data/navigation'
-import { AllPermissions, CRUD, roleMatrix, UserRole } from '@/lib/data/roleMatrix'
+import { Permission, CRUD, roleMatrix, UserRole } from '@/lib/data/roleMatrix'
 import { ButtonState } from '@/types'
 
 const Toolbar = ({ buttons, menuPath }: { buttons: ButtonState[]; menuPath: MenuItemPath; }) => {
@@ -11,7 +11,7 @@ const Toolbar = ({ buttons, menuPath }: { buttons: ButtonState[]; menuPath: Menu
   return <nav className={'flex space-x-2 pt-2 px-2 bg-gray-100'}>
     {buttons.map((button, index) => {
       const disabled = button.disabled || !button.permission || !session?.roles?.some((role: UserRole) =>
-        !!(roleMatrix[menuPath]?.[role] as AllPermissions | undefined)?.[button.permission as CRUD])
+        !!(roleMatrix[menuPath]?.[role] as Permission | undefined)?.[button.permission as CRUD])
 
       if (button.href) {
         if (disabled) {

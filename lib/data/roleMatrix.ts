@@ -14,22 +14,31 @@ export enum UserRole {
   UNAUTHORIZED = 'UNAUTHORIZED',
 }
 
-export type AllPermissions = { [K in keyof typeof CRUD]: boolean }
-type ReadOnlyPermission = { [K in 'READ']: boolean }
-type Permission = AllPermissions | ReadOnlyPermission
+export type Permission = {
+  [CRUD.READ]: boolean,
+  [CRUD.CREATE]?: boolean,
+  [CRUD.UPDATE]?: boolean,
+  [CRUD.DELETE]?: boolean,
+}
 type RolePermission = Record<UserRole, Permission>
 export type RoleMatrix = Record<MenuItemPath, RolePermission>
 
 const allPerms = (v: boolean) => ({
-  [CRUD.CREATE]: v,
   [CRUD.READ]: v,
+  [CRUD.CREATE]: v,
   [CRUD.UPDATE]: v,
   [CRUD.DELETE]: v,
-} as AllPermissions)
+})
 
-const readOnly = (v = true) => ({ [CRUD.READ]: v } as ReadOnlyPermission)
+const readOnly = (v = true) => ({ [CRUD.READ]: v })
 
 export const roleMatrix: RoleMatrix = {
+  [MenuItemPath.HOME]: {
+    [UserRole.ADMINISTRATOR]: readOnly(true),
+    [UserRole.MODERATOR]: readOnly(true),
+    [UserRole.USER]: readOnly(true),
+    [UserRole.UNAUTHORIZED]: readOnly(true),
+  },
   [MenuItemPath.CALENDAR]: {
     [UserRole.ADMINISTRATOR]: readOnly(true),
     [UserRole.MODERATOR]: readOnly(true),

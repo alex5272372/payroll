@@ -1,52 +1,68 @@
-import React from 'react'
+import { useEffect, useReducer } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { TabItem, TabState } from '@/types'
 import { MenuItem, MenuItemPath, navigation } from '@/lib/data/navigation'
 
+type TabAction =
+  | { type: 'init'; pathname: MenuItemPath }
+  | { type: 'close'; index: number }
+
+const tabReducer = (state: TabState, action: TabAction): TabState => {
+  switch (action.type) {
+    case 'init': {
+      let newState: TabState = state
+      const storedTabState = localStorage.getItem('tabState')
+      if (storedTabState) newState = { ...JSON.parse(storedTabState), activeTab: null }
+      if (action.pathname === MenuItemPath.HOME) return newState
+
+      let activeTab = newState.tabs.findIndex((tab: TabItem) => tab.menuPath === action.pathname)
+
+      if (activeTab === -1) {
+        newState.tabs.push({ menuPath: action.pathname })
+        activeTab = newState.tabs.length - 1
+      }
+      newState.activeTab = activeTab
+
+      localStorage.setItem('tabState', JSON.stringify(newState))
+      return newState
+    }
+    case 'close': {
+      const tabs: TabItem[] = state.tabs.filter((_, i: number) => i !== action.index)
+      const activeTab: number | null =
+        state.activeTab === null || tabs.length === 0 ? null
+          : state.activeTab > 0 || state.activeTab > action.index || state.activeTab === tabs.length
+            ? state.activeTab - 1 : state.activeTab
+
+      const newState: TabState = { tabs, activeTab }
+      localStorage.setItem('tabState', JSON.stringify(newState))
+      return newState
+    }
+    default:
+      return state
+  }
+}
+
 const MainTabs = () => {
-  const [tabState, setTabState] = React.useState<TabState>({ tabs: [], activeTab: null })
+  const [tabState, dispatch] = useReducer(tabReducer, { tabs: [], activeTab: null })
 
   const pathname = usePathname()
   const router = useRouter()
 
-  React.useEffect(() => {
-    const menuPath = pathname as MenuItemPath
-    if (!menuPath || pathname === '/') return
-
-    let newTabState: TabState = { tabs: [], activeTab: null }
-    const storedTabState = localStorage.getItem('tabState')
-    if (storedTabState) newTabState = { ...JSON.parse(storedTabState), activeTab: null }
-
-    let activeTab = newTabState.tabs.findIndex((tab: TabItem) => tab.menuPath === menuPath)
-
-    if (activeTab === -1) {
-      newTabState.tabs.push({ menuPath })
-      activeTab = newTabState.tabs.length - 1
-    }
-    newTabState.activeTab = activeTab
-
-    setTabState(newTabState)
-    localStorage.setItem('tabState', JSON.stringify(newTabState))
+  useEffect(() => {
+    dispatch({ type: 'init', pathname: pathname as MenuItemPath })
   }, [pathname])
 
   const closeTab = (event: React.MouseEvent, index: number) => {
     event.stopPropagation()
 
-    const tabs: TabItem[] = tabState.tabs.filter((_, i: number) => i !== index)
-    const activeTab: number | null =
-      tabState.activeTab === null || tabs.length === 0 ? null
-        : tabState.activeTab > 0 || tabState.activeTab > index || tabState.activeTab === tabs.length
-          ? tabState.activeTab - 1 : tabState.activeTab
+    dispatch({ type: 'close', index })
 
-    const newTabState: TabState = { tabs, activeTab }
-    localStorage.setItem('tabState', JSON.stringify(newTabState))
-
-    if (index === tabState.activeTab)
-      router.push(activeTab === null ? '/' : tabs[activeTab].menuPath)
-    else
-      setTabState(newTabState)
+    if (index === tabState.activeTab) {
+      const nextTabItem: TabItem | null = tabState.tabs[index + 1] || tabState.tabs[index - 1] || null
+      router.push(nextTabItem === null ? MenuItemPath.HOME : nextTabItem.menuPath)
+    }
   }
 
   const mapTabs = (tab: TabItem, index: number) => {

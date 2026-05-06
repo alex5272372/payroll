@@ -1,11 +1,11 @@
 'use client'
 import { useState } from 'react'
+import { PlusIcon } from '@heroicons/react/24/outline'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
-import { MenuItemPath } from '@/lib/data/navigation'
 import ErrorDialog from '@/components/MainDialog/ErrorDialog'
-import { PlusIcon } from '@heroicons/react/24/outline'
+import { MenuItemPath } from '@/lib/data/navigation'
 import { CRUD } from '@/lib/data/roleMatrix'
 import { ButtonState } from '@/types'
 
@@ -13,7 +13,7 @@ const buttons: ButtonState[] = [
   { title: 'Create', Icon: PlusIcon, onClick: () => {}, permission: CRUD.CREATE },
 ]
 
-const NewCountry = () => {
+const CountryCreate = () => {
   const [error, setError] = useState('')
   const [code, setCode] = useState('')
   const [name, setName] = useState('')
@@ -48,4 +48,4 @@ const NewCountry = () => {
   </Layout>
 }
 
-export default NewCountry
+export default CountryCreate

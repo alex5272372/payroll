@@ -30,6 +30,7 @@ export type MenuItem = {
 }
 
 export enum MenuItemPath {
+  HOME = '/',
   CALENDAR = '/calendar',
   CATALOG = '/catalog',
   DOCUMENT = '/document',

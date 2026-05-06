@@ -4,19 +4,26 @@ import { TableData, TableDataColumn, TableDataRow } from '@/types'
 
 const DataTable = ({
   tableData,
-  setTableData
+  setTableData,
+  onRowSelect,
 } : {
   tableData: TableData
   setTableData: Dispatch<SetStateAction<TableData>>
+  onRowSelect?: (row?: TableDataRow) => void
 }) => {
 
   const handleRowSelect = (rowIdx: number) => {
+    const previousRow = tableData.rows[rowIdx]
+    const nowSelected = !previousRow?.selected
+
     setTableData((prev: TableData) => ({
       ...prev,
       rows: prev.rows.map((row: TableDataRow, idx: number) =>
-        idx === rowIdx ? { ...row, selected: !row.selected } : { ...row, selected: false }
+        idx === rowIdx ? { ...row, selected: nowSelected } : { ...row, selected: false }
       )
     }))
+
+    onRowSelect?.(nowSelected ? previousRow : undefined)
   }
 
   return <table className="m-2">
