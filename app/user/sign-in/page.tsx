@@ -1,63 +1,70 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { signIn, useSession } from 'next-auth/react'
 import { Field, Input, Label } from '@headlessui/react'
 import { ArrowRightEndOnRectangleIcon, IdentificationIcon } from '@heroicons/react/24/outline'
-import MainDialog from '@/components/MainDialog'
 import { ButtonState } from '@/types'
 import PasswordField from '@/components/inputs/PasswordField'
-import OkDialog from '@/components/MainDialog/OkDialog'
+import { useOverlay } from '@/components/OverlayContext'
+import Layout from '@/components/Layout'
 
 const SignIn = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const { showError, showMain } = useOverlay()
 
   const searchParams = useSearchParams()
   const { data: session } = useSession()
 
   if (session) {
-    return <OkDialog type="error" header='User already authorized' />
+    showError('Already authorized', 'You are already signed in.')
   }
 
   const error = searchParams.get('error')
   if (error) {
-    return <OkDialog type="error" header='Invalid credentials' message='Incorrect email address or password.' />
+    showError('Sign in error', 'Invalid email or password. Please try again.')
   }
 
-  const handleSignIn = async () => {
-    await signIn('credentials', {
-      email,
-      password,
-      redirectTo: '/',
-    })
-  }
+  useEffect(() => {
+    const handleSignIn = async () => {
+      await signIn('credentials', {
+        email,
+        password,
+        redirectTo: '/',
+      })
+    }
 
-  const buttons: ButtonState[] = [
-    {
-      Icon: ArrowRightEndOnRectangleIcon,
-      title: 'Sign In',
-      onClick: handleSignIn,
-    },
-  ]
+    const buttons: ButtonState[] = [
+      {
+        Icon: ArrowRightEndOnRectangleIcon,
+        title: 'Sign In',
+        onClick: handleSignIn,
+      },
+    ]
 
-  return <MainDialog
-    Icon={IdentificationIcon}
-    title="User"
-    buttons={buttons}
-  >
-    <Field>
-      <Label className="text-gray-100">Email:</Label>
-      <Input
-        name="email"
-        type="email"
-        className="ml-2 mr-8 py-1 px-2 rounded-md bg-gray-100"
-        onChange={(e) => setEmail(e.target.value)}
-      />
-    </Field>
+    const dialogChildren = (<>
+      <Field>
+        <Label className="text-gray-100">Email:</Label>
+        <Input
+          name="email"
+          type="email"
+          className="ml-2 mr-8 py-1 px-2 rounded-md bg-gray-100"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </Field>
 
-    <PasswordField setPassword={setPassword} />
-  </MainDialog>
+      <PasswordField setPassword={setPassword} />
+    </>)
+
+    showMain(dialogChildren, buttons, IdentificationIcon, 'Sign In')
+  }, [email, password, showError, showMain])
+
+  return (
+    <Layout>
+      <></>
+    </Layout>
+  )
 }
 
 export default SignIn

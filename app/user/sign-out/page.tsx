@@ -1,29 +1,37 @@
 'use client'
+import { useEffect } from 'react'
 import { signOut } from 'next-auth/react'
 import { ArrowRightStartOnRectangleIcon, IdentificationIcon } from '@heroicons/react/24/outline'
-import MainDialog from '@/components/MainDialog'
 import { ButtonState } from '@/types'
+import { useOverlay } from '@/components/OverlayContext'
+import Layout from '@/components/Layout'
 
 const SignOut = () => {
-  const handleSignOut = async () => {
-    await signOut({ redirectTo: '/' })
-  }
+  const { showMain } = useOverlay()
 
-  const buttons: ButtonState[] = [
-    {
-      Icon: ArrowRightStartOnRectangleIcon,
-      title: 'Sign Out',
-      onClick: handleSignOut,
-    },
-  ]
+  useEffect(() => {
+    const handleSignOut = async () => {
+      await signOut({ redirectTo: '/' })
+    }
 
-  return <MainDialog
-    Icon={IdentificationIcon}
-    title="User"
-    buttons={buttons}
-  >
-    <h2 className="text-2xl text-gray-100">Are you sure you want to sign out?</h2>
-  </MainDialog>
+    const buttons: ButtonState[] = [
+      {
+        Icon: ArrowRightStartOnRectangleIcon,
+        title: 'Sign Out',
+        onClick: handleSignOut,
+      },
+    ]
+
+    const dialogChildren = (<h2 className="text-2xl text-gray-100">Are you sure you want to sign out?</h2>)
+
+    showMain(dialogChildren, buttons, IdentificationIcon, 'Sign Out')
+  }, [showMain])
+
+  return (
+    <Layout>
+      <></>
+    </Layout>
+  )
 }
 
 export default SignOut

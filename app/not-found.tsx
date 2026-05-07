@@ -1,8 +1,19 @@
-import OkDialog from '@/components/MainDialog/OkDialog'
+'use client'
+import { useEffect } from 'react'
+import Layout from '@/components/Layout'
+import { useOverlay } from '@/components/OverlayContext'
 
 const NotFound = () => {
+  const { showError } = useOverlay()
+
+  useEffect(() => {
+    showError('Not Found', 'This page could not be found.')
+  }, [showError])
+
   return (
-    <OkDialog type="error" header="Not Found" message="This page could not be found." />
+    <Layout>
+      <></>
+    </Layout>
   )
 }
 

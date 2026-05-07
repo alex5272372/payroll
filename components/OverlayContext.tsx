@@ -1,11 +1,16 @@
 'use client'
-import { DialogType } from '@/types'
+import { ButtonState, DialogType, HeroIcon } from '@/types'
 import { createContext, useContext, useState, ReactNode, useCallback } from 'react'
 
 export interface DialogState {
   type?: DialogType
+  title?: string
   header?: string
   message?: string
+  children?: React.ReactNode
+  buttons?: ButtonState[]
+  icon?: HeroIcon
+  onClose?: () => void
   onOk?: () => void
   onCancel?: () => void
 }
@@ -25,6 +30,12 @@ interface OverlayContextType {
     header?: string,
     message?: string,
   ) => void
+  showMain: (
+    children: React.ReactNode,
+    buttons: ButtonState[],
+    icon?: HeroIcon,
+    title?: string,
+  ) => void
   closeDialog: () => void
 }
 
@@ -34,15 +45,44 @@ export const OverlayProvider = ({ children }: { children: ReactNode }) => {
   const [dialog, setDialog] = useState<DialogState>({})
 
   const showError = useCallback((header?: string, message?: string) => {
-    setDialog({ type: 'error', header, message, onOk: () => setDialog({}) })
+    setDialog({
+      type: 'error',
+      header,
+      message,
+      onClose: () => setDialog({}),
+      onOk: () => setDialog({})
+    })
   }, [])
 
   const showOk = useCallback((header?: string, message?: string) => {
-    setDialog({ type: 'ok', header, message, onOk: () => setDialog({}) })
+    setDialog({
+      type: 'ok',
+      header,
+      message,
+      onClose: () => setDialog({}),
+      onOk: () => setDialog({})
+    })
   }, [])
 
   const showOkCancel = useCallback((onOk: () => void, header?: string, message?: string ) => {
-    setDialog({ type: 'okCancel', onOk, header, message, onCancel: () => setDialog({}) })
+    setDialog({
+      type: 'okCancel',
+      header,
+      message,
+      onClose: () => setDialog({}),
+      onOk,
+      onCancel: () => setDialog({})
+    })
+  }, [])
+
+  const showMain = useCallback((children: React.ReactNode, buttons: ButtonState[], icon?: HeroIcon, title?: string) => {
+    setDialog({
+      type: 'main',
+      onClose: () => setDialog({}),
+      children,
+      buttons,
+      icon
+    })
   }, [])
 
   const closeDialog = useCallback(() => {
@@ -50,7 +90,7 @@ export const OverlayProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   return (
-    <OverlayContext.Provider value={{ dialog, showError, showOk, showOkCancel, closeDialog }}>
+    <OverlayContext.Provider value={{ dialog, showError, showOk, showOkCancel, showMain, closeDialog }}>
       {children}
     </OverlayContext.Provider>
   )

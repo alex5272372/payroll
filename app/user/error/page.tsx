@@ -1,6 +1,8 @@
 'use client'
+import { useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
-import OkDialog from '@/components/MainDialog/OkDialog'
+import Layout from '@/components/Layout'
+import { useOverlay } from '@/components/OverlayContext'
 
 enum Error {
   Configuration = 'Configuration',
@@ -31,8 +33,18 @@ const errorMap: Record<Error, { header: string, message: string }> = {
 const UserError = () => {
   const searchParams = useSearchParams()
   const error: Error = searchParams.get('error') as Error || Error.Default
+  const { showError } = useOverlay()
 
-  return <OkDialog type="error" header={errorMap[error].header} message={errorMap[error].message} />
+  useEffect(() => {
+    const errorInfo = errorMap[error] || errorMap[Error.Default]
+    showError(errorInfo.header, errorInfo.message)
+  }, [error, showError])
+
+  return (
+    <Layout>
+      <></>
+    </Layout>
+  )
 }
 
 export default UserError

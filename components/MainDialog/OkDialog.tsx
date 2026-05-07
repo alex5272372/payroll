@@ -6,12 +6,14 @@ const OkDialog = ({
   type,
   header,
   message,
+  onClose,
   onOk,
   onCancel,
 }: {
   type: DialogType
   header?: string
   message?: string
+  onClose?: () => void
   onOk?: () => void
   onCancel?: () => void
 }) => {
@@ -35,6 +37,7 @@ const OkDialog = ({
     Icon={type === 'error' ? ExclamationTriangleIcon : InformationCircleIcon}
     title={type === 'error' ? 'Error' : type === 'okCancel' ? 'Confirmation' : 'Information'}
     buttons={buttons}
+    onClose={onClose}
   >
     <div className='flex flex-col items-center'>
       {header && <h2 className="text-2xl text-gray-100">{header}</h2>}

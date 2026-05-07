@@ -7,8 +7,10 @@ import MainTabs from './MainTabs'
 import MainMenuDropdown from './MainMenuDropdown'
 import ProfileDropdown from './ProfileDropdown'
 import { CRUD, roleMatrix, UserRole } from '@/lib/data/roleMatrix'
+import MainDialog from '@/components/MainDialog'
 import OkDialog from '@/components/MainDialog/OkDialog'
 import { useOverlay } from '@/components/OverlayContext'
+import { ButtonState } from '@/types'
 
 const Layout = ({ children }: { children: React.ReactNode; }) => {
   const { data: session } = useSession()
@@ -43,15 +45,25 @@ const Layout = ({ children }: { children: React.ReactNode; }) => {
     <MainTabs />
     {children}
 
-    {dialog.type && (
+    {dialog.type && dialog.type === 'main' &&
+      <MainDialog
+        Icon={dialog.icon}
+        title={dialog.title}
+        buttons={dialog.buttons as ButtonState[]}
+        onClose={dialog.onClose}
+      >
+        {dialog.children}
+      </MainDialog>}
+
+    {dialog.type && dialog.type !== 'main' &&
       <OkDialog
         type={dialog.type}
         header={dialog.header}
         message={dialog.message}
+        onClose={dialog.onClose}
         onOk={dialog.onOk}
         onCancel={dialog.onCancel}
-      />
-    )}
+      />}
   </>
 }
 

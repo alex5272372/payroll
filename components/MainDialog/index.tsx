@@ -4,13 +4,17 @@ import { InformationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { ButtonState, HeroIcon } from '@/types'
 
 const MainDialog = ({
-  children, Icon, title, buttons, closeHref
+  children,
+  Icon,
+  title,
+  buttons,
+  onClose,
 }: {
-  children: React.ReactNode;
-  Icon?: HeroIcon;
-  title?: string;
-  buttons: ButtonState[];
-  closeHref?: string
+  children: React.ReactNode
+  Icon?: HeroIcon
+  title?: string
+  buttons: ButtonState[]
+  onClose?: () => void
 }) => {
   const submitButton = buttons.find((button) => button.action)
 
@@ -23,9 +27,9 @@ const MainDialog = ({
             : <InformationCircleIcon className="h-6" />}
           <p className="ml-2">{title || 'Information'}</p>
         </div>
-        <Link href={closeHref || '/'}>
+        <Button onClick={onClose}>
           <XMarkIcon className="h-6 cursor-pointer bg-gray-900 text-gray-300 hover:bg-gray-700" />
-        </Link>
+        </Button>
       </div>
 
       <form action={submitButton?.action} className="flex flex-col items-end p-4 space-y-4 rounded-b-md bg-gray-600">

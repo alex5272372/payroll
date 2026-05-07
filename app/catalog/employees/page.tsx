@@ -6,9 +6,9 @@ import Toolbar from '@/components/Toolbar'
 import DataTable from '@/components/dataDisplay/DataTable'
 import { ActionResult, ButtonState, TableData } from '@/types'
 import { MenuItemPath } from '@/lib/data/navigation'
-import OkDialog from '@/components/MainDialog/OkDialog'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { CRUD } from '@/lib/data/roleMatrix'
+import { useOverlay } from '@/components/OverlayContext'
 
 const buttons: ButtonState[] = [
   { title: 'New', Icon: PlusIcon, onClick: () => {}, permission: CRUD.CREATE },
@@ -27,12 +27,12 @@ const initialData: TableData = {
 
 const EmployeesCatalog = () => {
   const [tableData, setTableData] = useState<TableData>(initialData)
-  const [error, setError] = useState('')
+  const { showError } = useOverlay()
 
   useEffect(() => {
     getAllEmployees().then((employees: ActionResult<EmployeeWithPersonAndDepartment[]>) => {
       if (!employees.success) {
-        setError(employees.error || '')
+        showError(employees.error || '')
         return
       }
 
@@ -45,11 +45,7 @@ const EmployeesCatalog = () => {
         ] })) || []
       }))
     })
-  }, [])
-
-  if (error) {
-    return <OkDialog type="error" header='Server error' message={error} />
-  }
+  }, [showError])
 
   return <Layout>
     <main>
