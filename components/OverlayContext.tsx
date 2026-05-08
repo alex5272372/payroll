@@ -1,5 +1,5 @@
 'use client'
-import { ButtonState, DialogType, HeroIcon } from '@/types'
+import { ButtonGroupState, DialogType, HeroIcon } from '@/types'
 import { createContext, useContext, useState, ReactNode, useCallback } from 'react'
 
 export interface DialogState {
@@ -8,7 +8,7 @@ export interface DialogState {
   header?: string
   message?: string
   children?: React.ReactNode
-  buttons?: ButtonState[]
+  buttonGroup?: ButtonGroupState
   icon?: HeroIcon
   onClose?: () => void
   onOk?: () => void
@@ -32,7 +32,7 @@ interface OverlayContextType {
   ) => void
   showMain: (
     children: React.ReactNode,
-    buttons: ButtonState[],
+    buttonGroup: ButtonGroupState,
     icon?: HeroIcon,
     title?: string,
   ) => void
@@ -75,12 +75,18 @@ export const OverlayProvider = ({ children }: { children: ReactNode }) => {
     })
   }, [])
 
-  const showMain = useCallback((children: React.ReactNode, buttons: ButtonState[], icon?: HeroIcon, title?: string) => {
+  const showMain = useCallback((
+    children: React.ReactNode,
+    buttonGroup: ButtonGroupState,
+    icon?: HeroIcon,
+    title?: string
+  ) => {
     setDialog({
       type: 'main',
+      title,
       onClose: () => setDialog({}),
       children,
-      buttons,
+      buttonGroup,
       icon
     })
   }, [])

@@ -1,6 +1,6 @@
 import { CheckIcon, XMarkIcon, InformationCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import MainDialog from '.'
-import { ButtonState, DialogType } from '@/types'
+import { ButtonGroupState, DialogType } from '@/types'
 
 const OkDialog = ({
   type,
@@ -17,16 +17,18 @@ const OkDialog = ({
   onOk?: () => void
   onCancel?: () => void
 }) => {
-  const buttons: ButtonState[] = [
-    {
-      Icon: CheckIcon,
-      title: 'OK',
-      onClick: onOk,
-    },
-  ]
+  const buttonGroup: ButtonGroupState = {
+    buttons: [
+      {
+        Icon: CheckIcon,
+        title: 'OK',
+        onClick: onOk,
+      },
+    ],
+  }
 
   if (type === 'okCancel') {
-    buttons.push({
+    buttonGroup.buttons.push({
       Icon: XMarkIcon,
       title: 'Cancel',
       onClick: onCancel,
@@ -36,7 +38,7 @@ const OkDialog = ({
   return <MainDialog
     Icon={type === 'error' ? ExclamationTriangleIcon : InformationCircleIcon}
     title={type === 'error' ? 'Error' : type === 'okCancel' ? 'Confirmation' : 'Information'}
-    buttons={buttons}
+    buttonGroup={buttonGroup}
     onClose={onClose}
   >
     <div className='flex flex-col items-center'>

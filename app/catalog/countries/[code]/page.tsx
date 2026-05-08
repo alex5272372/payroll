@@ -5,7 +5,7 @@ import { getCountryByCode, updateCountry } from '@/actions/countryActions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
-import { ActionResult, ButtonState } from '@/types'
+import { ActionResult, ButtonGroupState } from '@/types'
 import { CRUD } from '@/lib/data/roleMatrix'
 import { MenuItemPath } from '@/lib/data/navigation'
 import { Country } from '@prisma/client'
@@ -47,15 +47,17 @@ const CountryUpdate = () => {
     )
   }
 
-  const buttons: ButtonState[] = [
-    { title: 'Save', Icon: PencilIcon, action: handleSubmit, permission: CRUD.UPDATE },
-  ]
-  const submitButton = buttons.find((button) => button.action)
+  const buttonGroup: ButtonGroupState = {
+    buttons: [
+      { title: 'Save', Icon: PencilIcon, onClick: handleSubmit, permission: CRUD.UPDATE },
+    ],
+    submitButton: 0,
+  }
 
   return <Layout>
     <main>
-      <form action={submitButton?.action}>
-        <Toolbar buttons={buttons} menuPath={MenuItemPath.COUNTRIES} />
+      <form action={buttonGroup.buttons[buttonGroup.submitButton || 0].onClick}>
+        <Toolbar buttonGroup={buttonGroup} menuPath={MenuItemPath.COUNTRIES} />
 
         <div className="p-4">
           <TextField
@@ -74,7 +76,6 @@ const CountryUpdate = () => {
       </form>
     </main>
   </Layout>
-
 }
 
 export default CountryUpdate

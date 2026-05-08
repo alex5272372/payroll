@@ -7,7 +7,7 @@ import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
 import { MenuItemPath } from '@/lib/data/navigation'
 import { CRUD } from '@/lib/data/roleMatrix'
-import { ButtonState } from '@/types'
+import { ButtonGroupState } from '@/types'
 import { useOverlay } from '@/components/OverlayContext'
 
 const CountryCreate = () => {
@@ -24,15 +24,17 @@ const CountryCreate = () => {
     }
   }
 
-  const buttons: ButtonState[] = [
-    { title: 'Create', Icon: PlusIcon, action: handleSubmit, permission: CRUD.CREATE },
-  ]
-  const submitButton = buttons.find((button) => button.action)
+  const buttonGroup: ButtonGroupState = {
+    buttons: [
+      { title: 'Create', Icon: PlusIcon, onClick: handleSubmit, permission: CRUD.CREATE },
+    ],
+    submitButton: 0,
+  }
 
   return <Layout>
     <main>
-      <form action={submitButton?.action}>
-        <Toolbar buttons={buttons} menuPath={MenuItemPath.COUNTRIES} />
+      <form action={buttonGroup.buttons[buttonGroup.submitButton || 0].onClick}>
+        <Toolbar buttonGroup={buttonGroup} menuPath={MenuItemPath.COUNTRIES} />
 
         <div className="p-4">
           <TextField

@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { signIn, useSession } from 'next-auth/react'
 import { Field, Input, Label } from '@headlessui/react'
 import { ArrowRightEndOnRectangleIcon, IdentificationIcon } from '@heroicons/react/24/outline'
-import { ButtonState } from '@/types'
+import { ButtonGroupState } from '@/types'
 import PasswordField from '@/components/inputs/PasswordField'
 import { useOverlay } from '@/components/OverlayContext'
 import Layout from '@/components/Layout'
@@ -35,13 +35,16 @@ const SignIn = () => {
       })
     }
 
-    const buttons: ButtonState[] = [
-      {
-        Icon: ArrowRightEndOnRectangleIcon,
-        title: 'Sign In',
-        onClick: handleSignIn,
-      },
-    ]
+    const buttonGroup: ButtonGroupState = {
+      buttons: [
+        {
+          Icon: ArrowRightEndOnRectangleIcon,
+          title: 'Sign In',
+          onClick: handleSignIn,
+        },
+      ],
+      submitButton: 0,
+    }
 
     const dialogChildren = (<>
       <Field>
@@ -57,7 +60,7 @@ const SignIn = () => {
       <PasswordField setPassword={setPassword} />
     </>)
 
-    showMain(dialogChildren, buttons, IdentificationIcon, 'Sign In')
+    showMain(dialogChildren, buttonGroup, IdentificationIcon, 'Sign In')
   }, [email, password, showError, showMain])
 
   return (

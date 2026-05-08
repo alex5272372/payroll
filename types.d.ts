@@ -33,8 +33,12 @@ export type ButtonState = {
   permission?: CRUD;
   disabled?: boolean;
   href?: string;
-  action?: (formData: FormData) => void;
-  onClick?: () => void;
+  onClick?: MouseEventHandler<HTMLButtonElement> | ((formData: FormData) => void | Promise<void>);
+}
+
+export type ButtonGroupState = {
+  buttons: ButtonState[];
+  submitButton?: number;
 }
 
 export type SignUpData = {

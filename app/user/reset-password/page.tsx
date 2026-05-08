@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { ArrowPathIcon, IdentificationIcon } from '@heroicons/react/24/outline'
-import { ActionResult, ButtonState } from '@/types'
+import { ActionResult, ButtonGroupState } from '@/types'
 import { resetPasswordAction } from '@/actions/userActions'
 import PasswordField from '@/components/inputs/PasswordField'
 import PasswordPolicy from '@/components/dataDisplay/PasswordPolicy'
@@ -25,14 +25,17 @@ const ResetPassword = () => {
       setSuccess(result.success)
     }
 
-    const buttons: ButtonState[] = [
-      {
-        Icon: ArrowPathIcon,
-        title: 'Reset password',
-        disabled: !passwordValid,
-        onClick: handleResetPassword,
-      },
-    ]
+    const buttonGroup: ButtonGroupState = {
+      buttons: [
+        {
+          Icon: ArrowPathIcon,
+          title: 'Reset password',
+          disabled: !passwordValid,
+          onClick: handleResetPassword,
+        },
+      ],
+      submitButton: 0,
+    }
 
     if (success) {
       showOk('Password changed', 'Your password has been successfully changed.')
@@ -43,7 +46,7 @@ const ResetPassword = () => {
         <PasswordField name="confirmPassword" label="Confirm password" setPassword={setConfirmPassword} />
         <PasswordPolicy password={password} confirmPassword={confirmPassword} setPasswordValid={setPasswordValid} />
       </>)
-      showMain(dialogChildren, buttons, IdentificationIcon, 'Reset password')
+      showMain(dialogChildren, buttonGroup, IdentificationIcon, 'Reset password')
     }
 
   } else {

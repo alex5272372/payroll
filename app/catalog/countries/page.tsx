@@ -5,7 +5,7 @@ import { getAllCountries, deleteCountry } from '@/actions/countryActions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import DataTable from '@/components/dataDisplay/DataTable'
-import { ButtonState, TableData, TableDataRow } from '@/types'
+import { ButtonGroupState, TableData, TableDataRow } from '@/types'
 import { Country } from '@prisma/client'
 import { MenuItemPath } from '@/lib/data/navigation'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
@@ -64,23 +64,25 @@ const CountriesCatalog = () => {
     )
   }
 
-  const buttons: ButtonState[] = [
-    { title: 'New', Icon: PlusIcon, href: '/catalog/countries/create', permission: CRUD.CREATE },
-    {
-      title: 'Edit',
-      Icon: PencilIcon,
-      onClick: () => selectedCode && router.push(`/catalog/countries/${selectedCode}`),
-      permission: CRUD.UPDATE,
-      disabled: !selectedCode,
-    },
-    {
-      title: 'Delete',
-      Icon: TrashIcon,
-      onClick: handleDelete,
-      permission: CRUD.DELETE,
-      disabled: !selectedCode,
-    },
-  ]
+  const buttonGroup: ButtonGroupState = {
+    buttons: [
+      { title: 'New', Icon: PlusIcon, href: '/catalog/countries/create', permission: CRUD.CREATE },
+      {
+        title: 'Edit',
+        Icon: PencilIcon,
+        onClick: () => { selectedCode && router.push(`/catalog/countries/${selectedCode}`) },
+        permission: CRUD.UPDATE,
+        disabled: !selectedCode,
+      },
+      {
+        title: 'Delete',
+        Icon: TrashIcon,
+        onClick: handleDelete,
+        permission: CRUD.DELETE,
+        disabled: !selectedCode,
+      },
+    ]
+  }
 
   useEffect(() => {
     (async () => await fetchCountries())()
@@ -92,7 +94,7 @@ const CountriesCatalog = () => {
 
   return <Layout>
     <main>
-      <Toolbar buttons={buttons} menuPath={MenuItemPath.COUNTRIES} />
+      <Toolbar buttonGroup={buttonGroup} menuPath={MenuItemPath.COUNTRIES} />
       <DataTable
         tableData={tableData}
         setTableData={setTableData}

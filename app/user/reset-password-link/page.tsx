@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { Field, Input, Label } from '@headlessui/react'
 import { ArrowPathIcon, IdentificationIcon } from '@heroicons/react/24/outline'
-import { ButtonState } from '@/types'
+import { ButtonGroupState } from '@/types'
 import { useOverlay } from '@/components/OverlayContext'
 import Layout from '@/components/Layout'
 
@@ -19,13 +19,16 @@ const ResetPasswordLink = () => {
       })
     }
 
-    const buttons: ButtonState[] = [
-      {
-        Icon: ArrowPathIcon,
-        title: 'Send reset password link',
-        onClick: handleSignIn,
-      },
-    ]
+    const buttonGroup: ButtonGroupState = {
+      buttons: [
+        {
+          Icon: ArrowPathIcon,
+          title: 'Send reset password link',
+          onClick: handleSignIn,
+        },
+      ],
+      submitButton: 0,
+    }
 
     const dialogChildren = (<>
       <Field>
@@ -39,7 +42,7 @@ const ResetPasswordLink = () => {
       </Field>
     </>)
 
-    showMain(dialogChildren, buttons, IdentificationIcon, 'Reset password')
+    showMain(dialogChildren, buttonGroup, IdentificationIcon, 'Reset password')
   }, [email, showMain])
 
   return (

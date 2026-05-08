@@ -5,17 +5,19 @@ import { getAllCompanies } from '@/actions/companyActions'
 import Layout from '@/components/Layout'
 import DataTable from '@/components/dataDisplay/DataTable'
 import Toolbar from '@/components/Toolbar'
-import { ActionResult, ButtonState, TableData } from '@/types'
+import { ActionResult, ButtonGroupState, TableData } from '@/types'
 import { MenuItemPath } from '@/lib/data/navigation'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { CRUD } from '@/lib/data/roleMatrix'
 import { useOverlay } from '@/components/OverlayContext'
 
-const buttons: ButtonState[] = [
-  { title: 'New', Icon: PlusIcon, onClick: () => {}, permission: CRUD.CREATE },
-  { title: 'Edit', Icon: PencilIcon, onClick: () => {}, permission: CRUD.UPDATE },
-  { title: 'Delete', Icon: TrashIcon, onClick: () => {}, permission: CRUD.DELETE },
-]
+const buttonGroup: ButtonGroupState = {
+  buttons: [
+    { title: 'New', Icon: PlusIcon, onClick: () => {}, permission: CRUD.CREATE },
+    { title: 'Edit', Icon: PencilIcon, onClick: () => {}, permission: CRUD.UPDATE },
+    { title: 'Delete', Icon: TrashIcon, onClick: () => {}, permission: CRUD.DELETE },
+  ]
+}
 
 const initialData: TableData = {
   columns: [
@@ -49,7 +51,7 @@ const CompaniesCatalog = () => {
 
   return <Layout>
     <main>
-      <Toolbar buttons={buttons} menuPath={MenuItemPath.COMPANIES} />
+      <Toolbar buttonGroup={buttonGroup} menuPath={MenuItemPath.COMPANIES} />
       <DataTable
         tableData={tableData}
         setTableData={setTableData}

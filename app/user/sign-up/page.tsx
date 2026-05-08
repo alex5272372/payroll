@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { Field, Input, Label } from '@headlessui/react'
 import { UserPlusIcon, IdentificationIcon } from '@heroicons/react/24/outline'
-import { ActionResult, ButtonState } from '@/types'
+import { ActionResult, ButtonGroupState } from '@/types'
 import { signUpAction } from '@/actions/userActions'
 import PasswordField from '@/components/inputs/PasswordField'
 import PasswordPolicy from '@/components/dataDisplay/PasswordPolicy'
@@ -36,14 +36,17 @@ const SignUp = () => {
       if (!result.success) setError(result.error || '')
     }
 
-    const buttons: ButtonState[] = [
-      {
-        Icon: UserPlusIcon,
-        title: 'Sign Up',
-        disabled: !passwordValid,
-        onClick: handleSubmit
-      },
-    ]
+    const buttonGroup: ButtonGroupState = {
+      buttons: [
+        {
+          Icon: UserPlusIcon,
+          title: 'Sign Up',
+          disabled: !passwordValid,
+          onClick: handleSubmit
+        },
+      ],
+      submitButton: 0,
+    }
 
     const dialogChildren = (<>
       <Field>
@@ -81,7 +84,7 @@ const SignUp = () => {
       <PasswordPolicy password={password} confirmPassword={confirmPassword} setPasswordValid={setPasswordValid} />
     </>)
 
-    showMain(dialogChildren, buttons, IdentificationIcon, 'Sign Up')
+    showMain(dialogChildren, buttonGroup, IdentificationIcon, 'Sign Up')
   }, [confirmPassword, email, error, firstName, lastName, password, passwordValid, showError, showMain])
 
 

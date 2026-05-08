@@ -3,13 +3,13 @@ import { useSession } from 'next-auth/react'
 import { Button } from '@headlessui/react'
 import { MenuItemPath } from '@/lib/data/navigation'
 import { Permission, CRUD, roleMatrix, UserRole } from '@/lib/data/roleMatrix'
-import { ButtonState } from '@/types'
+import { ButtonGroupState, ButtonState } from '@/types'
 
-const Toolbar = ({ buttons, menuPath }: { buttons: ButtonState[]; menuPath: MenuItemPath; }) => {
+const Toolbar = ({ buttonGroup, menuPath }: { buttonGroup: ButtonGroupState; menuPath: MenuItemPath; }) => {
   const { data: session } = useSession()
 
   return <nav className={'flex space-x-2 pt-2 px-2 bg-gray-100'}>
-    {buttons.map((button, index) => {
+    {buttonGroup.buttons.map((button: ButtonState, index: number) => {
       const disabled = button.disabled || !button.permission || !session?.roles?.some((role: UserRole) =>
         !!(roleMatrix[menuPath]?.[role] as Permission | undefined)?.[button.permission as CRUD])
 
@@ -37,7 +37,7 @@ const Toolbar = ({ buttons, menuPath }: { buttons: ButtonState[]; menuPath: Menu
       } else {
         return <Button
           key={index}
-          type={button.action ? 'submit' : 'button'}
+          type={index === buttonGroup.submitButton ? 'submit' : 'button'}
           className={`flex py-1 px-2 rounded-md border ${disabled && 'bg-gray-100 text-gray-600'}
             ${!disabled && 'bg-gray-300 text-gray-900 hover:bg-gray-400 cursor-pointer'}`}
           disabled={disabled}
