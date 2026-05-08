@@ -1,6 +1,7 @@
 import { CheckIcon, XMarkIcon, InformationCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import MainDialog from '.'
-import { ButtonGroupState, DialogType } from '@/types'
+import type { ButtonGroupState } from '@/types'
+import type { DialogType } from '@/types/overlay'
 
 const OkDialog = ({
   type,

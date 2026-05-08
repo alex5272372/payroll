@@ -5,18 +5,19 @@ import { createCountry } from '@/actions/countryActions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
-import { MenuItemPath } from '@/lib/data/navigation'
-import { CRUD } from '@/lib/data/roleMatrix'
+import { MenuItemPath } from '@/types/enums/navigation'
+import { CRUD } from '@/types/enums/roleMatrix'
 import { ButtonGroupState } from '@/types'
 import { useOverlay } from '@/components/OverlayContext'
+import { CountryRequest } from '@/types/models/countryModels'
 
 const CountryCreate = () => {
   const [code, setCode] = useState('')
   const [name, setName] = useState('')
   const { showError, showOk } = useOverlay()
 
-  const handleSubmit = async (formData: FormData) => {
-    const result = await createCountry(formData)
+  const handleSubmit = async (country: CountryRequest) => {
+    const result = await createCountry(country)
     if (result.success) {
       showOk('Create country', `Country ${code} has been created successfully`)
     } else {
@@ -26,7 +27,7 @@ const CountryCreate = () => {
 
   const buttonGroup: ButtonGroupState = {
     buttons: [
-      { title: 'Create', Icon: PlusIcon, onClick: handleSubmit, permission: CRUD.CREATE },
+      { title: 'Create', Icon: PlusIcon, onClick: () => handleSubmit({ code, name }), permission: CRUD.CREATE },
     ],
     submitButton: 0,
   }

@@ -1,9 +1,11 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { MenuSection, navigation } from '@/lib/data/navigation'
+import { MenuSection } from '@/types/enums/navigation'
+import { navigation } from '@/lib/data/navigation'
 import { User } from 'next-auth'
-import { CRUD, roleMatrix, UserRole } from '@/lib/data/roleMatrix'
+import { CRUD, UserRole } from '@/types/enums/roleMatrix'
+import { roleMatrix } from '@/lib/data/roleMatrix'
 
 const ProfileDropdown = ({ user, roles }: { user?: User, roles?: UserRole[] }) => {
   const authNavigation = navigation.filter(item => {

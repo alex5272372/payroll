@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { MenuItem as MenuItemType, navigation } from '@/lib/data/navigation'
-import { CRUD, roleMatrix, UserRole } from '@/lib/data/roleMatrix'
+import type { MenuItem as MenuItemType } from '@/types/navigation'
+import { navigation } from '@/lib/data/navigation'
+import { CRUD, UserRole } from '@/types/enums/roleMatrix'
+import { roleMatrix } from '@/lib/data/roleMatrix'
 
 const MainMenuDropdown = ({ menuItem, roles }: { menuItem: MenuItemType, roles?: UserRole[] }) => {
   const authNavigation = navigation.filter(item => {

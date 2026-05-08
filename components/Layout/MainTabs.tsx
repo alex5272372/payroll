@@ -3,7 +3,9 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { TabItem, TabState } from '@/types'
-import { MenuItem, MenuItemPath, navigation } from '@/lib/data/navigation'
+import { MenuItemPath } from '@/types/enums/navigation'
+import type { MenuItem } from '@/types/navigation'
+import { navigation } from '@/lib/data/navigation'
 
 type TabAction =
   | { type: 'init'; pathname: MenuItemPath }

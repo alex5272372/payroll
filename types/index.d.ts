@@ -1,4 +1,4 @@
-import { CRUD, UserRole } from '@/lib/data/roleMatrix'
+import type { CRUD, UserRole } from '@/types/enums/roleMatrix'
 
 declare module 'next-auth' {
   interface Session {
@@ -8,8 +8,6 @@ declare module 'next-auth' {
 
 export type HeroIcon = React.ForwardRefExoticComponent<React.PropsWithoutRef<React.SVGProps<SVGSVGElement>>
   & { title?: string, titleId?: string } & React.RefAttributes<SVGSVGElement>>
-
-export type DialogType = 'error' | 'ok' | 'okCancel' | 'main'
 
 export type TabItem = {
   menuPath: MenuItemPath;

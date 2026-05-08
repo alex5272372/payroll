@@ -6,11 +6,12 @@ import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
 import { ActionResult, ButtonGroupState } from '@/types'
-import { CRUD } from '@/lib/data/roleMatrix'
-import { MenuItemPath } from '@/lib/data/navigation'
+import { CRUD } from '@/types/enums/roleMatrix'
+import { MenuItemPath } from '@/types/enums/navigation'
 import { Country } from '@prisma/client'
 import { useParams } from 'next/navigation'
 import { useOverlay } from '@/components/OverlayContext'
+import { CountryRequest } from '@/types/models/countryModels'
 
 const CountryUpdate = () => {
   const [name, setName] = useState('')
@@ -28,9 +29,9 @@ const CountryUpdate = () => {
     })
   }, [params.code, showError])
 
-  const submitConfirmed = useCallback(async (formData: FormData): Promise<void> => {
+  const submitConfirmed = useCallback(async (country: CountryRequest): Promise<void> => {
     closeDialog()
-    const result = await updateCountry(formData)
+    const result = await updateCountry(country)
 
     if (result.success) {
       showOk('Country updated', 'Country has been updated successfully')
@@ -41,7 +42,7 @@ const CountryUpdate = () => {
 
   const handleSubmit = async (formData: FormData) => {
     showOkCancel(
-      () => submitConfirmed(formData),
+      () => submitConfirmed({ code: params.code as string, name: formData.get('name') as string }),
       'Update country',
       `Are you sure you want to update country ${params.code}?`
     )

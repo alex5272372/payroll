@@ -4,8 +4,9 @@ import { auth, signIn } from '@/lib/auth'
 import bcrypt from 'bcryptjs'
 import { ActionResult, SignUpData } from '@/types'
 import { Prisma } from '@prisma/client'
-import { CRUD, roleMatrix, UserRole } from '@/lib/data/roleMatrix'
-import { MenuItemPath } from '@/lib/data/navigation'
+import { CRUD, UserRole } from '@/types/enums/roleMatrix'
+import { roleMatrix } from '@/lib/data/roleMatrix'
+import { MenuItemPath } from '@/types/enums/navigation'
 
 const crypt = (pass: string) => bcrypt.hashSync(pass, bcrypt.genSaltSync(10))
 

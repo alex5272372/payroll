@@ -6,9 +6,9 @@ import Layout from '@/components/Layout'
 import DataTable from '@/components/dataDisplay/DataTable'
 import Toolbar from '@/components/Toolbar'
 import { ActionResult, ButtonGroupState, TableData } from '@/types'
-import { MenuItemPath } from '@/lib/data/navigation'
+import { MenuItemPath } from '@/types/enums/navigation'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { CRUD } from '@/lib/data/roleMatrix'
+import { CRUD } from '@/types/enums/roleMatrix'
 import { useOverlay } from '@/components/OverlayContext'
 
 const buttonGroup: ButtonGroupState = {

@@ -1,8 +1,10 @@
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { Button } from '@headlessui/react'
-import { MenuItemPath } from '@/lib/data/navigation'
-import { Permission, CRUD, roleMatrix, UserRole } from '@/lib/data/roleMatrix'
+import { MenuItemPath } from '@/types/enums/navigation'
+import { CRUD, UserRole } from '@/types/enums/roleMatrix'
+import type { Permission } from '@/types/roleMatrix'
+import { roleMatrix } from '@/lib/data/roleMatrix'
 import { ButtonGroupState, ButtonState } from '@/types'
 
 const Toolbar = ({ buttonGroup, menuPath }: { buttonGroup: ButtonGroupState; menuPath: MenuItemPath; }) => {
@@ -39,9 +41,10 @@ const Toolbar = ({ buttonGroup, menuPath }: { buttonGroup: ButtonGroupState; men
           key={index}
           type={index === buttonGroup.submitButton ? 'submit' : 'button'}
           className={`flex py-1 px-2 rounded-md border ${disabled && 'bg-gray-100 text-gray-600'}
-            ${!disabled && 'bg-gray-300 text-gray-900 hover:bg-gray-400 cursor-pointer'}`}
+            ${!disabled && (index === buttonGroup.submitButton ? 'bg-blue-300' : 'bg-gray-300')
+              + ' text-gray-900 hover:bg-gray-400 cursor-pointer'}`}
           disabled={disabled}
-          onClick={button.onClick}
+          onClick={index !== buttonGroup.submitButton && button.onClick}
         >
           <button.Icon className="h-6" />
           <p className="ml-2">{button.title}</p>

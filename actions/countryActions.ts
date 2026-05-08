@@ -3,10 +3,12 @@ import prisma from '@/lib/prisma'
 import { Country } from '@prisma/client'
 import { ActionResult } from '@/types'
 import { auth } from '@/lib/auth'
-import { CRUD, roleMatrix, UserRole } from '@/lib/data/roleMatrix'
-import { MenuItemPath } from '@/lib/data/navigation'
+import { CRUD, UserRole } from '@/types/enums/roleMatrix'
+import { roleMatrix } from '@/lib/data/roleMatrix'
+import { MenuItemPath } from '@/types/enums/navigation'
+import { CountryRequest, CountryResponse } from '@/types/models/countryModels'
 
-const getAllCountries = async (): Promise<ActionResult<Country[]>> => {
+const getAllCountries = async (): Promise<ActionResult<CountryResponse[]>> => {
   const session = await auth()
   if (!session || !session.roles) {
     return { success: false, error: 'Unauthorized' }
@@ -18,11 +20,11 @@ const getAllCountries = async (): Promise<ActionResult<Country[]>> => {
 
   return {
     success: true,
-    value: countries,
+    value: countries.map((country) => ({ code: country.code, name: country.name })),
   }
 }
 
-const getCountryByCode = async (code: string): Promise<ActionResult<Country>> => {
+const getCountryByCode = async (code: string): Promise<ActionResult<CountryResponse>> => {
   const session = await auth()
   if (!session || !session.roles) {
     return { success: false, error: 'Unauthorized' }
@@ -37,11 +39,11 @@ const getCountryByCode = async (code: string): Promise<ActionResult<Country>> =>
 
   return {
     success: true,
-    value: country,
+    value: { code: country.code, name: country.name },
   }
 }
 
-const createCountry = async (formData: FormData): Promise<ActionResult> => {
+const createCountry = async (country: CountryRequest): Promise<ActionResult> => {
   const session = await auth()
   if (!session || !session.roles) {
     return { success: false, error: 'Unauthorized' }
@@ -51,8 +53,8 @@ const createCountry = async (formData: FormData): Promise<ActionResult> => {
     return { success: false, error: 'Forbidden' }
   }
 
-  const code = formData.get('code')
-  const name = formData.get('name')
+  const code = country.code
+  const name = country.name
 
   if (typeof code !== 'string' || typeof name !== 'string') {
     return { success: false, error: 'Invalid form data' }
@@ -72,7 +74,7 @@ const createCountry = async (formData: FormData): Promise<ActionResult> => {
   return { success: true }
 }
 
-const updateCountry = async (formData: FormData): Promise<ActionResult> => {
+const updateCountry = async (country: CountryRequest): Promise<ActionResult> => {
   const session = await auth()
   if (!session || !session.roles) {
     return { success: false, error: 'Unauthorized' }
@@ -82,8 +84,8 @@ const updateCountry = async (formData: FormData): Promise<ActionResult> => {
     return { success: false, error: 'Forbidden' }
   }
 
-  const code = formData.get('code')
-  const name = formData.get('name')
+  const code = country.code
+  const name = country.name
 
   if (typeof code !== 'string' || typeof name !== 'string') {
     return { success: false, error: 'Invalid form data' }

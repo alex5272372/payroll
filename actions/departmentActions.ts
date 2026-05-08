@@ -3,8 +3,9 @@ import prisma from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { ActionResult } from '@/types'
 import { auth } from '@/lib/auth'
-import { CRUD, roleMatrix, UserRole } from '@/lib/data/roleMatrix'
-import { MenuItemPath } from '@/lib/data/navigation'
+import { CRUD, UserRole } from '@/types/enums/roleMatrix'
+import { roleMatrix } from '@/lib/data/roleMatrix'
+import { MenuItemPath } from '@/types/enums/navigation'
 
 export type DepartmentWithCompany = Prisma.DepartmentGetPayload<{
   include: { company: { select: { name: boolean } } }

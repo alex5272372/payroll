@@ -1,27 +1,6 @@
-import { MenuItemPath } from '@/lib/data/navigation'
-
-export enum CRUD {
-  CREATE = 'CREATE',
-  READ = 'READ',
-  UPDATE = 'UPDATE',
-  DELETE = 'DELETE',
-}
-
-export enum UserRole {
-  ADMINISTRATOR = 'ADMINISTRATOR',
-  MODERATOR = 'MODERATOR',
-  USER = 'USER',
-  UNAUTHORIZED = 'UNAUTHORIZED',
-}
-
-export type Permission = {
-  [CRUD.READ]: boolean,
-  [CRUD.CREATE]?: boolean,
-  [CRUD.UPDATE]?: boolean,
-  [CRUD.DELETE]?: boolean,
-}
-type RolePermission = Record<UserRole, Permission>
-export type RoleMatrix = Record<MenuItemPath, RolePermission>
+import { MenuItemPath } from '@/types/enums/navigation'
+import { CRUD, UserRole } from '@/types/enums/roleMatrix'
+import type { RoleMatrix } from '@/types/roleMatrix'
 
 const allPerms = (v: boolean) => ({
   [CRUD.READ]: v,

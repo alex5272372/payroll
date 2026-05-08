@@ -8,7 +8,7 @@ import { compare } from 'bcryptjs'
 import crypto from 'crypto'
 import prisma from '@/lib/prisma'
 import { sendVerificationRequest } from '@/lib/authSendRequest'
-import { UserRole } from './data/roleMatrix'
+import { UserRole } from '@/types/enums/roleMatrix'
 
 const CustomPrismaAdapter = (prismaClient: typeof prisma): Adapter => {
   const prismaAdapter: Adapter = PrismaAdapter(prismaClient)

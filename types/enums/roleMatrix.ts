@@ -1,0 +1,13 @@
+export enum CRUD {
+  CREATE = 'CREATE',
+  READ = 'READ',
+  UPDATE = 'UPDATE',
+  DELETE = 'DELETE',
+}
+
+export enum UserRole {
+  ADMINISTRATOR = 'ADMINISTRATOR',
+  MODERATOR = 'MODERATOR',
+  USER = 'USER',
+  UNAUTHORIZED = 'UNAUTHORIZED',
+}

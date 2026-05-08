@@ -1,43 +1,7 @@
 'use client'
-import { ButtonGroupState, DialogType, HeroIcon } from '@/types'
+import type { ButtonGroupState, HeroIcon } from '@/types'
+import type { DialogState, OverlayContextType } from '@/types/overlay'
 import { createContext, useContext, useState, ReactNode, useCallback } from 'react'
-
-export interface DialogState {
-  type?: DialogType
-  title?: string
-  header?: string
-  message?: string
-  children?: React.ReactNode
-  buttonGroup?: ButtonGroupState
-  icon?: HeroIcon
-  onClose?: () => void
-  onOk?: () => void
-  onCancel?: () => void
-}
-
-interface OverlayContextType {
-  dialog: DialogState
-  showError: (
-    header?: string,
-    message?: string
-  ) => void
-  showOk: (
-    header?: string,
-    message?: string
-  ) => void
-  showOkCancel: (
-    onOk: () => void,
-    header?: string,
-    message?: string,
-  ) => void
-  showMain: (
-    children: React.ReactNode,
-    buttonGroup: ButtonGroupState,
-    icon?: HeroIcon,
-    title?: string,
-  ) => void
-  closeDialog: () => void
-}
 
 const OverlayContext = createContext<OverlayContextType | undefined>(undefined)
 
