@@ -13,6 +13,7 @@ import { roleMatrix } from '@/lib/data/roleMatrix'
 import MainDialog from '@/components/MainDialog'
 import OkDialog from '@/components/MainDialog/OkDialog'
 import { useOverlay } from '@/components/OverlayContext'
+import ZodDialog from '../MainDialog/ZodDialog'
 
 const Layout = ({ children }: { children: React.ReactNode; }) => {
   const { data: session } = useSession()
@@ -57,7 +58,14 @@ const Layout = ({ children }: { children: React.ReactNode; }) => {
         {dialog.children}
       </MainDialog>}
 
-    {dialog.type && dialog.type !== 'main' &&
+    {dialog.type && dialog.type === 'zod' &&
+      <ZodDialog
+        zodError={dialog.zodError}
+        onClose={dialog.onClose}
+        onOk={dialog.onOk}
+      />}
+
+    {dialog.type && dialog.type !== 'main' && dialog.type !== 'zod' &&
       <OkDialog
         type={dialog.type}
         header={dialog.header}

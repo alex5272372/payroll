@@ -14,14 +14,18 @@ import { CountryRequest } from '@/types/models/countryModels'
 const CountryCreate = () => {
   const [code, setCode] = useState('')
   const [name, setName] = useState('')
-  const { showError, showOk } = useOverlay()
+  const { showOk, showZod, showError } = useOverlay()
 
   const handleSubmit = async (country: CountryRequest) => {
     const result = await createCountry(country)
     if (result.success) {
       showOk('Create country', `Country ${code} has been created successfully`)
     } else {
-      showError('Server error', result.error || 'Failed to create country')
+      if (result.zodError) {
+        showZod(result.zodError)
+      } else {
+        showError('Create country', result.error || 'Unknown error')
+      }
     }
   }
 

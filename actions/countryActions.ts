@@ -7,6 +7,12 @@ import { CRUD, UserRole } from '@/types/enums/roleMatrix'
 import { roleMatrix } from '@/lib/data/roleMatrix'
 import { MenuItemPath } from '@/types/enums/navigation'
 import { CountryRequest, CountryResponse } from '@/types/models/countryModels'
+import { z } from 'zod'
+
+const countrySchema = z.object({
+  code: z.string().min(1).max(2),
+  name: z.string().min(1).max(60),
+})
 
 const getAllCountries = async (): Promise<ActionResult<CountryResponse[]>> => {
   const session = await auth()
@@ -53,22 +59,20 @@ const createCountry = async (country: CountryRequest): Promise<ActionResult> => 
     return { success: false, error: 'Forbidden' }
   }
 
-  const code = country.code
-  const name = country.name
-
-  if (typeof code !== 'string' || typeof name !== 'string') {
-    return { success: false, error: 'Invalid form data' }
+  const validation = countrySchema.safeParse(country)
+  if (!validation.success) {
+    return { success: false, zodError: z.treeifyError(validation.error) }
   }
 
   const existingCountry = await prisma.country.findUnique({
-    where: { code }
+    where: { code: country.code },
   })
   if (existingCountry) {
     return { success: false, error: 'Country with this code already exists' }
   }
 
   await prisma.country.create({
-    data: { code, name },
+    data: { code: country.code, name: country.name },
   })
 
   return { success: true }
@@ -84,16 +88,14 @@ const updateCountry = async (country: CountryRequest): Promise<ActionResult> => 
     return { success: false, error: 'Forbidden' }
   }
 
-  const code = country.code
-  const name = country.name
-
-  if (typeof code !== 'string' || typeof name !== 'string') {
-    return { success: false, error: 'Invalid form data' }
+  const validation = countrySchema.safeParse(country)
+  if (!validation.success) {
+    return { success: false, zodError: z.treeifyError(validation.error) }
   }
 
   await prisma.country.update({
-    where: { code },
-    data: { name },
+    where: { code: country.code },
+    data: { name: country.name },
   })
 
   return { success: true }

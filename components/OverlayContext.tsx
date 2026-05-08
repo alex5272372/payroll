@@ -1,7 +1,8 @@
 'use client'
+import { createContext, useContext, useState, ReactNode, useCallback } from 'react'
 import type { ButtonGroupState, HeroIcon } from '@/types'
 import type { DialogState, OverlayContextType } from '@/types/overlay'
-import { createContext, useContext, useState, ReactNode, useCallback } from 'react'
+import type { $ZodErrorTree } from 'zod/v4/core'
 
 const OverlayContext = createContext<OverlayContextType | undefined>(undefined)
 
@@ -55,12 +56,21 @@ export const OverlayProvider = ({ children }: { children: ReactNode }) => {
     })
   }, [])
 
+  const showZod = useCallback((zodError: $ZodErrorTree<object>) => {
+    setDialog({
+      type: 'zod',
+      zodError,
+      onClose: () => setDialog({}),
+      onOk: () => setDialog({})
+    })
+  }, [])
+
   const closeDialog = useCallback(() => {
     setDialog({})
   }, [])
 
   return (
-    <OverlayContext.Provider value={{ dialog, showError, showOk, showOkCancel, showMain, closeDialog }}>
+    <OverlayContext.Provider value={{ dialog, showError, showOk, showOkCancel, showMain, showZod, closeDialog }}>
       {children}
     </OverlayContext.Provider>
   )

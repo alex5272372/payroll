@@ -1,4 +1,5 @@
 import type { CRUD, UserRole } from '@/types/enums/roleMatrix'
+import type { $ZodErrorTree } from 'zod/v4/core'
 
 declare module 'next-auth' {
   interface Session {
@@ -49,6 +50,7 @@ export type SignUpData = {
 export type ActionResult<T = undefined> = {
   success: boolean;
   error?: string;
+  zodError?: $ZodErrorTree<T>;
   value?: T;
 }
 
