@@ -1,5 +1,5 @@
-import { MenuItemPath, MenuSection } from '@/types/enums/navigation'
-import type { MenuItem } from '@/types/navigation'
+import { MenuItemPath, MenuItemType, MenuSection } from '@/types/enums/navigation'
+import type { NavMenuItem } from '@/types/navigation'
 import {
   ArrowPathIcon,
   ArrowRightEndOnRectangleIcon,
@@ -17,14 +17,16 @@ import {
   ViewColumnsIcon,
 } from '@heroicons/react/24/outline'
 
-export const navigation: MenuItem[] = [
+export const navigation: NavMenuItem[] = [
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.CALENDAR,
     section: MenuSection.MAIN,
     name: 'Calendars',
     icon: CalendarIcon,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.COUNTRY_CALENDAR,
     section: MenuSection.MAIN,
     name: 'Country calendar',
@@ -32,6 +34,7 @@ export const navigation: MenuItem[] = [
     parent: MenuItemPath.CALENDAR,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.COMPANY_CALENDAR,
     section: MenuSection.MAIN,
     name: 'Company calendar',
@@ -39,6 +42,7 @@ export const navigation: MenuItem[] = [
     parent: MenuItemPath.CALENDAR,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.DEPARTMENT_CALENDAR,
     section: MenuSection.MAIN,
     name: 'Department calendar',
@@ -46,6 +50,7 @@ export const navigation: MenuItem[] = [
     parent: MenuItemPath.CALENDAR,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.EMPLOYEE_CALENDAR,
     section: MenuSection.MAIN,
     name: 'Employee calendar',
@@ -53,12 +58,14 @@ export const navigation: MenuItem[] = [
     parent: MenuItemPath.CALENDAR,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.CATALOG,
     section: MenuSection.MAIN,
     name: 'Catalogs',
     icon: ViewColumnsIcon,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.COUNTRIES,
     section: MenuSection.MAIN,
     name: 'Countries',
@@ -66,6 +73,7 @@ export const navigation: MenuItem[] = [
     parent: MenuItemPath.CATALOG,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.COMPANIES,
     section: MenuSection.MAIN,
     name: 'Companies',
@@ -73,6 +81,7 @@ export const navigation: MenuItem[] = [
     parent: MenuItemPath.CATALOG,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.DEPARTMENTS,
     section: MenuSection.MAIN,
     name: 'Departments',
@@ -80,6 +89,7 @@ export const navigation: MenuItem[] = [
     parent: MenuItemPath.CATALOG,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.EMPLOYEES,
     section: MenuSection.MAIN,
     name: 'Employees',
@@ -87,6 +97,7 @@ export const navigation: MenuItem[] = [
     parent: MenuItemPath.CATALOG,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.PEOPLE,
     section: MenuSection.MAIN,
     name: 'People',
@@ -94,6 +105,7 @@ export const navigation: MenuItem[] = [
     parent: MenuItemPath.CATALOG,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.USERS,
     section: MenuSection.MAIN,
     name: 'Users',
@@ -101,12 +113,14 @@ export const navigation: MenuItem[] = [
     parent: MenuItemPath.CATALOG,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.DOCUMENT,
     section: MenuSection.MAIN,
     name: 'Documents',
     icon: DocumentTextIcon,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.CALENDAR_FILLING,
     section: MenuSection.MAIN,
     name: 'Calendar filling',
@@ -114,6 +128,7 @@ export const navigation: MenuItem[] = [
     parent: MenuItemPath.DOCUMENT,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.CALCULATION_TEMPLATE,
     section: MenuSection.MAIN,
     name: 'Calculation template',
@@ -121,6 +136,7 @@ export const navigation: MenuItem[] = [
     parent: MenuItemPath.DOCUMENT,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.PAYROLL_CALCULATION,
     section: MenuSection.MAIN,
     name: 'Payroll calculation',
@@ -128,12 +144,14 @@ export const navigation: MenuItem[] = [
     parent: MenuItemPath.DOCUMENT,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.REPORT,
     section: MenuSection.MAIN,
     name: 'Reports',
     icon: ChartBarIcon,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.PAYSLIP,
     section: MenuSection.MAIN,
     name: 'Payslip',
@@ -141,6 +159,7 @@ export const navigation: MenuItem[] = [
     parent: MenuItemPath.REPORT,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.PAYMENT_STATEMENT,
     section: MenuSection.MAIN,
     name: 'Payment statement',
@@ -148,30 +167,35 @@ export const navigation: MenuItem[] = [
     parent: MenuItemPath.REPORT,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.USER_PROFILE,
     section: MenuSection.USER,
     name: 'Profile',
     icon: UserIcon,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.SIGN_OUT,
     section: MenuSection.USER,
     name: 'Sign Out',
     icon: ArrowRightStartOnRectangleIcon,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.SIGN_IN,
     section: MenuSection.USER,
     name: 'Sign In',
     icon: ArrowRightEndOnRectangleIcon,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.SIGN_UP,
     section: MenuSection.USER,
     name: 'Sign Up',
     icon: UserPlusIcon,
   },
   {
+    type: MenuItemType.PATH,
     path: MenuItemPath.RESET_PASSWORD,
     section: MenuSection.USER,
     name: 'Reset password',

@@ -11,16 +11,6 @@ declare module 'next-auth' {
 export type HeroIcon = React.ForwardRefExoticComponent<React.PropsWithoutRef<React.SVGProps<SVGSVGElement>>
   & { title?: string, titleId?: string } & React.RefAttributes<SVGSVGElement>>
 
-export type TabItem = {
-  menuPath: MenuItemPath;
-  objectId?: number;
-}
-
-export type TabState = {
-  tabs: TabItem[];
-  activeTab: number | null;
-}
-
 export type ToolbarItem = {
   name: string;
   icon: HeroIcon;

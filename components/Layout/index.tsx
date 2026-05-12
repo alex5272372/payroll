@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { MenuSection } from '@/types/enums/navigation'
-import type { MenuItem } from '@/types/navigation'
+import type { NavMenuItem } from '@/types/navigation'
 import { navigation } from '@/lib/data/navigation'
 import MainTabs from './MainTabs'
 import MainMenuDropdown from './MainMenuDropdown'
@@ -18,7 +18,7 @@ import ErrorDialog from '../MainDialog/ErrorDialog'
 const Layout = ({ children }: { children: React.ReactNode; }) => {
   const { data: session } = useSession()
   const { dialog } = useOverlay()
-  const authNavigation = navigation.filter((item: MenuItem) => {
+  const authNavigation = navigation.filter((item: NavMenuItem) => {
     if (item.section !== MenuSection.MAIN || item.parent)
       return false
     else if (session?.roles) {
@@ -40,7 +40,7 @@ const Layout = ({ children }: { children: React.ReactNode; }) => {
         />
       </Link>
 
-      {authNavigation.map((item: MenuItem) =>
+      {authNavigation.map((item: NavMenuItem) =>
         <MainMenuDropdown key={item.path} menuItem={item} roles={session?.roles}></MainMenuDropdown>)}
       <ProfileDropdown user={session?.user} roles={session?.roles} />
     </nav>

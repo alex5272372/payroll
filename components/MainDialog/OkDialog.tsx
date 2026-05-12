@@ -1,7 +1,7 @@
 import { CheckIcon, XMarkIcon, InformationCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import MainDialog from '.'
 import type { ButtonGroupState } from '@/types'
-import type { DialogType } from '@/types/overlay'
+import { DialogType } from '@/types/enums/overlay'
 
 const OkDialog = ({
   type,
@@ -28,7 +28,7 @@ const OkDialog = ({
     ],
   }
 
-  if (type === 'okCancel') {
+  if (type === DialogType.OK_CANCEL) {
     buttonGroup.buttons.push({
       Icon: XMarkIcon,
       title: 'Cancel',
@@ -37,8 +37,8 @@ const OkDialog = ({
   }
 
   return <MainDialog
-    Icon={type === 'error' ? ExclamationTriangleIcon : InformationCircleIcon}
-    title={type === 'error' ? 'Error' : type === 'okCancel' ? 'Confirmation' : 'Information'}
+    Icon={InformationCircleIcon}
+    title={type === DialogType.OK_CANCEL ? 'Confirmation' : 'Information'}
     buttonGroup={buttonGroup}
     onClose={onClose}
   >

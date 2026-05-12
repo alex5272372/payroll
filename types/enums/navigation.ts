@@ -5,6 +5,11 @@ export enum MenuSection {
   USER = 'user',
 }
 
+export enum MenuItemType {
+  PATH = 'path',
+  ACTION = 'action',
+}
+
 export enum MenuItemPath {
   HOME = '/',
   CALENDAR = '/calendar',
@@ -31,4 +36,9 @@ export enum MenuItemPath {
   PAYROLL_CALCULATION = '/document/payroll-calculation',
   PAYSLIP = '/report/payslip',
   PAYMENT_STATEMENT = '/report/payment-statement',
+}
+
+export enum TabActionType {
+  INIT = 'init',
+  CLOSE = 'close',
 }

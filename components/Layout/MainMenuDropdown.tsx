@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import type { MenuItem as MenuItemType } from '@/types/navigation'
+import type { NavMenuItem } from '@/types/navigation'
 import { navigation } from '@/lib/data/navigation'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
 import { roleMatrix } from '@/lib/data/roleMatrix'
 
-const MainMenuDropdown = ({ menuItem, roles }: { menuItem: MenuItemType, roles?: UserRole[] }) => {
+const MainMenuDropdown = ({ menuItem, roles }: { menuItem: NavMenuItem, roles?: UserRole[] }) => {
   const authNavigation = navigation.filter(item => {
     if (item.parent !== menuItem.path)
       return false
@@ -34,7 +34,7 @@ const MainMenuDropdown = ({ menuItem, roles }: { menuItem: MenuItemType, roles?:
           <MenuItem key={item.path}>
             <Link
               className="flex w-full py-2 px-4 text-left hover:bg-gray-700 hover:text-white cursor-pointer"
-              href={item.path}
+              href={item.path as string}
             >
               <item.icon className='h-6' />
               <p className='ml-2'>{item.name}</p>

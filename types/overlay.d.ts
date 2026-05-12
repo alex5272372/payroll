@@ -1,7 +1,5 @@
 import type { ButtonGroupState, HeroIcon } from '@/types'
-import type { $ZodErrorTree } from 'zod/v4/core'
-
-export type DialogType = 'error' | 'ok' | 'okCancel' | 'main'
+import type { DialogType } from '@/types/enums/overlay'
 
 export type ErrorTree = {
   errors: string[]

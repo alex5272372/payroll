@@ -2,6 +2,7 @@
 import { createContext, useContext, useState, ReactNode, useCallback } from 'react'
 import type { ButtonGroupState, HeroIcon } from '@/types'
 import type { DialogState, ErrorTree, OverlayContextType } from '@/types/overlay'
+import { DialogType } from '@/types/enums/overlay'
 
 const OverlayContext = createContext<OverlayContextType | undefined>(undefined)
 
@@ -10,7 +11,7 @@ export const OverlayProvider = ({ children }: { children: ReactNode }) => {
 
   const showError = useCallback((errorTree: ErrorTree) => {
     setDialog({
-      type: 'error',
+      type: DialogType.ERROR,
       errorTree,
       onClose: () => setDialog({}),
       onOk: () => setDialog({})
@@ -19,7 +20,7 @@ export const OverlayProvider = ({ children }: { children: ReactNode }) => {
 
   const showOk = useCallback((header?: string, message?: string) => {
     setDialog({
-      type: 'ok',
+      type: DialogType.OK,
       header,
       message,
       onClose: () => setDialog({}),
@@ -29,7 +30,7 @@ export const OverlayProvider = ({ children }: { children: ReactNode }) => {
 
   const showOkCancel = useCallback((onOk: () => void, header?: string, message?: string ) => {
     setDialog({
-      type: 'okCancel',
+      type: DialogType.OK_CANCEL,
       header,
       message,
       onClose: () => setDialog({}),
@@ -45,7 +46,7 @@ export const OverlayProvider = ({ children }: { children: ReactNode }) => {
     title?: string
   ) => {
     setDialog({
-      type: 'main',
+      type: DialogType.MAIN,
       title,
       onClose: () => setDialog({}),
       children,

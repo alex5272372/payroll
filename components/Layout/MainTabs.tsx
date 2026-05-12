@@ -2,14 +2,9 @@ import { useEffect, useReducer } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { TabItem, TabState } from '@/types'
-import { MenuItemPath } from '@/types/enums/navigation'
-import type { MenuItem } from '@/types/navigation'
+import { MenuItemPath, TabActionType } from '@/types/enums/navigation'
+import type { NavMenuItem, TabAction, TabItem, TabState } from '@/types/navigation'
 import { navigation } from '@/lib/data/navigation'
-
-type TabAction =
-  | { type: 'init'; pathname: MenuItemPath }
-  | { type: 'close'; index: number }
 
 const tabReducer = (state: TabState, action: TabAction): TabState => {
   switch (action.type) {
@@ -53,13 +48,13 @@ const MainTabs = () => {
   const router = useRouter()
 
   useEffect(() => {
-    dispatch({ type: 'init', pathname: pathname as MenuItemPath })
+    dispatch({ type: TabActionType.INIT, pathname: pathname as MenuItemPath })
   }, [pathname])
 
   const closeTab = (event: React.MouseEvent, index: number) => {
     event.stopPropagation()
 
-    dispatch({ type: 'close', index })
+    dispatch({ type: TabActionType.CLOSE, index })
 
     if (index === tabState.activeTab) {
       const nextTabItem: TabItem | null = tabState.tabs[index + 1] || tabState.tabs[index - 1] || null
@@ -68,7 +63,7 @@ const MainTabs = () => {
   }
 
   const mapTabs = (tab: TabItem, index: number) => {
-    const menuItem: MenuItem | undefined = navigation.find((item: MenuItem) => tab.menuPath === item.path)
+    const menuItem: NavMenuItem | undefined = navigation.find((item: NavMenuItem) => tab.menuPath === item.path)
 
     return <div
       key={index}
