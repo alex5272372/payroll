@@ -35,7 +35,7 @@ const DepartmentsCatalog = () => {
   useEffect(() => {
     getAllDepartments().then((departments: ActionResult<DepartmentWithCompany[]>) => {
       if (!departments.success) {
-        showError(departments.error || '')
+        showError(departments.errorTree)
         return
       }
 

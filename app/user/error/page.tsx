@@ -37,7 +37,7 @@ const UserError = () => {
 
   useEffect(() => {
     const errorInfo = errorMap[error] || errorMap[Error.Default]
-    showError(errorInfo.header, errorInfo.message)
+    showError({ errors: [errorInfo.header, errorInfo.message] })
   }, [error, showError])
 
   return (

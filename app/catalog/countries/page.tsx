@@ -29,7 +29,7 @@ const CountriesCatalog = () => {
   const fetchCountries = useCallback(async (): Promise<void> => {
     const result = await getAllCountries()
     if (!result.success) {
-      showError('Server error', result.error || 'Failed to fetch countries')
+      showError(result.errorTree)
     }
     setTableData((prev: TableData) => ({
       ...prev,
@@ -50,7 +50,7 @@ const CountriesCatalog = () => {
       showOk('Delete country', `Country ${code} has been deleted successfully`)
 
     } else {
-      showError('Server error', deleteResult.error || 'Failed to delete country')
+      showError(deleteResult.errorTree)
     }
   }, [closeDialog, fetchCountries, showError, showOk])
 

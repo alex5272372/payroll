@@ -34,7 +34,7 @@ const EmployeesCatalog = () => {
   useEffect(() => {
     getAllEmployees().then((employees: ActionResult<EmployeeWithPersonAndDepartment[]>) => {
       if (!employees.success) {
-        showError(employees.error || '')
+        showError(employees.errorTree)
         return
       }
 

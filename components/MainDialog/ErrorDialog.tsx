@@ -1,14 +1,14 @@
 import { CheckIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import MainDialog from '.'
 import type { ButtonGroupState } from '@/types'
-import type { $ZodErrorTree } from 'zod/v4/core'
+import { ErrorTree } from '@/types/overlay'
 
-const ZodDialog = ({
-  zodError,
+const ErrorDialog = ({
+  errorTree,
   onClose,
   onOk,
 }: {
-  zodError?: $ZodErrorTree<object>
+  errorTree?: ErrorTree
   onClose?: () => void
   onOk?: () => void
 }) => {
@@ -22,8 +22,6 @@ const ZodDialog = ({
     ],
   }
 
-  const properties = zodError?.properties as Record<string, { errors: string[] }> | undefined
-
   return <MainDialog
     Icon={ExclamationTriangleIcon}
     title={'Error'}
@@ -31,10 +29,15 @@ const ZodDialog = ({
     onClose={onClose}
   >
     <div className='flex flex-col'>
-      {Object.entries(properties ?? {}).map(([key, value]) =>
+      {errorTree?.errors.map((error, index) =>
+        <h2 className="text-2xl text-gray-100" key={`${index}`}>
+          {error}
+        </h2>
+      )}
+      {Object.entries(errorTree?.properties ?? {}).map(([key, value]) =>
         <div key={key}>
           <h3 className="text-xl text-gray-100">{key}</h3>
-          {value.errors.map((error, index) =>
+          {value?.errors.map((error, index) =>
             <div className="text-gray-100" key={`${key}-${index}`}>
               {error}
             </div>
@@ -45,4 +48,4 @@ const ZodDialog = ({
   </MainDialog>
 }
 
-export default ZodDialog
+export default ErrorDialog

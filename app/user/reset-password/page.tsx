@@ -50,7 +50,7 @@ const ResetPassword = () => {
     }
 
   } else {
-    showError('Invalid link', 'Email parameter is missing in the reset password link.')
+    showError({ errors: ['Email parameter is missing in the reset password link.'] })
   }
 
   return (

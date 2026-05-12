@@ -17,23 +17,18 @@ const SignUp = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [passwordValid, setPasswordValid] = useState(false)
-  const [error, setError] = useState('')
   const { showError, showMain } = useOverlay()
 
   const { data: session } = useSession()
 
   if (session) {
-    showError('User already authorized', 'You are already signed in. Please sign out to create a new account.')
-  }
-
-  if (error) {
-    showError('Server error', error)
+    showError({ errors: ['You are already signed in. Please sign out to create a new account.'] })
   }
 
   useEffect(() => {
     const handleSubmit = async () => {
       const result: ActionResult = await signUpAction({ firstName, lastName, email, password })
-      if (!result.success) setError(result.error || '')
+      if (!result.success) showError(result.errorTree)
     }
 
     const buttonGroup: ButtonGroupState = {
@@ -85,7 +80,7 @@ const SignUp = () => {
     </>)
 
     showMain(dialogChildren, buttonGroup, IdentificationIcon, 'Sign Up')
-  }, [confirmPassword, email, error, firstName, lastName, password, passwordValid, showError, showMain])
+  }, [confirmPassword, email, firstName, lastName, password, passwordValid, showError, showMain])
 
 
   return (

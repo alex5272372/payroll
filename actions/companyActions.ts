@@ -10,9 +10,9 @@ import { MenuItemPath } from '@/types/enums/navigation'
 const getAllCompanies = async (): Promise<ActionResult<Company[]>> => {
   const session = await auth()
   if (!session || !session.roles) {
-    return { success: false, error: 'Unauthorized' }
+    return { success: false, errorTree: { errors: ['Unauthorized'] }}
   } else if (!session.roles.some((role: UserRole) => !!roleMatrix[MenuItemPath.COMPANIES]?.[role]?.[CRUD.READ])) {
-    return { success: false, error: 'Forbidden' }
+    return { success: false, errorTree: { errors: ['Forbidden'] }}
   }
 
   const companies: Company[] = await prisma.company.findMany()

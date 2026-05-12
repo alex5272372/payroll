@@ -1,14 +1,21 @@
 import type { ButtonGroupState, HeroIcon } from '@/types'
 import type { $ZodErrorTree } from 'zod/v4/core'
 
-export type DialogType = 'error' | 'ok' | 'okCancel' | 'main' | 'zod'
+export type DialogType = 'error' | 'ok' | 'okCancel' | 'main'
+
+export type ErrorTree = {
+  errors: string[]
+  properties?: {
+    [K in keyof Record<string, ErrorTree>]?: ErrorTree
+  }
+}
 
 export interface DialogState {
   type?: DialogType
   title?: string
   header?: string
   message?: string
-  zodError?: $ZodErrorTree<object>
+  errorTree?: ErrorTree
   children?: React.ReactNode
   buttonGroup?: ButtonGroupState
   icon?: HeroIcon
@@ -20,8 +27,7 @@ export interface DialogState {
 export interface OverlayContextType {
   dialog: DialogState
   showError: (
-    header?: string,
-    message?: string
+    errorTree: ErrorTree<Record<string, unknown>>
   ) => void
   showOk: (
     header?: string,
@@ -37,9 +43,6 @@ export interface OverlayContextType {
     buttonGroup: ButtonGroupState,
     icon?: HeroIcon,
     title?: string
-  ) => void
-  showZod: (
-    zodError: $ZodErrorTree<object>
   ) => void
   closeDialog: () => void
 }

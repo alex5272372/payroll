@@ -18,12 +18,12 @@ const SignIn = () => {
   const { data: session } = useSession()
 
   if (session) {
-    showError('Already authorized', 'You are already signed in.')
+    showError({ errors: ['You are already signed in.'] })
   }
 
   const error = searchParams.get('error')
   if (error) {
-    showError('Sign in error', 'Invalid email or password. Please try again.')
+    showError({ errors: ['Invalid email or password. Please try again.'] })
   }
 
   useEffect(() => {

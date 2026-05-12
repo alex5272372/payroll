@@ -24,9 +24,9 @@ export type UserWithPerson = Prisma.UserGetPayload<{
 const getAllUsers = async (): Promise<ActionResult<UserWithPerson[]>> => {
   const session = await auth()
   if (!session || !session.roles) {
-    return { success: false, error: 'Unauthorized' }
+    return { success: false, errorTree: { errors: ['Unauthorized'] }}
   } else if (!session.roles.some((role: UserRole) => !!roleMatrix[MenuItemPath.USERS]?.[role]?.[CRUD.READ])) {
-    return { success: false, error: 'Forbidden' }
+    return { success: false, errorTree: { errors: ['Forbidden'] }}
   }
 
   const users: UserWithPerson[] = await prisma.user.findMany({
@@ -48,7 +48,7 @@ const getAllUsers = async (): Promise<ActionResult<UserWithPerson[]>> => {
 
 const signUpAction = async (data: SignUpData): Promise<ActionResult> => {
   const dbUser = await prisma.user.findFirst({ where: { email: data.email }})
-  if (dbUser) return { success: false, error: 'User already exists' }
+  if (dbUser) return { success: false, errorTree: { errors: ['User already exists'] }}
 
   await prisma.user.create({
     data: {
@@ -78,7 +78,7 @@ const resetPasswordAction = async (email: string, password: string): Promise<Act
   })
 
   if (!user) {
-    throw new Error('User not found')
+    return { success: false, errorTree: { errors: ['User not found'] }}
   }
 
   await prisma.user.update({

@@ -1,19 +1,17 @@
 'use client'
 import { createContext, useContext, useState, ReactNode, useCallback } from 'react'
 import type { ButtonGroupState, HeroIcon } from '@/types'
-import type { DialogState, OverlayContextType } from '@/types/overlay'
-import type { $ZodErrorTree } from 'zod/v4/core'
+import type { DialogState, ErrorTree, OverlayContextType } from '@/types/overlay'
 
 const OverlayContext = createContext<OverlayContextType | undefined>(undefined)
 
 export const OverlayProvider = ({ children }: { children: ReactNode }) => {
   const [dialog, setDialog] = useState<DialogState>({})
 
-  const showError = useCallback((header?: string, message?: string) => {
+  const showError = useCallback((errorTree: ErrorTree) => {
     setDialog({
       type: 'error',
-      header,
-      message,
+      errorTree,
       onClose: () => setDialog({}),
       onOk: () => setDialog({})
     })
@@ -56,21 +54,12 @@ export const OverlayProvider = ({ children }: { children: ReactNode }) => {
     })
   }, [])
 
-  const showZod = useCallback((zodError: $ZodErrorTree<object>) => {
-    setDialog({
-      type: 'zod',
-      zodError,
-      onClose: () => setDialog({}),
-      onOk: () => setDialog({})
-    })
-  }, [])
-
   const closeDialog = useCallback(() => {
     setDialog({})
   }, [])
 
   return (
-    <OverlayContext.Provider value={{ dialog, showError, showOk, showOkCancel, showMain, showZod, closeDialog }}>
+    <OverlayContext.Provider value={{ dialog, showError, showOk, showOkCancel, showMain, closeDialog }}>
       {children}
     </OverlayContext.Provider>
   )

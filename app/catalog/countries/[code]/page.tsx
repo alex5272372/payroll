@@ -22,7 +22,7 @@ const CountryUpdate = () => {
   useEffect(() => {
     getCountryByCode(params.code as string).then((country: ActionResult<Country>) => {
       if (!country.success) {
-        showError('Server error', country.error || 'Failed to fetch country')
+        showError(country.errorTree)
         return
       }
       setName(country.value?.name || '')
@@ -36,7 +36,7 @@ const CountryUpdate = () => {
     if (result.success) {
       showOk('Country updated', 'Country has been updated successfully')
     } else {
-      showError('Server error', result.error || 'Failed to update country')
+      showError(result.errorTree)
     }
   }, [closeDialog, showError, showOk])
 

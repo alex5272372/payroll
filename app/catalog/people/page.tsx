@@ -38,7 +38,7 @@ const PeopleCatalog = () => {
   useEffect(() => {
     getAllPeople().then((people: ActionResult<Person[]>) => {
       if (!people.success) {
-        showError(people.error || '')
+        showError(people.errorTree)
         return
       }
 

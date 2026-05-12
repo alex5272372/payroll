@@ -35,7 +35,7 @@ const CompaniesCatalog = () => {
   useEffect(() => {
     getAllCompanies().then((companies: ActionResult<Company[]>) => {
       if (!companies.success) {
-        showError(companies.error || '')
+        showError(companies.errorTree)
         return
       }
 

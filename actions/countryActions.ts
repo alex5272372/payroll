@@ -8,6 +8,7 @@ import { roleMatrix } from '@/lib/data/roleMatrix'
 import { MenuItemPath } from '@/types/enums/navigation'
 import { CountryRequest, CountryResponse } from '@/types/models/countryModels'
 import { z } from 'zod'
+import { MapErrorTree } from '@/lib'
 
 const countrySchema = z.object({
   code: z.string().min(1).max(2),
@@ -17,9 +18,9 @@ const countrySchema = z.object({
 const getAllCountries = async (): Promise<ActionResult<CountryResponse[]>> => {
   const session = await auth()
   if (!session || !session.roles) {
-    return { success: false, error: 'Unauthorized' }
+    return { success: false, errorTree: { errors: ['Unauthorized'] }}
   } else if (!session.roles.some((role: UserRole) => !!roleMatrix[MenuItemPath.COUNTRIES]?.[role]?.[CRUD.READ])) {
-    return { success: false, error: 'Forbidden' }
+    return { success: false, errorTree: { errors: ['Forbidden'] }}
   }
 
   const countries: Country[] = await prisma.country.findMany()
@@ -33,14 +34,14 @@ const getAllCountries = async (): Promise<ActionResult<CountryResponse[]>> => {
 const getCountryByCode = async (code: string): Promise<ActionResult<CountryResponse>> => {
   const session = await auth()
   if (!session || !session.roles) {
-    return { success: false, error: 'Unauthorized' }
+    return { success: false, errorTree: { errors: ['Unauthorized'] }}
   } else if (!session.roles.some((role: UserRole) => !!roleMatrix[MenuItemPath.COUNTRIES]?.[role]?.[CRUD.READ])) {
-    return { success: false, error: 'Forbidden' }
+    return { success: false, errorTree: { errors: ['Forbidden'] }}
   }
 
   const country = await prisma.country.findUnique({ where: { code }})
   if (!country) {
-    return { success: false, error: 'Country not found' }
+    return { success: false, errorTree: { errors: ['Country not found'] }}
   }
 
   return {
@@ -52,23 +53,23 @@ const getCountryByCode = async (code: string): Promise<ActionResult<CountryRespo
 const createCountry = async (country: CountryRequest): Promise<ActionResult> => {
   const session = await auth()
   if (!session || !session.roles) {
-    return { success: false, error: 'Unauthorized' }
+    return { success: false, errorTree: { errors: ['Unauthorized'] }}
   }
 
   if (!session.roles.some((role: UserRole) => !!roleMatrix[MenuItemPath.COUNTRIES]?.[role]?.[CRUD.CREATE])) {
-    return { success: false, error: 'Forbidden' }
+    return { success: false, errorTree: { errors: ['Forbidden'] }}
   }
 
   const validation = countrySchema.safeParse(country)
   if (!validation.success) {
-    return { success: false, zodError: z.treeifyError(validation.error) }
+    return { success: false, errorTree: MapErrorTree(z.treeifyError(validation.error)) }
   }
 
   const existingCountry = await prisma.country.findUnique({
     where: { code: country.code },
   })
   if (existingCountry) {
-    return { success: false, error: 'Country with this code already exists' }
+    return { success: false, errorTree: { errors: ['Country with this code already exists'] }}
   }
 
   await prisma.country.create({
@@ -81,16 +82,16 @@ const createCountry = async (country: CountryRequest): Promise<ActionResult> => 
 const updateCountry = async (country: CountryRequest): Promise<ActionResult> => {
   const session = await auth()
   if (!session || !session.roles) {
-    return { success: false, error: 'Unauthorized' }
+    return { success: false, errorTree: { errors: ['Unauthorized'] }}
   }
 
   if (!session.roles.some((role: UserRole) => !!roleMatrix[MenuItemPath.COUNTRIES]?.[role]?.[CRUD.UPDATE])) {
-    return { success: false, error: 'Forbidden' }
+    return { success: false, errorTree: { errors: ['Forbidden'] }}
   }
 
   const validation = countrySchema.safeParse(country)
   if (!validation.success) {
-    return { success: false, zodError: z.treeifyError(validation.error) }
+    return { success: false, errorTree: MapErrorTree(z.treeifyError(validation.error)) }
   }
 
   await prisma.country.update({
@@ -104,11 +105,11 @@ const updateCountry = async (country: CountryRequest): Promise<ActionResult> => 
 const deleteCountry = async (code: string): Promise<ActionResult> => {
   const session = await auth()
   if (!session || !session.roles) {
-    return { success: false, error: 'Unauthorized' }
+    return { success: false, errorTree: { errors: ['Unauthorized'] }}
   }
 
   if (!session.roles.some((role: UserRole) => !!roleMatrix[MenuItemPath.COUNTRIES]?.[role]?.[CRUD.DELETE])) {
-    return { success: false, error: 'Forbidden' }
+    return { success: false, errorTree: { errors: ['Forbidden'] }}
   }
 
   await prisma.country.delete({

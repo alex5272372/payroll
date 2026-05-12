@@ -17,9 +17,9 @@ export type EmployeeWithPersonAndDepartment = Prisma.EmployeeGetPayload<{
 const getAllEmployees = async (): Promise<ActionResult<EmployeeWithPersonAndDepartment[]>> => {
   const session = await auth()
   if (!session || !session.roles) {
-    return { success: false, error: 'Unauthorized' }
+    return { success: false, errorTree: { errors: ['Unauthorized'] }}
   } else if (!session.roles.some((role: UserRole) => !!roleMatrix[MenuItemPath.EMPLOYEES]?.[role]?.[CRUD.READ])) {
-    return { success: false, error: 'Forbidden' }
+    return { success: false, errorTree: { errors: ['Forbidden'] }}
   }
 
   const employees: EmployeeWithPersonAndDepartment[] = await prisma.employee.findMany({

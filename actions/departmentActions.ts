@@ -14,9 +14,9 @@ export type DepartmentWithCompany = Prisma.DepartmentGetPayload<{
 const getAllDepartments = async (): Promise<ActionResult<DepartmentWithCompany[]>> => {
   const session = await auth()
   if (!session || !session.roles) {
-    return { success: false, error: 'Unauthorized' }
+    return { success: false, errorTree: { errors: ['Unauthorized'] }}
   } else if (!session.roles.some((role: UserRole) => !!roleMatrix[MenuItemPath.DEPARTMENTS]?.[role]?.[CRUD.READ])) {
-    return { success: false, error: 'Forbidden' }
+    return { success: false, errorTree: { errors: ['Forbidden'] }}
   }
 
   const departments: DepartmentWithCompany[] = await prisma.department.findMany({
