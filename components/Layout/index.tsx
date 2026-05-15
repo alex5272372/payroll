@@ -7,7 +7,7 @@ import type { NavMenuItem } from '@/types/navigation'
 import { navigation } from '@/lib/data/navigation'
 import MainTabs from './MainTabs'
 import MainMenuDropdown from './MainMenuDropdown'
-import ProfileDropdown from './ProfileDropdown'
+import UserMenuDropdown from './UserMenuDropdown'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
 import { roleMatrix } from '@/lib/data/roleMatrix'
 import MainDialog from '@/components/MainDialog'
@@ -42,7 +42,7 @@ const Layout = ({ children }: { children: React.ReactNode; }) => {
 
       {authNavigation.map((item: NavMenuItem) =>
         <MainMenuDropdown key={item.path} menuItem={item} roles={session?.roles}></MainMenuDropdown>)}
-      <ProfileDropdown user={session?.user} roles={session?.roles} />
+      <UserMenuDropdown user={session?.user} roles={session?.roles} />
     </nav>
 
     <MainTabs />

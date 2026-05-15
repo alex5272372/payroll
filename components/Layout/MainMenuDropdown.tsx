@@ -1,9 +1,10 @@
 import Link from 'next/link'
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+import { Menu, MenuButton, MenuItems } from '@headlessui/react'
 import type { NavMenuItem } from '@/types/navigation'
 import { navigation } from '@/lib/data/navigation'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
 import { roleMatrix } from '@/lib/data/roleMatrix'
+import MenuDropdownItem from './MenuDropdownItem'
 
 const MainMenuDropdown = ({ menuItem, roles }: { menuItem: NavMenuItem, roles?: UserRole[] }) => {
   const authNavigation = navigation.filter(item => {
@@ -30,17 +31,7 @@ const MainMenuDropdown = ({ menuItem, roles }: { menuItem: NavMenuItem, roles?: 
         anchor={{ to: 'bottom start', gap: 8 }}
         className="rounded-md bg-gray-900 text-gray-300"
       >
-        {authNavigation?.map(item =>
-          <MenuItem key={item.path}>
-            <Link
-              className="flex w-full py-2 px-4 text-left hover:bg-gray-700 hover:text-white cursor-pointer"
-              href={item.path as string}
-            >
-              <item.icon className='h-6' />
-              <p className='ml-2'>{item.name}</p>
-            </Link>
-          </MenuItem>
-        )}
+        {authNavigation?.map(item => <MenuDropdownItem key={item.path} item={item} />)}
       </MenuItems>
     </Menu>
   )

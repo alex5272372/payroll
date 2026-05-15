@@ -5,7 +5,6 @@ import { Field, Input, Label } from '@headlessui/react'
 import { ArrowPathIcon, IdentificationIcon } from '@heroicons/react/24/outline'
 import { ButtonGroupState } from '@/types'
 import { useOverlay } from '@/components/OverlayContext'
-import Layout from '@/components/Layout'
 
 const ResetPasswordLink = () => {
   const [email, setEmail] = useState('')
@@ -45,11 +44,7 @@ const ResetPasswordLink = () => {
     showMain(dialogChildren, buttonGroup, IdentificationIcon, 'Reset password')
   }, [email, showMain])
 
-  return (
-    <Layout>
-      <></>
-    </Layout>
-  )
+  return null
 }
 
 export default ResetPasswordLink

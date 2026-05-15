@@ -5,7 +5,7 @@ import { TabActionType } from '@/types/enums/navigation'
 export type NavMenuItem = {
   type: MenuItemType;
   path: MenuItemPath;
-  action?: () => void;
+  component?: React.ComponentType<{}>;
   section: MenuSection;
   name: string;
   icon: HeroIcon;

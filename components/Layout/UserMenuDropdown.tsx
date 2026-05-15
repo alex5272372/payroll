@@ -1,13 +1,16 @@
-import Link from 'next/link'
 import Image from 'next/image'
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+import { ReactNode, useState } from 'react'
+import { Menu, MenuButton, MenuItems } from '@headlessui/react'
 import { MenuSection } from '@/types/enums/navigation'
 import { navigation } from '@/lib/data/navigation'
 import { User } from 'next-auth'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
 import { roleMatrix } from '@/lib/data/roleMatrix'
+import MenuDropdownItem from './MenuDropdownItem'
 
-const ProfileDropdown = ({ user, roles }: { user?: User, roles?: UserRole[] }) => {
+const UserMenuDropdown = ({ user, roles }: { user?: User, roles?: UserRole[] }) => {
+  const [element, setElement] = useState<ReactNode>(null)
+
   const authNavigation = navigation.filter(item => {
     if (item.section !== MenuSection.USER)
       return false
@@ -34,20 +37,11 @@ const ProfileDropdown = ({ user, roles }: { user?: User, roles?: UserRole[] }) =
         anchor={{ to: 'bottom end', gap: 8 }}
         className="rounded-md bg-gray-900 text-gray-300"
       >
-        {authNavigation.map(item =>
-          <MenuItem key={item.path}>
-            <Link
-              className="flex w-full py-2 px-4 text-left hover:bg-gray-700 hover:text-white cursor-pointer"
-              href={item.path}
-            >
-              <item.icon className='h-6' />
-              <p className='ml-2'>{item.name}</p>
-            </Link>
-          </MenuItem>
-        )}
+        {authNavigation.map(item => <MenuDropdownItem key={item.path} item={item} setElement={setElement} />)}
       </MenuItems>
     </Menu>
+    {element}
   </>
 }
 
-export default ProfileDropdown
+export default UserMenuDropdown

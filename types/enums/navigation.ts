@@ -7,7 +7,7 @@ export enum MenuSection {
 
 export enum MenuItemType {
   PATH = 'path',
-  ACTION = 'action',
+  COMPONENT = 'component',
 }
 
 export enum MenuItemPath {
@@ -20,7 +20,7 @@ export enum MenuItemPath {
   SIGN_OUT = '/user/sign-out',
   SIGN_IN = '/user/sign-in',
   SIGN_UP = '/user/sign-up',
-  RESET_PASSWORD = '/user/reset-password-link',
+  RESET_PASSWORD = '@/components/user/ResetPasswordLink',
   COUNTRY_CALENDAR = '/calendar/country-calendar',
   COMPANY_CALENDAR = '/calendar/company-calendar',
   DEPARTMENT_CALENDAR = '/calendar/department-calendar',

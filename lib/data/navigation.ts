@@ -1,3 +1,4 @@
+import ResetPasswordLink from '@/components/user/ResetPasswordLink'
 import { MenuItemPath, MenuItemType, MenuSection } from '@/types/enums/navigation'
 import type { NavMenuItem } from '@/types/navigation'
 import {
@@ -195,8 +196,9 @@ export const navigation: NavMenuItem[] = [
     icon: UserPlusIcon,
   },
   {
-    type: MenuItemType.PATH,
+    type: MenuItemType.COMPONENT,
     path: MenuItemPath.RESET_PASSWORD,
+    component: ResetPasswordLink,
     section: MenuSection.USER,
     name: 'Reset password',
     icon: ArrowPathIcon,
