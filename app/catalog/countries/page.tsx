@@ -10,7 +10,7 @@ import { Country } from '@prisma/client'
 import { MenuItemPath } from '@/types/enums/navigation'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { CRUD } from '@/types/enums/roleMatrix'
-import { useOverlay } from '@/components/OverlayContext'
+import { useOverlay } from '@/components/overlay/OverlayContext'
 
 const initialData: TableData = {
   columns: [
@@ -24,7 +24,7 @@ const CountriesCatalog = () => {
   const [tableData, setTableData] = useState<TableData>(initialData)
   const [selectedCode, setSelectedCode] = useState('')
   const router = useRouter()
-  const { showError, showOk, showOkCancel, closeDialog } = useOverlay()
+  const { showError, showOk, showOkCancel, hideDialog } = useOverlay()
 
   const fetchCountries = useCallback(async (): Promise<void> => {
     const result = await getAllCountries()
@@ -41,7 +41,7 @@ const CountriesCatalog = () => {
   }, [showError])
 
   const deleteConfirmed = useCallback(async (code: string): Promise<void> => {
-    closeDialog()
+    hideDialog()
     const deleteResult = await deleteCountry(code)
 
     if (deleteResult.success) {
@@ -52,7 +52,7 @@ const CountriesCatalog = () => {
     } else {
       showError(deleteResult.errorTree)
     }
-  }, [closeDialog, fetchCountries, showError, showOk])
+  }, [hideDialog, fetchCountries, showError, showOk])
 
   const handleDelete = () => {
     if (!selectedCode) return

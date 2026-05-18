@@ -1,7 +1,7 @@
 'use client'
 import { useEffect } from 'react'
 import Layout from '@/components/Layout'
-import { useOverlay } from '@/components/OverlayContext'
+import { useOverlay } from '@/components/overlay/OverlayContext'
 
 const NotFound = () => {
   const { showError } = useOverlay()

@@ -12,7 +12,7 @@ import { CRUD, UserRole } from '@/types/enums/roleMatrix'
 import { roleMatrix } from '@/lib/data/roleMatrix'
 import MainDialog from '@/components/MainDialog'
 import OkDialog from '@/components/MainDialog/OkDialog'
-import { useOverlay } from '@/components/OverlayContext'
+import { useOverlay } from '@/components/overlay/OverlayContext'
 import ErrorDialog from '../MainDialog/ErrorDialog'
 
 const Layout = ({ children }: { children: React.ReactNode; }) => {

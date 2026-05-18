@@ -44,7 +44,6 @@ export interface OverlayContextType {
     title?: string
   ) => void
   hideDialog: () => void
-  closeDialog: () => void
 }
 
 export interface OverlayDialogProps {

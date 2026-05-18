@@ -1,7 +1,7 @@
 import './globals.css'
 import React from 'react'
 import { SessionProvider } from 'next-auth/react'
-import { OverlayProvider } from '@/components/OverlayContext'
+import { OverlayProvider } from '@/components/overlay/OverlayContext'
 
 const RootLayout = ({
   children,

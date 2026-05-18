@@ -4,7 +4,7 @@ import { signIn } from 'next-auth/react'
 import { Field, Input, Label } from '@headlessui/react'
 import { ArrowPathIcon, IdentificationIcon } from '@heroicons/react/24/outline'
 import { ButtonGroupState } from '@/types'
-import { useOverlay } from '@/components/OverlayContext'
+import { useOverlay } from '@/components/overlay/OverlayContext'
 import Layout from '@/components/Layout'
 
 const VerifyEmail = () => {

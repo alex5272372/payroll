@@ -2,7 +2,7 @@
 import { useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Layout from '@/components/Layout'
-import { useOverlay } from '@/components/OverlayContext'
+import { useOverlay } from '@/components/overlay/OverlayContext'
 
 enum Error {
   Configuration = 'Configuration',

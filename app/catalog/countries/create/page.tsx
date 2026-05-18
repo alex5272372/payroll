@@ -8,7 +8,7 @@ import TextField from '@/components/inputs/TextField'
 import { MenuItemPath } from '@/types/enums/navigation'
 import { CRUD } from '@/types/enums/roleMatrix'
 import { ButtonGroupState } from '@/types'
-import { useOverlay } from '@/components/OverlayContext'
+import { useOverlay } from '@/components/overlay/OverlayContext'
 import { CountryRequest } from '@/types/models/countryModels'
 
 const CountryCreate = () => {

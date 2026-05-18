@@ -63,11 +63,9 @@ export const OverlayProvider = ({ children }: { children: ReactNode }) => {
     setDialog({})
   }, [])
 
-  const closeDialog = hideDialog
-
   return (
     <OverlayContext.Provider
-      value={{ dialog, showDialog, showError, showOk, showOkCancel, showMain, hideDialog, closeDialog }}
+      value={{ dialog, showDialog, showError, showOk, showOkCancel, showMain, hideDialog }}
     >
       {children}
     </OverlayContext.Provider>
@@ -80,37 +78,4 @@ export const useOverlay = () => {
     throw new Error('useOverlay must be used within an OverlayProvider')
   }
   return context
-}
-
-export const OverlayDialog = ({
-  open,
-  children,
-  buttonGroup,
-  icon,
-  title,
-  onClose,
-}: OverlayDialogProps) => {
-  const { showDialog, hideDialog } = useOverlay()
-
-  useEffect(() => {
-    if (!open) {
-      hideDialog()
-      return
-    }
-
-    showDialog({
-      type: DialogType.MAIN,
-      title,
-      onClose: onClose ?? hideDialog,
-      children,
-      buttonGroup,
-      icon,
-    })
-
-    return () => {
-      hideDialog()
-    }
-  }, [open, showDialog, hideDialog, children, buttonGroup, icon, title, onClose])
-
-  return null
 }

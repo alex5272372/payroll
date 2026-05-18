@@ -10,12 +10,12 @@ import { CRUD } from '@/types/enums/roleMatrix'
 import { MenuItemPath } from '@/types/enums/navigation'
 import { Country } from '@prisma/client'
 import { useParams } from 'next/navigation'
-import { useOverlay } from '@/components/OverlayContext'
+import { useOverlay } from '@/components/overlay/OverlayContext'
 import { CountryRequest } from '@/types/models/countryModels'
 
 const CountryUpdate = () => {
   const [name, setName] = useState('')
-  const { showError, showOk, showOkCancel, closeDialog } = useOverlay()
+  const { showError, showOk, showOkCancel, hideDialog } = useOverlay()
 
   const params = useParams()
 
@@ -30,7 +30,7 @@ const CountryUpdate = () => {
   }, [params.code, showError])
 
   const submitConfirmed = useCallback(async (country: CountryRequest): Promise<void> => {
-    closeDialog()
+    hideDialog()
     const result = await updateCountry(country)
 
     if (result.success) {
@@ -38,7 +38,7 @@ const CountryUpdate = () => {
     } else {
       showError(result.errorTree)
     }
-  }, [closeDialog, showError, showOk])
+  }, [hideDialog, showError, showOk])
 
   const handleSubmit = async (formData: FormData) => {
     showOkCancel(

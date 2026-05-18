@@ -8,7 +8,7 @@ import { ActionResult, ButtonGroupState, TableData } from '@/types'
 import { MenuItemPath } from '@/types/enums/navigation'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { CRUD } from '@/types/enums/roleMatrix'
-import { useOverlay } from '@/components/OverlayContext'
+import { useOverlay } from '@/components/overlay/OverlayContext'
 
 const buttonGroup: ButtonGroupState = {
   buttons: [

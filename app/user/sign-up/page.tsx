@@ -7,7 +7,7 @@ import { ActionResult, ButtonGroupState } from '@/types'
 import { signUpAction } from '@/actions/userActions'
 import PasswordField from '@/components/inputs/PasswordField'
 import PasswordPolicy from '@/components/dataDisplay/PasswordPolicy'
-import { useOverlay } from '@/components/OverlayContext'
+import { useOverlay } from '@/components/overlay/OverlayContext'
 import Layout from '@/components/Layout'
 
 const SignUp = () => {
