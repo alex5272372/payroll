@@ -1,71 +1,69 @@
 'use client'
-import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react'
-import type { ButtonGroupState, HeroIcon } from '@/types'
-import type { DialogState, ErrorTree, OverlayContextType, OverlayDialogProps } from '@/types/overlay'
-import { DialogType } from '@/types/enums/overlay'
+import { createContext, useContext, useState, ReactNode, useCallback } from 'react'
+import type { HeroIcon } from '@/types'
+import type { DialogState, ErrorTree, OverlayContextType } from '@/types/overlay'
+import { ExclamationTriangleIcon, InformationCircleIcon } from '@heroicons/react/24/outline'
+import ErrorDialog from '@/components/overlay/ErrorDialog'
+import OkDialog from '@/components/overlay/OkDialog'
+import OkCancelDialog from './OkCancelDialog'
 
 const OverlayContext = createContext<OverlayContextType | undefined>(undefined)
 
 export const OverlayProvider = ({ children }: { children: ReactNode }) => {
-  const [dialog, setDialog] = useState<DialogState>({})
-
-  const showDialog = useCallback((dialogState: DialogState) => {
-    setDialog(dialogState)
-  }, [])
+  const [dialog, setDialog] = useState<DialogState>({ isOpen: false })
 
   const showError = useCallback((errorTree: ErrorTree) => {
-    showDialog({
-      type: DialogType.ERROR,
-      errorTree,
-      onClose: () => setDialog({}),
-      onOk: () => setDialog({})
+    setDialog({
+      isOpen: true,
+      icon: ExclamationTriangleIcon,
+      title: 'Error',
+      children: <ErrorDialog errorTree={errorTree} onOk={() => setDialog({ isOpen: false })} />,
+      onClose: () => setDialog({ isOpen: false })
     })
-  }, [showDialog])
+  }, [])
 
   const showOk = useCallback((header?: string, message?: string) => {
-    showDialog({
-      type: DialogType.OK,
-      header,
-      message,
-      onClose: () => setDialog({}),
-      onOk: () => setDialog({})
+    setDialog({
+      isOpen: true,
+      icon: InformationCircleIcon,
+      title: 'Information',
+      children: <OkDialog header={header} message={message} onOk={() => setDialog({ isOpen: false })} />,
+      onClose: () => setDialog({ isOpen: false })
     })
-  }, [showDialog])
+  }, [])
 
   const showOkCancel = useCallback((onOk: () => void, header?: string, message?: string ) => {
-    showDialog({
-      type: DialogType.OK_CANCEL,
-      header,
-      message,
-      onClose: () => setDialog({}),
-      onOk,
-      onCancel: () => setDialog({})
+    setDialog({
+      isOpen: true,
+      icon: InformationCircleIcon,
+      title: 'Confirmation',
+      children: <OkCancelDialog
+        header={header} message={message} onOk={onOk} onCancel={() => setDialog({ isOpen: false })} />,
+      onClose: () => setDialog({ isOpen: false }),
     })
-  }, [showDialog])
+  }, [])
 
-  const showMain = useCallback((
-    children: React.ReactNode,
-    buttonGroup: ButtonGroupState,
+  const showDialog = useCallback((
+    children: ReactNode,
     icon?: HeroIcon,
     title?: string
   ) => {
-    showDialog({
-      type: DialogType.MAIN,
+    setDialog({
+      isOpen: true,
+      icon,
       title,
-      onClose: () => setDialog({}),
       children,
-      buttonGroup,
-      icon
+      onClose: () => setDialog({ isOpen: false }),
     })
-  }, [showDialog])
+  }, [])
 
   const hideDialog = useCallback(() => {
-    setDialog({})
+    setDialog({ isOpen: false })
   }, [])
 
   return (
     <OverlayContext.Provider
-      value={{ dialog, showDialog, showError, showOk, showOkCancel, showMain, hideDialog }}
+      value={{ dialog, showError, showOk, showOkCancel, showDialog, hideDialog }}
     >
       {children}
     </OverlayContext.Provider>

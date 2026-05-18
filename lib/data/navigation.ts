@@ -1,4 +1,7 @@
 import ResetPasswordLink from '@/components/user/ResetPasswordLink'
+import SignIn from '@/components/user/SignIn'
+import SignOut from '@/components/user/SignOut'
+import SignUp from '@/components/user/SignUp'
 import { MenuItemPath, MenuItemType, MenuSection } from '@/types/enums/navigation'
 import type { NavMenuItem } from '@/types/navigation'
 import {
@@ -175,22 +178,25 @@ export const navigation: NavMenuItem[] = [
     icon: UserIcon,
   },
   {
-    type: MenuItemType.PATH,
+    type: MenuItemType.COMPONENT,
     path: MenuItemPath.SIGN_OUT,
+    component: SignOut,
     section: MenuSection.USER,
     name: 'Sign Out',
     icon: ArrowRightStartOnRectangleIcon,
   },
   {
-    type: MenuItemType.PATH,
+    type: MenuItemType.COMPONENT,
     path: MenuItemPath.SIGN_IN,
+    component: SignIn,
     section: MenuSection.USER,
     name: 'Sign In',
     icon: ArrowRightEndOnRectangleIcon,
   },
   {
-    type: MenuItemType.PATH,
+    type: MenuItemType.COMPONENT,
     path: MenuItemPath.SIGN_UP,
+    component: SignUp,
     section: MenuSection.USER,
     name: 'Sign Up',
     icon: UserPlusIcon,

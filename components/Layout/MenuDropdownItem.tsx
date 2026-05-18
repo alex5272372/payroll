@@ -1,16 +1,12 @@
 import Link from 'next/link'
-import { Dispatch, ReactNode, SetStateAction } from 'react'
 import { Button, MenuItem } from '@headlessui/react'
 import type { NavMenuItem } from '@/types/navigation'
 import { MenuItemType } from '@/types/enums/navigation'
+import { useOverlay } from '@/components/overlay/OverlayContext'
 
-const MenuDropdownItem = ({
-  item,
-  setElement
-}: {
-  item: NavMenuItem,
-  setElement?: Dispatch<SetStateAction<ReactNode>>
-}) => {
+const MenuDropdownItem = ({ item }: { item: NavMenuItem }) => {
+  const { showDialog } = useOverlay()
+
   return <MenuItem>
     { item.type === MenuItemType.PATH ?
       <Link
@@ -25,7 +21,9 @@ const MenuDropdownItem = ({
         type="button"
         className="flex w-full py-2 px-4 text-left hover:bg-gray-700 hover:text-white cursor-pointer"
         onClick={() => {
-          item.component && setElement?.(<item.component />)
+          if (item.component) {
+            showDialog(<item.component />, item.icon, item.name)
+          }
         }}
       >
         <item.icon className='h-6' />

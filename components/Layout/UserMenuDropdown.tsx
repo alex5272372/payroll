@@ -9,8 +9,6 @@ import { roleMatrix } from '@/lib/data/roleMatrix'
 import MenuDropdownItem from './MenuDropdownItem'
 
 const UserMenuDropdown = ({ user, roles }: { user?: User, roles?: UserRole[] }) => {
-  const [element, setElement] = useState<ReactNode>(null)
-
   const authNavigation = navigation.filter(item => {
     if (item.section !== MenuSection.USER)
       return false
@@ -37,10 +35,9 @@ const UserMenuDropdown = ({ user, roles }: { user?: User, roles?: UserRole[] }) 
         anchor={{ to: 'bottom end', gap: 8 }}
         className="rounded-md bg-gray-900 text-gray-300"
       >
-        {authNavigation.map(item => <MenuDropdownItem key={item.path} item={item} setElement={setElement} />)}
+        {authNavigation.map(item => <MenuDropdownItem key={item.path} item={item} />)}
       </MenuItems>
     </Menu>
-    {element}
   </>
 }
 

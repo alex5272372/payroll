@@ -1,5 +1,4 @@
 import type { ButtonGroupState, HeroIcon } from '@/types'
-import type { DialogType } from '@/types/enums/overlay'
 
 export type ErrorTree = {
   errors: string[]
@@ -9,22 +8,15 @@ export type ErrorTree = {
 }
 
 export interface DialogState {
-  type?: DialogType
-  title?: string
-  header?: string
-  message?: string
-  errorTree?: ErrorTree
-  children?: React.ReactNode
-  buttonGroup?: ButtonGroupState
+  isOpen: boolean
   icon?: HeroIcon
+  title?: string
+  children?: React.ReactNode
   onClose?: () => void
-  onOk?: () => void
-  onCancel?: () => void
 }
 
 export interface OverlayContextType {
   dialog: DialogState
-  showDialog: (dialogState: DialogState) => void
   showError: (
     errorTree: ErrorTree<Record<string, unknown>>
   ) => void
@@ -37,20 +29,10 @@ export interface OverlayContextType {
     header?: string,
     message?: string,
   ) => void
-  showMain: (
+  showDialog: (
     children: React.ReactNode,
-    buttonGroup: ButtonGroupState,
     icon?: HeroIcon,
     title?: string
   ) => void
   hideDialog: () => void
-}
-
-export interface OverlayDialogProps {
-  open: boolean
-  children: React.ReactNode
-  buttonGroup: ButtonGroupState
-  icon?: HeroIcon
-  title?: string
-  onClose?: () => void
 }

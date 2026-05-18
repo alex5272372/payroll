@@ -6,13 +6,13 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { ButtonGroupState } from '@/types'
 import OverlayDialogForm from '../overlay/OverlayDialogForm'
 
-const ResetPasswordLink = () => {
+const VerifyEmail = () => {
   const [email, setEmail] = useState('')
 
-  const handleSignIn = async () => {
-    await signIn('sendgrid-reset', {
+  const onClick = async () => {
+    await signIn('sendgrid-signup', {
       email,
-      redirectTo: '/user/reset-password?email=' + encodeURIComponent(email),
+      redirectTo: '/email-verified',
     })
   }
 
@@ -20,8 +20,8 @@ const ResetPasswordLink = () => {
     buttons: [
       {
         Icon: ArrowPathIcon,
-        title: 'Send reset password link',
-        onClick: handleSignIn,
+        title: 'Send verification link',
+        onClick,
       },
     ],
     submitButton: 0,
@@ -40,4 +40,4 @@ const ResetPasswordLink = () => {
   </OverlayDialogForm>
 }
 
-export default ResetPasswordLink
+export default VerifyEmail

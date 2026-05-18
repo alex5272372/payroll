@@ -1,15 +1,13 @@
-import { CheckIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import MainDialog from '.'
+import { CheckIcon } from '@heroicons/react/24/outline'
 import type { ButtonGroupState } from '@/types'
 import { ErrorTree } from '@/types/overlay'
+import OverlayDialogButtons from './OverlayDialogButtons'
 
 const ErrorDialog = ({
   errorTree,
-  onClose,
   onOk,
 }: {
   errorTree?: ErrorTree
-  onClose?: () => void
   onOk?: () => void
 }) => {
   const buttonGroup: ButtonGroupState = {
@@ -22,12 +20,7 @@ const ErrorDialog = ({
     ],
   }
 
-  return <MainDialog
-    Icon={ExclamationTriangleIcon}
-    title={'Error'}
-    buttonGroup={buttonGroup}
-    onClose={onClose}
-  >
+  return <>
     <div className='flex flex-col'>
       {errorTree?.errors.map((error, index) =>
         <h2 className="text-2xl text-gray-100" key={`${index}`}>
@@ -45,7 +38,8 @@ const ErrorDialog = ({
         </div>
       )}
     </div>
-  </MainDialog>
+    <OverlayDialogButtons buttonGroup={buttonGroup} />
+  </>
 }
 
 export default ErrorDialog

@@ -10,14 +10,10 @@ import MainMenuDropdown from './MainMenuDropdown'
 import UserMenuDropdown from './UserMenuDropdown'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
 import { roleMatrix } from '@/lib/data/roleMatrix'
-import MainDialog from '@/components/MainDialog'
-import OkDialog from '@/components/MainDialog/OkDialog'
-import { useOverlay } from '@/components/overlay/OverlayContext'
-import ErrorDialog from '../MainDialog/ErrorDialog'
+import OverlayDialog from '@/components/overlay/OverlayDialog'
 
 const Layout = ({ children }: { children: React.ReactNode; }) => {
   const { data: session } = useSession()
-  const { dialog } = useOverlay()
   const authNavigation = navigation.filter((item: NavMenuItem) => {
     if (item.section !== MenuSection.MAIN || item.parent)
       return false
@@ -47,33 +43,7 @@ const Layout = ({ children }: { children: React.ReactNode; }) => {
 
     <MainTabs />
     {children}
-
-    {dialog.type && dialog.type === 'main' &&
-      <MainDialog
-        Icon={dialog.icon}
-        title={dialog.title}
-        buttonGroup={dialog.buttonGroup}
-        onClose={dialog.onClose}
-      >
-        {dialog.children}
-      </MainDialog>}
-
-    {dialog.type && dialog.type === 'error' &&
-      <ErrorDialog
-        errorTree={dialog.errorTree}
-        onClose={dialog.onClose}
-        onOk={dialog.onOk}
-      />}
-
-    {dialog.type && dialog.type !== 'main' && dialog.type !== 'error' &&
-      <OkDialog
-        type={dialog.type}
-        header={dialog.header}
-        message={dialog.message}
-        onClose={dialog.onClose}
-        onOk={dialog.onOk}
-        onCancel={dialog.onCancel}
-      />}
+    <OverlayDialog />
   </>
 }
 
