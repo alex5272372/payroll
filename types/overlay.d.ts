@@ -24,6 +24,7 @@ export interface DialogState {
 
 export interface OverlayContextType {
   dialog: DialogState
+  showDialog: (dialogState: DialogState) => void
   showError: (
     errorTree: ErrorTree<Record<string, unknown>>
   ) => void
@@ -42,5 +43,15 @@ export interface OverlayContextType {
     icon?: HeroIcon,
     title?: string
   ) => void
+  hideDialog: () => void
   closeDialog: () => void
+}
+
+export interface OverlayDialogProps {
+  open: boolean
+  children: React.ReactNode
+  buttonGroup: ButtonGroupState
+  icon?: HeroIcon
+  title?: string
+  onClose?: () => void
 }

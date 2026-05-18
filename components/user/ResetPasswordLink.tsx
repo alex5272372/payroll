@@ -1,50 +1,61 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { Field, Input, Label } from '@headlessui/react'
 import { ArrowPathIcon, IdentificationIcon } from '@heroicons/react/24/outline'
 import { ButtonGroupState } from '@/types'
-import { useOverlay } from '@/components/OverlayContext'
+import { OverlayDialog } from '@/components/OverlayContext'
 
 const ResetPasswordLink = () => {
   const [email, setEmail] = useState('')
-  const { showMain } = useOverlay()
+  const emailRef = useRef(email)
 
   useEffect(() => {
-    const handleSignIn = async () => {
+    emailRef.current = email
+  }, [email])
+
+  const handleSignIn = useMemo(() => {
+    return async () => {
       await signIn('sendgrid-reset', {
-        email,
-        redirectTo: '/user/reset-password?email=' + encodeURIComponent(email),
+        email: emailRef.current,
+        redirectTo: '/user/reset-password?email=' + encodeURIComponent(emailRef.current),
       })
     }
+  }, [])
 
-    const buttonGroup: ButtonGroupState = {
-      buttons: [
-        {
-          Icon: ArrowPathIcon,
-          title: 'Send reset password link',
-          onClick: handleSignIn,
-        },
-      ],
-      submitButton: 0,
-    }
+  const buttonGroup: ButtonGroupState = useMemo(() => ({
+    buttons: [
+      {
+        Icon: ArrowPathIcon,
+        title: 'Send reset password link',
+        onClick: handleSignIn,
+      },
+    ],
+    submitButton: 0,
+  }), [handleSignIn])
 
-    const dialogChildren = (<>
-      <Field>
-        <Label className="text-gray-100">Email:</Label>
-        <Input
-          name="email"
-          type="email"
-          className="ml-2 py-1 px-2 rounded-md bg-gray-100"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </Field>
-    </>)
+  const dialogChildren = useMemo(() => (
+    <Field>
+      <Label className="text-gray-100">Email:</Label>
+      <Input
+        name="email"
+        type="email"
+        className="ml-2 py-1 px-2 rounded-md bg-gray-100"
+        onChange={(e) => setEmail(e.target.value)}
+      />
+    </Field>
+  ), [])
 
-    showMain(dialogChildren, buttonGroup, IdentificationIcon, 'Reset password')
-  }, [email, showMain])
-
-  return null
+  return (
+    <OverlayDialog
+      open
+      buttonGroup={buttonGroup}
+      icon={IdentificationIcon}
+      title="Reset password"
+    >
+      {dialogChildren}
+    </OverlayDialog>
+  )
 }
 
 export default ResetPasswordLink
