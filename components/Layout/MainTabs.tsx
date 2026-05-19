@@ -1,65 +1,15 @@
-import { useEffect, useReducer } from 'react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { MenuItemPath, TabActionType } from '@/types/enums/navigation'
-import type { NavMenuItem, TabAction, TabItem, TabState } from '@/types/navigation'
+import type { NavMenuItem, TabItem } from '@/types/navigation'
 import { navigation } from '@/lib/data/navigation'
-
-const tabReducer = (state: TabState, action: TabAction): TabState => {
-  switch (action.type) {
-    case 'init': {
-      let newState: TabState = state
-      const storedTabState = localStorage.getItem('tabState')
-      if (storedTabState) newState = { ...JSON.parse(storedTabState), activeTab: null }
-      if (action.pathname === MenuItemPath.HOME) return newState
-
-      let activeTab = newState.tabs.findIndex((tab: TabItem) => tab.menuPath === action.pathname)
-
-      if (activeTab === -1) {
-        newState.tabs.push({ menuPath: action.pathname })
-        activeTab = newState.tabs.length - 1
-      }
-      newState.activeTab = activeTab
-
-      localStorage.setItem('tabState', JSON.stringify(newState))
-      return newState
-    }
-    case 'close': {
-      const tabs: TabItem[] = state.tabs.filter((_, i: number) => i !== action.index)
-      const activeTab: number | null =
-        state.activeTab === null || tabs.length === 0 ? null
-          : state.activeTab > 0 || state.activeTab > action.index || state.activeTab === tabs.length
-            ? state.activeTab - 1 : state.activeTab
-
-      const newState: TabState = { tabs, activeTab }
-      localStorage.setItem('tabState', JSON.stringify(newState))
-      return newState
-    }
-    default:
-      return state
-  }
-}
+import { useOverlay } from '@/components/overlay/OverlayContext'
 
 const MainTabs = () => {
-  const [tabState, dispatch] = useReducer(tabReducer, { tabs: [], activeTab: null })
+  const { tabState, closeTab } = useOverlay()
 
-  const pathname = usePathname()
-  const router = useRouter()
-
-  useEffect(() => {
-    dispatch({ type: TabActionType.INIT, pathname: pathname as MenuItemPath })
-  }, [pathname])
-
-  const closeTab = (event: React.MouseEvent, index: number) => {
+  const onCloseTab = (event: React.MouseEvent, index: number) => {
     event.stopPropagation()
-
-    dispatch({ type: TabActionType.CLOSE, index })
-
-    if (index === tabState.activeTab) {
-      const nextTabItem: TabItem | null = tabState.tabs[index + 1] || tabState.tabs[index - 1] || null
-      router.push(nextTabItem === null ? MenuItemPath.HOME : nextTabItem.menuPath)
-    }
+    closeTab(index)
   }
 
   const mapTabs = (tab: TabItem, index: number) => {
@@ -84,7 +34,7 @@ const MainTabs = () => {
         className={`ml-2 h-5 cursor-pointer ${index === tabState.activeTab
           ? 'hover:bg-gray-300'
           : 'hover:bg-gray-700'}`}
-        onClick={e => closeTab(e, index)}
+        onClick={e => onCloseTab(e, index)}
       />
     </div>
   }

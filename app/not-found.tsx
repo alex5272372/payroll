@@ -9,7 +9,8 @@ const NotFound = () => {
   useEffect(() => {
     showError({
       errors: ['404'],
-      properties: { ['Not Found']: { errors: ['The page you are looking for does not exist.'] }}})
+      properties: { ['Not Found']: { errors: ['The page you are looking for does not exist.'] }}
+    }, true)
   }, [showError])
 
   return (

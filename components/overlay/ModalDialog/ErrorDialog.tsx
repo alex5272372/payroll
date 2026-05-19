@@ -2,14 +2,15 @@ import { CheckIcon } from '@heroicons/react/24/outline'
 import type { ButtonGroupState } from '@/types'
 import { ErrorTree } from '@/types/overlay'
 import ModalDialogButtons from '@/components/overlay/ModalDialog/ModalDialogButtons'
+import { useOverlay } from '@/components/overlay/OverlayContext'
 
-const ErrorDialog = ({
-  errorTree,
-  onOk,
-}: {
-  errorTree?: ErrorTree
-  onOk?: () => void
-}) => {
+const ErrorDialog = ({ errorTree }: { errorTree?: ErrorTree }) => {
+  const { hideDialog } = useOverlay()
+
+  const onOk = () => {
+    hideDialog()
+  }
+
   const buttonGroup: ButtonGroupState = {
     buttons: [
       {

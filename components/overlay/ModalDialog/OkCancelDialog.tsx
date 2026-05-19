@@ -1,18 +1,23 @@
 import { CheckIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import type { ButtonGroupState } from '@/types'
 import ModalDialogButtons from '@/components/overlay/ModalDialog/ModalDialogButtons'
+import { useOverlay } from '@/components/overlay/OverlayContext'
 
 const OkCancelDialog = ({
   header,
   message,
   onOk,
-  onCancel,
 }: {
   header?: string
   message?: string
   onOk?: () => void
-  onCancel?: () => void
 }) => {
+  const { hideDialog } = useOverlay()
+
+  const onCancel = () => {
+    hideDialog()
+  }
+
   const buttonGroup: ButtonGroupState = {
     buttons: [
       {
