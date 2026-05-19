@@ -12,7 +12,6 @@ export interface DialogState {
   icon?: HeroIcon
   title?: string
   children?: React.ReactNode
-  onClose?: () => void
 }
 
 export interface OverlayContextType {

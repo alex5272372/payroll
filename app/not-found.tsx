@@ -7,7 +7,9 @@ const NotFound = () => {
   const { showError } = useOverlay()
 
   useEffect(() => {
-    showError({ errors: ['Not Found', 'This page could not be found.'] })
+    showError({
+      errors: ['404'],
+      properties: { ['Not Found']: { errors: ['The page you are looking for does not exist.'] }}})
   }, [showError])
 
   return (

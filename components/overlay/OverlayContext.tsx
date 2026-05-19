@@ -17,8 +17,7 @@ export const OverlayProvider = ({ children }: { children: ReactNode }) => {
       isOpen: true,
       icon: ExclamationTriangleIcon,
       title: 'Error',
-      children: <ErrorDialog errorTree={errorTree} onOk={() => setDialog({ isOpen: false })} />,
-      onClose: () => setDialog({ isOpen: false })
+      children: <ErrorDialog errorTree={errorTree} onOk={() => setDialog({ isOpen: false })} />
     })
   }, [])
 
@@ -27,8 +26,7 @@ export const OverlayProvider = ({ children }: { children: ReactNode }) => {
       isOpen: true,
       icon: InformationCircleIcon,
       title: 'Information',
-      children: <OkDialog header={header} message={message} onOk={() => setDialog({ isOpen: false })} />,
-      onClose: () => setDialog({ isOpen: false })
+      children: <OkDialog header={header} message={message} onOk={() => setDialog({ isOpen: false })} />
     })
   }, [])
 
@@ -38,8 +36,7 @@ export const OverlayProvider = ({ children }: { children: ReactNode }) => {
       icon: InformationCircleIcon,
       title: 'Confirmation',
       children: <OkCancelDialog
-        header={header} message={message} onOk={onOk} onCancel={() => setDialog({ isOpen: false })} />,
-      onClose: () => setDialog({ isOpen: false }),
+        header={header} message={message} onOk={onOk} onCancel={() => setDialog({ isOpen: false })} />
     })
   }, [])
 
@@ -52,8 +49,7 @@ export const OverlayProvider = ({ children }: { children: ReactNode }) => {
       isOpen: true,
       icon,
       title,
-      children,
-      onClose: () => setDialog({ isOpen: false }),
+      children
     })
   }, [])
 
