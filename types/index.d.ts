@@ -1,6 +1,6 @@
-import type { CRUD, UserRole } from '@/types/enums/roleMatrix'
 import type { $ZodErrorTree } from 'zod/v4/core'
-import { ErrorTree } from './overlay'
+import type { CRUD, UserRole } from '@/types/enums/roleMatrix'
+import { ErrorTree } from '@/types/overlay'
 
 declare module 'next-auth' {
   interface Session {

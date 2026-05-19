@@ -4,7 +4,7 @@ import { signIn } from 'next-auth/react'
 import { Field, Input, Label } from '@headlessui/react'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { ButtonGroupState } from '@/types'
-import OverlayDialogForm from '../overlay/OverlayDialogForm'
+import ModalDialogForm from '@/components/overlay/ModalDialog/ModalDialogForm'
 
 const VerifyEmail = () => {
   const [email, setEmail] = useState('')
@@ -27,7 +27,7 @@ const VerifyEmail = () => {
     submitButton: 0,
   }
 
-  return <OverlayDialogForm buttonGroup={buttonGroup}>
+  return <ModalDialogForm buttonGroup={buttonGroup}>
     <Field>
       <Label className="text-gray-100">Email:</Label>
       <Input
@@ -37,7 +37,7 @@ const VerifyEmail = () => {
         onChange={(e) => setEmail(e.target.value)}
       />
     </Field>
-  </OverlayDialogForm>
+  </ModalDialogForm>
 }
 
 export default VerifyEmail

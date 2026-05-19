@@ -3,9 +3,9 @@ import { createContext, useContext, useState, ReactNode, useCallback } from 'rea
 import type { HeroIcon } from '@/types'
 import type { DialogState, ErrorTree, OverlayContextType } from '@/types/overlay'
 import { ExclamationTriangleIcon, InformationCircleIcon } from '@heroicons/react/24/outline'
-import ErrorDialog from '@/components/overlay/ErrorDialog'
-import OkDialog from '@/components/overlay/OkDialog'
-import OkCancelDialog from './OkCancelDialog'
+import ErrorDialog from '@/components/overlay/ModalDialog/ErrorDialog'
+import OkDialog from '@/components/overlay/ModalDialog/OkDialog'
+import OkCancelDialog from '@/components/overlay/ModalDialog/OkCancelDialog'
 
 const OverlayContext = createContext<OverlayContextType | undefined>(undefined)
 

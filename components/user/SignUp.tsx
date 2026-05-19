@@ -9,7 +9,7 @@ import PasswordField from '@/components/inputs/PasswordField'
 import PasswordPolicy from '@/components/dataDisplay/PasswordPolicy'
 import { useOverlay } from '@/components/overlay/OverlayContext'
 import Layout from '@/components/Layout'
-import OverlayDialogForm from '../overlay/OverlayDialogForm'
+import ModalDialogForm from '@/components/overlay/ModalDialog/ModalDialogForm'
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState('')
@@ -43,7 +43,7 @@ const SignUp = () => {
     submitButton: 0,
   }
 
-  return <OverlayDialogForm buttonGroup={buttonGroup}>
+  return <ModalDialogForm buttonGroup={buttonGroup}>
     <Field>
       <Label className="text-gray-100">First name:</Label>
       <Input
@@ -77,7 +77,7 @@ const SignUp = () => {
     <PasswordField setPassword={setPassword} />
     <PasswordField name="confirmPassword" label="Confirm password" setPassword={setConfirmPassword} />
     <PasswordPolicy password={password} confirmPassword={confirmPassword} setPasswordValid={setPasswordValid} />
-  </OverlayDialogForm>
+  </ModalDialogForm>
 }
 
 export default SignUp

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { CRUD, UserRole } from './types/enums/roleMatrix'
-import { roleMatrix } from './lib/data/roleMatrix'
-import { MenuItemPath } from './types/enums/navigation'
+import { CRUD, UserRole } from '@/types/enums/roleMatrix'
+import { roleMatrix } from '@/lib/data/roleMatrix'
+import { MenuItemPath } from '@/types/enums/navigation'
 
 export const proxy = async (request: NextRequest) => {
   let sessionToken = request.cookies.get('__Secure-authjs.session-token')

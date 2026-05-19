@@ -2,7 +2,7 @@
 import { signOut } from 'next-auth/react'
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/outline'
 import { ButtonGroupState } from '@/types'
-import OverlayDialogButtons from '../overlay/OverlayDialogButtons'
+import ModalDialogButtons from '@/components/overlay/ModalDialog/ModalDialogButtons'
 
 const SignOut = () => {
   const handleSignOut = async () => {
@@ -20,10 +20,10 @@ const SignOut = () => {
     submitButton: 0,
   }
 
-  return <>
-    <h2 className="text-2xl text-gray-100">Are you sure you want to sign out?</h2>
-    <OverlayDialogButtons buttonGroup={buttonGroup} />
-  </>
+  return <div className='flex flex-col items-center p-4 rounded-b-md bg-gray-600'>
+    <h2 className="mb-4 text-2xl text-gray-100">Are you sure you want to sign out?</h2>
+    <ModalDialogButtons buttonGroup={buttonGroup} />
+  </div>
 }
 
 export default SignOut

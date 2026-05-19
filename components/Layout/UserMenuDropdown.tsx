@@ -6,7 +6,7 @@ import { navigation } from '@/lib/data/navigation'
 import { User } from 'next-auth'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
 import { roleMatrix } from '@/lib/data/roleMatrix'
-import MenuDropdownItem from './MenuDropdownItem'
+import MenuDropdownItem from '@/components/Layout/MenuDropdownItem'
 
 const UserMenuDropdown = ({ user, roles }: { user?: User, roles?: UserRole[] }) => {
   const authNavigation = navigation.filter(item => {

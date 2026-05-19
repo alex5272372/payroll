@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Button } from '@headlessui/react'
 import { ButtonGroupState, ButtonState } from '@/types'
 
-const OverlayDialogButtons = ({ buttonGroup } : { buttonGroup?: ButtonGroupState }) => {
+const ModalDialogButtons = ({ buttonGroup } : { buttonGroup?: ButtonGroupState }) => {
   return <div className="flex self-center flex-row space-x-2">
     {buttonGroup?.buttons.map((button: ButtonState, index: number) => button.href
       ? button.disabled
@@ -40,4 +40,4 @@ const OverlayDialogButtons = ({ buttonGroup } : { buttonGroup?: ButtonGroupState
   </div>
 }
 
-export default OverlayDialogButtons
+export default ModalDialogButtons

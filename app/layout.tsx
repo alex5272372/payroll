@@ -1,4 +1,4 @@
-import './globals.css'
+import '@/app/globals.css'
 import React from 'react'
 import { SessionProvider } from 'next-auth/react'
 import { OverlayProvider } from '@/components/overlay/OverlayContext'

@@ -7,7 +7,7 @@ import { ArrowRightEndOnRectangleIcon } from '@heroicons/react/24/outline'
 import { ButtonGroupState } from '@/types'
 import PasswordField from '@/components/inputs/PasswordField'
 import { useOverlay } from '@/components/overlay/OverlayContext'
-import OverlayDialogForm from '../overlay/OverlayDialogForm'
+import ModalDialogForm from '@/components/overlay/ModalDialog/ModalDialogForm'
 
 const SignIn = () => {
   const [email, setEmail] = useState('')
@@ -45,7 +45,7 @@ const SignIn = () => {
     submitButton: 0,
   }
 
-  return <OverlayDialogForm buttonGroup={buttonGroup}>
+  return <ModalDialogForm buttonGroup={buttonGroup}>
     <Field>
       <Label className="text-gray-100">Email:</Label>
       <Input
@@ -57,7 +57,7 @@ const SignIn = () => {
     </Field>
 
     <PasswordField setPassword={setPassword} />
-  </OverlayDialogForm>
+  </ModalDialogForm>
 }
 
 export default SignIn

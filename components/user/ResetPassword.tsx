@@ -7,7 +7,7 @@ import { resetPasswordAction } from '@/actions/userActions'
 import PasswordField from '@/components/inputs/PasswordField'
 import PasswordPolicy from '@/components/dataDisplay/PasswordPolicy'
 import { useOverlay } from '@/components/overlay/OverlayContext'
-import OverlayDialogForm from '../overlay/OverlayDialogForm'
+import ModalDialogForm from '@/components/overlay/ModalDialog/ModalDialogForm'
 
 const ResetPassword = () => {
   const [password, setPassword] = useState('')
@@ -41,11 +41,11 @@ const ResetPassword = () => {
       showOk('Password changed', 'Your password has been successfully changed.')
 
     } else {
-      return <OverlayDialogForm buttonGroup={buttonGroup}>
+      return <ModalDialogForm buttonGroup={buttonGroup}>
         <PasswordField setPassword={setPassword} />
         <PasswordField name="confirmPassword" label="Confirm password" setPassword={setConfirmPassword} />
         <PasswordPolicy password={password} confirmPassword={confirmPassword} setPasswordValid={setPasswordValid} />
-      </OverlayDialogForm>
+      </ModalDialogForm>
     }
 
   } else {

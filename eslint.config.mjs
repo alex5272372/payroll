@@ -21,6 +21,7 @@ const eslintConfig = defineConfig([
       'no-trailing-spaces': 'error',
       'no-tabs': 'error',
       'no-multi-spaces': 'error',
+      'no-restricted-imports': ['error', { 'patterns': ['../**/*', './**/*'] }],
       'eol-last': 'error',
       'comma-spacing': ['error', { 'before': false, 'after': true }],
       'array-bracket-spacing': ['error', 'never'],

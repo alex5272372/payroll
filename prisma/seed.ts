@@ -1,10 +1,10 @@
 import { PrismaClient } from '@prisma/client'
-import companies from './data/companies'
-import countries from './data/countries'
-import departments from './data/departments'
-import employees from './data/employees'
-import people from './data/people'
-import users from './data/users'
+import companies from '@/prisma/data/companies'
+import countries from '@/prisma/data/countries'
+import departments from '@/prisma/data/departments'
+import employees from '@/prisma/data/employees'
+import people from '@/prisma/data/people'
+import users from '@/prisma/data/users'
 
 const prisma = new PrismaClient()
 

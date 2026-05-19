@@ -3,7 +3,7 @@ import { InformationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Button } from '@headlessui/react'
 import { useOverlay } from '@/components/overlay/OverlayContext'
 
-const OverlayDialog = () => {
+const ModalDialog = () => {
   const { dialog: { isOpen, children, icon, title, onClose }} = useOverlay()
   const Icon = icon
 
@@ -30,4 +30,4 @@ const OverlayDialog = () => {
     : null
 }
 
-export default OverlayDialog
+export default ModalDialog

@@ -1,4 +1,4 @@
-import CalendarHour from './CalendarHour'
+import CalendarHour from '@/components/calendar/CalendarHour'
 
 const CalendarDay = ({ date }: { date: Date }) => {
   const options: Intl.DateTimeFormatOptions = {

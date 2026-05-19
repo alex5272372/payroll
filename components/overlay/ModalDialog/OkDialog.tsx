@@ -1,6 +1,6 @@
 import { CheckIcon } from '@heroicons/react/24/outline'
 import type { ButtonGroupState } from '@/types'
-import OverlayDialogButtons from './OverlayDialogButtons'
+import ModalDialogButtons from '@/components/overlay/ModalDialog/ModalDialogButtons'
 
 const OkDialog = ({
   header,
@@ -21,13 +21,11 @@ const OkDialog = ({
     ],
   }
 
-  return <>
-    <div className='flex flex-col items-center'>
-      {header && <h2 className="text-2xl text-gray-100">{header}</h2>}
-      {message && <p className="text-gray-100">{message}</p>}
-    </div>
-    <OverlayDialogButtons buttonGroup={buttonGroup} />
-  </>
+  return <div className='flex flex-col items-center p-4 rounded-b-md bg-gray-600'>
+    {header && <h2 className="text-2xl text-gray-100">{header}</h2>}
+    {message && <p className="mb-4 text-gray-100">{message}</p>}
+    <ModalDialogButtons buttonGroup={buttonGroup} />
+  </div>
 }
 
 export default OkDialog

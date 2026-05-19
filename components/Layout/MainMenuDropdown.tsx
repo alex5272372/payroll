@@ -4,7 +4,7 @@ import type { NavMenuItem } from '@/types/navigation'
 import { navigation } from '@/lib/data/navigation'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
 import { roleMatrix } from '@/lib/data/roleMatrix'
-import MenuDropdownItem from './MenuDropdownItem'
+import MenuDropdownItem from '@/components/Layout/MenuDropdownItem'
 
 const MainMenuDropdown = ({ menuItem, roles }: { menuItem: NavMenuItem, roles?: UserRole[] }) => {
   const authNavigation = navigation.filter(item => {

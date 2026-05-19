@@ -5,12 +5,12 @@ import { useSession } from 'next-auth/react'
 import { MenuSection } from '@/types/enums/navigation'
 import type { NavMenuItem } from '@/types/navigation'
 import { navigation } from '@/lib/data/navigation'
-import MainTabs from './MainTabs'
-import MainMenuDropdown from './MainMenuDropdown'
-import UserMenuDropdown from './UserMenuDropdown'
+import MainTabs from '@/components/Layout/MainTabs'
+import MainMenuDropdown from '@/components/Layout/MainMenuDropdown'
+import UserMenuDropdown from '@/components/Layout/UserMenuDropdown'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
 import { roleMatrix } from '@/lib/data/roleMatrix'
-import OverlayDialog from '@/components/overlay/OverlayDialog'
+import ModalDialog from '@/components/overlay/ModalDialog'
 
 const Layout = ({ children }: { children: React.ReactNode; }) => {
   const { data: session } = useSession()
@@ -43,7 +43,7 @@ const Layout = ({ children }: { children: React.ReactNode; }) => {
 
     <MainTabs />
     {children}
-    <OverlayDialog />
+    <ModalDialog />
   </>
 }
 
