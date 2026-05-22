@@ -6,15 +6,15 @@ import { ActionResult, ButtonGroupState } from '@/types'
 import { resetPasswordAction } from '@/actions/userActions'
 import PasswordField from '@/components/inputs/PasswordField'
 import PasswordPolicy from '@/components/dataDisplay/PasswordPolicy'
-import { useOverlay } from '@/components/overlay/OverlayContext'
-import ModalDialogForm from '@/components/overlay/ModalDialog/ModalDialogForm'
+import { useLayout } from '@/components/LayoutContext'
+import ModalDialogForm from '@/components/ModalDialog/ModalDialogForm'
 
 const ResetPassword = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [passwordValid, setPasswordValid] = useState(false)
   const [success, setSuccess] = useState(false)
-  const { showError, showOk } = useOverlay()
+  const { showError, showOk } = useLayout()
 
   const searchParams = useSearchParams()
   const email = searchParams.get('email')

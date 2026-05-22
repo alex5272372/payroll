@@ -2,10 +2,10 @@ import Link from 'next/link'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import type { NavMenuItem, TabItem } from '@/types/navigation'
 import { navigation } from '@/lib/data/navigation'
-import { useOverlay } from '@/components/overlay/OverlayContext'
+import { useLayout } from '@/components/LayoutContext'
 
 const MainTabs = () => {
-  const { tabState, closeTab } = useOverlay()
+  const { tabState, closeTab } = useLayout()
 
   const onCloseTab = (event: React.MouseEvent, index: number) => {
     event.stopPropagation()

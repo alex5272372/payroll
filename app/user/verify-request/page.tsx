@@ -1,10 +1,10 @@
 'use client'
 import { useEffect } from 'react'
 import Layout from '@/components/Layout'
-import { useOverlay } from '@/components/overlay/OverlayContext'
+import { useLayout } from '@/components/LayoutContext'
 
 const VerifyRequest = () => {
-  const { showOk } = useOverlay()
+  const { showOk } = useLayout()
 
   useEffect(() => {
     showOk('Check your email', 'A sign in link has been sent to your email address.')

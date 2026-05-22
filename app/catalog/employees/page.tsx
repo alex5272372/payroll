@@ -8,7 +8,7 @@ import { ActionResult, ButtonGroupState, TableData } from '@/types'
 import { MenuItemPath } from '@/types/enums/navigation'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { CRUD } from '@/types/enums/roleMatrix'
-import { useOverlay } from '@/components/overlay/OverlayContext'
+import { useLayout } from '@/components/LayoutContext'
 
 const buttonGroup: ButtonGroupState = {
   buttons: [
@@ -29,7 +29,7 @@ const initialData: TableData = {
 
 const EmployeesCatalog = () => {
   const [tableData, setTableData] = useState<TableData>(initialData)
-  const { showError } = useOverlay()
+  const { showError } = useLayout()
 
   useEffect(() => {
     getAllEmployees().then((employees: ActionResult<EmployeeWithPersonAndDepartment[]>) => {

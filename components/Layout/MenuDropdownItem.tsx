@@ -2,10 +2,10 @@ import Link from 'next/link'
 import { Button, MenuItem } from '@headlessui/react'
 import type { NavMenuItem } from '@/types/navigation'
 import { MenuItemType } from '@/types/enums/navigation'
-import { useOverlay } from '@/components/overlay/OverlayContext'
+import { useLayout } from '@/components/LayoutContext'
 
 const MenuDropdownItem = ({ item }: { item: NavMenuItem }) => {
-  const { showDialog } = useOverlay()
+  const { showDialog } = useLayout()
 
   return <MenuItem>
     { item.type === MenuItemType.PATH ?

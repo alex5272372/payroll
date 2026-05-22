@@ -2,7 +2,7 @@
 import { signOut } from 'next-auth/react'
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/outline'
 import { ButtonGroupState } from '@/types'
-import ModalDialogButtons from '@/components/overlay/ModalDialog/ModalDialogButtons'
+import ModalDialogButtons from '@/components/ModalDialog/ModalDialogButtons'
 
 const SignOut = () => {
   const handleSignOut = async () => {

@@ -2,7 +2,7 @@
 import { useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Layout from '@/components/Layout'
-import { useOverlay } from '@/components/overlay/OverlayContext'
+import { useLayout } from '@/components/LayoutContext'
 
 enum Error {
   Configuration = 'Configuration',
@@ -33,7 +33,7 @@ const errorMap: Record<Error, { header: string, message: string }> = {
 const UserError = () => {
   const searchParams = useSearchParams()
   const error: Error = searchParams.get('error') as Error || Error.Default
-  const { showError } = useOverlay()
+  const { showError } = useLayout()
 
   useEffect(() => {
     const errorInfo = errorMap[error] || errorMap[Error.Default]

@@ -6,13 +6,13 @@ import { Field, Input, Label } from '@headlessui/react'
 import { ArrowRightEndOnRectangleIcon } from '@heroicons/react/24/outline'
 import { ButtonGroupState } from '@/types'
 import PasswordField from '@/components/inputs/PasswordField'
-import { useOverlay } from '@/components/overlay/OverlayContext'
-import ModalDialogForm from '@/components/overlay/ModalDialog/ModalDialogForm'
+import { useLayout } from '@/components/LayoutContext'
+import ModalDialogForm from '@/components/ModalDialog/ModalDialogForm'
 
 const SignIn = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const { showError } = useOverlay()
+  const { showError } = useLayout()
 
   const searchParams = useSearchParams()
   const { data: session } = useSession()

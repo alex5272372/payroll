@@ -1,10 +1,10 @@
 'use client'
 import { InformationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Button, Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
-import { useOverlay } from '@/components/overlay/OverlayContext'
+import { useLayout } from '@/components/LayoutContext'
 
 const ModalDialog = () => {
-  const { dialog: { isOpen, children, icon, title }, hideDialog } = useOverlay()
+  const { dialog: { isOpen, children, icon, title }, hideDialog } = useLayout()
   const Icon = icon
 
   return <Dialog

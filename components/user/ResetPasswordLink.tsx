@@ -4,7 +4,7 @@ import { signIn } from 'next-auth/react'
 import { Field, Input, Label } from '@headlessui/react'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { ButtonGroupState } from '@/types'
-import ModalDialogForm from '@/components/overlay/ModalDialog/ModalDialogForm'
+import ModalDialogForm from '@/components/ModalDialog/ModalDialogForm'
 
 const ResetPasswordLink = () => {
   const [email, setEmail] = useState('')

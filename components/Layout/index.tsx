@@ -10,7 +10,7 @@ import MainMenuDropdown from '@/components/Layout/MainMenuDropdown'
 import UserMenuDropdown from '@/components/Layout/UserMenuDropdown'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
 import { roleMatrix } from '@/lib/data/roleMatrix'
-import ModalDialog from '@/components/overlay/ModalDialog'
+import ModalDialog from '@/components/ModalDialog'
 
 const Layout = ({ children }: { children: React.ReactNode; }) => {
   const { data: session } = useSession()

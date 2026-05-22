@@ -10,7 +10,7 @@ import { Country } from '@prisma/client'
 import { MenuItemPath } from '@/types/enums/navigation'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { CRUD } from '@/types/enums/roleMatrix'
-import { useOverlay } from '@/components/overlay/OverlayContext'
+import { useLayout } from '@/components/LayoutContext'
 
 const initialData: TableData = {
   columns: [
@@ -24,7 +24,7 @@ const CountriesCatalog = () => {
   const [tableData, setTableData] = useState<TableData>(initialData)
   const [selectedCode, setSelectedCode] = useState('')
   const router = useRouter()
-  const { showError, showOk, showOkCancel, hideDialog } = useOverlay()
+  const { showError, showOk, showOkCancel, hideDialog } = useLayout()
 
   const fetchCountries = useCallback(async (): Promise<void> => {
     const result = await getAllCountries()

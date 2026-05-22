@@ -10,12 +10,12 @@ import { CRUD } from '@/types/enums/roleMatrix'
 import { MenuItemPath } from '@/types/enums/navigation'
 import { Country } from '@prisma/client'
 import { useParams } from 'next/navigation'
-import { useOverlay } from '@/components/overlay/OverlayContext'
+import { useLayout } from '@/components/LayoutContext'
 import { CountryRequest } from '@/types/models/countryModels'
 
 const CountryUpdate = () => {
   const [name, setName] = useState('')
-  const { showError, showOk, showOkCancel, hideDialog } = useOverlay()
+  const { showError, showOk, showOkCancel, hideDialog } = useLayout()
 
   const params = useParams()
 

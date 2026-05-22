@@ -1,4 +1,4 @@
-import { ErrorTree } from '@/types/overlay'
+import { ErrorTree } from '@/types/layout'
 import { $ZodErrorTree } from 'zod/v4/core'
 
 export const MapErrorTree = (zodError: $ZodErrorTree<Record<string, unknown>>): ErrorTree => {

@@ -1,5 +1,5 @@
 import type { HeroIcon } from '@/types'
-import type { DialogState } from '@/types/overlay'
+import type { DialogState } from '@/types/layout'
 import type { MenuItemPath, MenuItemType, MenuSection } from '@/types/enums/navigation'
 import type { UserRole } from '@/types/enums/roleMatrix'
 import { TabActionType } from '@/types/enums/navigation'

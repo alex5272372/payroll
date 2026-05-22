@@ -17,7 +17,7 @@ export interface DialogState {
   onClose?: () => void
 }
 
-export interface OverlayContextType {
+export interface LayoutContextType {
   dialog: DialogState
   tabState?: TabState
   closeTab: (index: number) => void

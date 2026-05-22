@@ -3,16 +3,16 @@ import { createContext, useContext, useEffect, useReducer, useState, ReactNode, 
 import { usePathname, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import type { HeroIcon } from '@/types'
-import type { DialogState, ErrorTree, OverlayContextType } from '@/types/overlay'
+import type { DialogState, ErrorTree, LayoutContextType } from '@/types/layout'
 import { MenuItemPath, TabActionType } from '@/types/enums/navigation'
 import type { RoleTabState, TabAction, TabItem, TabState } from '@/types/navigation'
 import { UserRole } from '@/types/enums/roleMatrix'
 import { ExclamationTriangleIcon, InformationCircleIcon } from '@heroicons/react/24/outline'
-import ErrorDialog from '@/components/overlay/ModalDialog/ErrorDialog'
-import OkDialog from '@/components/overlay/ModalDialog/OkDialog'
-import OkCancelDialog from '@/components/overlay/ModalDialog/OkCancelDialog'
+import ErrorDialog from '@/components/ModalDialog/ErrorDialog'
+import OkDialog from '@/components/ModalDialog/OkDialog'
+import OkCancelDialog from '@/components/ModalDialog/OkCancelDialog'
 
-const OverlayContext = createContext<OverlayContextType | undefined>(undefined)
+const LayoutContext = createContext<LayoutContextType | undefined>(undefined)
 
 const roleTabReducer = (state: RoleTabState, action: TabAction): RoleTabState => {
   const storedState = localStorage.getItem('roleTabState')
@@ -80,7 +80,7 @@ const roleTabReducer = (state: RoleTabState, action: TabAction): RoleTabState =>
   return newState
 }
 
-export const OverlayProvider = ({ children }: { children: ReactNode }) => {
+export const LayoutProvider = ({ children }: { children: ReactNode }) => {
   const { data: session } = useSession()
   const [dialog, setDialog] = useState<DialogState>({ isOpen: false })
   const [roleTabState, dispatch] = useReducer(roleTabReducer, {})
@@ -174,7 +174,7 @@ export const OverlayProvider = ({ children }: { children: ReactNode }) => {
   }, [closeTab, dialog.closeTab, tabState])
 
   return (
-    <OverlayContext.Provider
+    <LayoutContext.Provider
       value={{
         dialog,
         tabState,
@@ -187,14 +187,14 @@ export const OverlayProvider = ({ children }: { children: ReactNode }) => {
       }}
     >
       {children}
-    </OverlayContext.Provider>
+    </LayoutContext.Provider>
   )
 }
 
-export const useOverlay = () => {
-  const context = useContext(OverlayContext)
+export const useLayout = () => {
+  const context = useContext(LayoutContext)
   if (!context) {
-    throw new Error('useOverlay must be used within an OverlayProvider')
+    throw new Error('useLayout must be used within a LayoutProvider')
   }
   return context
 }

@@ -8,13 +8,13 @@ import TextField from '@/components/inputs/TextField'
 import { MenuItemPath } from '@/types/enums/navigation'
 import { CRUD } from '@/types/enums/roleMatrix'
 import { ButtonGroupState } from '@/types'
-import { useOverlay } from '@/components/overlay/OverlayContext'
+import { useLayout } from '@/components/LayoutContext'
 import { CountryRequest } from '@/types/models/countryModels'
 
 const CountryCreate = () => {
   const [code, setCode] = useState('')
   const [name, setName] = useState('')
-  const { showOk, showError } = useOverlay()
+  const { showOk, showError } = useLayout()
 
   const handleSubmit = async (country: CountryRequest) => {
     const result = await createCountry(country)

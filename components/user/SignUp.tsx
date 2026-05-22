@@ -1,15 +1,14 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { Field, Input, Label } from '@headlessui/react'
-import { UserPlusIcon, IdentificationIcon } from '@heroicons/react/24/outline'
+import { UserPlusIcon } from '@heroicons/react/24/outline'
 import { ActionResult, ButtonGroupState } from '@/types'
 import { signUpAction } from '@/actions/userActions'
 import PasswordField from '@/components/inputs/PasswordField'
 import PasswordPolicy from '@/components/dataDisplay/PasswordPolicy'
-import { useOverlay } from '@/components/overlay/OverlayContext'
-import Layout from '@/components/Layout'
-import ModalDialogForm from '@/components/overlay/ModalDialog/ModalDialogForm'
+import { useLayout } from '@/components/LayoutContext'
+import ModalDialogForm from '@/components/ModalDialog/ModalDialogForm'
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState('')
@@ -18,7 +17,7 @@ const SignUp = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [passwordValid, setPasswordValid] = useState(false)
-  const { showError } = useOverlay()
+  const { showError } = useLayout()
 
   const { data: session } = useSession()
 

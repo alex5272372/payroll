@@ -1,6 +1,6 @@
 'use client'
 import { ReactNode } from 'react'
-import ModalDialogButtons from '@/components/overlay/ModalDialog/ModalDialogButtons'
+import ModalDialogButtons from '@/components/ModalDialog/ModalDialogButtons'
 import { ButtonGroupState } from '@/types'
 
 const ModalDialogForm = ({ children, buttonGroup } : { children: ReactNode, buttonGroup?: ButtonGroupState }) => {

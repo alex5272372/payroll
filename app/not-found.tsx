@@ -1,10 +1,10 @@
 'use client'
 import { useEffect } from 'react'
 import Layout from '@/components/Layout'
-import { useOverlay } from '@/components/overlay/OverlayContext'
+import { useLayout } from '@/components/LayoutContext'
 
 const NotFound = () => {
-  const { showError } = useOverlay()
+  const { showError } = useLayout()
 
   useEffect(() => {
     showError({
