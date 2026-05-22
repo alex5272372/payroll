@@ -19,7 +19,7 @@ export interface DialogState {
 
 export interface OverlayContextType {
   dialog: DialogState
-  tabState: TabState
+  tabState?: TabState
   closeTab: (index: number) => void
   showError: (
     errorTree: ErrorTree<Record<string, unknown>>,

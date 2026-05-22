@@ -7,16 +7,12 @@ import { useOverlay } from '@/components/overlay/OverlayContext'
 const ErrorDialog = ({ errorTree }: { errorTree?: ErrorTree }) => {
   const { hideDialog } = useOverlay()
 
-  const onOk = () => {
-    hideDialog()
-  }
-
   const buttonGroup: ButtonGroupState = {
     buttons: [
       {
         Icon: CheckIcon,
         title: 'OK',
-        onClick: onOk,
+        onClick: hideDialog,
       },
     ],
   }

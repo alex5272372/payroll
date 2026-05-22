@@ -14,10 +14,6 @@ const OkCancelDialog = ({
 }) => {
   const { hideDialog } = useOverlay()
 
-  const onCancel = () => {
-    hideDialog()
-  }
-
   const buttonGroup: ButtonGroupState = {
     buttons: [
       {
@@ -28,7 +24,7 @@ const OkCancelDialog = ({
       {
         Icon: XMarkIcon,
         title: 'Cancel',
-        onClick: onCancel,
+        onClick: hideDialog,
       },
     ],
   }

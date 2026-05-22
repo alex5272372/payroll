@@ -12,16 +12,12 @@ const OkDialog = ({
 }) => {
   const { hideDialog } = useOverlay()
 
-  const onOk = () => {
-    hideDialog()
-  }
-
   const buttonGroup: ButtonGroupState = {
     buttons: [
       {
         Icon: CheckIcon,
         title: 'OK',
-        onClick: onOk,
+        onClick: hideDialog,
       },
     ],
   }

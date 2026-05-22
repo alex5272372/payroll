@@ -1,10 +1,12 @@
 'use client'
-import { createContext, useContext, useEffect, useReducer, useState, ReactNode, useCallback } from 'react'
+import { createContext, useContext, useEffect, useReducer, useState, ReactNode, useCallback, use } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import type { HeroIcon } from '@/types'
 import type { DialogState, ErrorTree, OverlayContextType } from '@/types/overlay'
 import { MenuItemPath, TabActionType } from '@/types/enums/navigation'
-import type { TabAction, TabItem, TabState } from '@/types/navigation'
+import type { RoleTabState, TabAction, TabItem, TabState } from '@/types/navigation'
+import { UserRole } from '@/types/enums/roleMatrix'
 import { ExclamationTriangleIcon, InformationCircleIcon } from '@heroicons/react/24/outline'
 import ErrorDialog from '@/components/overlay/ModalDialog/ErrorDialog'
 import OkDialog from '@/components/overlay/ModalDialog/OkDialog'
@@ -12,55 +14,112 @@ import OkCancelDialog from '@/components/overlay/ModalDialog/OkCancelDialog'
 
 const OverlayContext = createContext<OverlayContextType | undefined>(undefined)
 
-const tabReducer = (state: TabState, action: TabAction): TabState => {
-  switch (action.type) {
-    case TabActionType.INIT: {
-      let newState: TabState = state
-      const storedTabState = localStorage.getItem('tabState')
-      if (storedTabState) newState = { ...JSON.parse(storedTabState), activeTab: null }
-      if (action.pathname === MenuItemPath.HOME) return newState
+const roleTabReducer = (state: RoleTabState, action: TabAction): RoleTabState => {
+  const storedState = localStorage.getItem('roleTabState')
+  const parsedState: RoleTabState = storedState ? JSON.parse(storedState) : {}
+  const newState: RoleTabState = { ...state, ...parsedState }
 
-      let activeTab = newState.tabs.findIndex((tab: TabItem) => tab.menuPath === action.pathname)
-      if (activeTab === -1) {
-        newState.tabs.push({ menuPath: action.pathname })
-        activeTab = newState.tabs.length - 1
+  switch (action.type) {
+    case TabActionType.INIT_TAB: {
+      if (newState.activeRole && newState[newState.activeRole]) {
+        const newTabState = { ...newState[newState.activeRole] as TabState }
+        newState[newState.activeRole] = newTabState
+
+        if (action.pathname === MenuItemPath.HOME) {
+          newTabState.activeTab = undefined
+
+        } else {
+          const activeTab = newTabState.tabs.findIndex((tab: TabItem) => tab.menuPath === action.pathname)
+
+          if (activeTab === -1) {
+            const newTabs = [...newTabState.tabs]
+            newTabState.tabs = newTabs
+
+            newTabs.push({ menuPath: action.pathname })
+            newTabState.activeTab = newTabs.length - 1
+
+          } else {
+            newTabState.activeTab = activeTab
+          }
+        }
       }
-      newState.activeTab = activeTab
-      localStorage.setItem('tabState', JSON.stringify(newState))
-      return newState
+      break
     }
-    case TabActionType.CLOSE: {
-      const tabs: TabItem[] = state.tabs.filter((_, i: number) => i !== action.index)
-      const activeTab: number | null =
-        state.activeTab === null || tabs.length === 0 ? null
-          : state.activeTab > 0 || state.activeTab > action.index || state.activeTab === tabs.length
-            ? state.activeTab - 1 : state.activeTab
-      const newState: TabState = { tabs, activeTab }
-      localStorage.setItem('tabState', JSON.stringify(newState))
-      return newState
+
+    case TabActionType.CLOSE_TAB: {
+      if (newState.activeRole && newState[newState.activeRole]) {
+        const newTabState = { ...newState[newState.activeRole] as TabState }
+        newState[newState.activeRole] = newTabState
+
+        const newTabs = newTabState.tabs.filter((_, i: number) => i !== action.index)
+        newTabState.tabs = newTabs
+
+        const activeTab: number | undefined =
+          newTabState.activeTab === undefined || newTabs.length === 0 ? undefined
+            : newTabState.activeTab > 0
+              || newTabState.activeTab > action.index
+              || newTabState.activeTab === newTabs.length
+              ? newTabState.activeTab - 1
+              : newTabState.activeTab
+        newTabState.activeTab = activeTab
+      }
+      break
     }
+
+    case TabActionType.SET_ACTIVE_ROLE: {
+      newState.activeRole = action.role
+      if (!state[action.role]) newState[action.role] = { tabs: [] }
+      break
+    }
+
     default:
-      return state
+      break
   }
+
+  localStorage.setItem('roleTabState', JSON.stringify(newState))
+  return newState
 }
 
 export const OverlayProvider = ({ children }: { children: ReactNode }) => {
+  const { data: session } = useSession()
   const [dialog, setDialog] = useState<DialogState>({ isOpen: false })
-  const [tabState, dispatch] = useReducer(tabReducer, { tabs: [], activeTab: null })
+  const [roleTabState, dispatch] = useReducer(roleTabReducer, {})
   const pathname = usePathname()
   const router = useRouter()
 
+  const tabState = roleTabState.activeRole ? roleTabState[roleTabState.activeRole] : undefined
+
   useEffect(() => {
-    dispatch({ type: TabActionType.INIT, pathname: pathname as MenuItemPath })
+    if (session === undefined) return
+    let role: UserRole | undefined
+
+    if (session?.roles === undefined) {
+      role = UserRole.UNAUTHORIZED
+    } else if (session.roles.findIndex(role => role === UserRole.ADMINISTRATOR) !== -1) {
+      role = UserRole.ADMINISTRATOR
+    } else if (session.roles.findIndex(role => role === UserRole.MODERATOR) !== -1) {
+      role = UserRole.MODERATOR
+    } else if (session.roles.findIndex(role => role === UserRole.USER) !== -1) {
+      role = UserRole.USER
+    } else {
+      role = UserRole.UNAUTHORIZED
+    }
+
+    dispatch({ type: TabActionType.SET_ACTIVE_ROLE, role })
+  }, [session])
+
+  useEffect(() => {
+    dispatch({ type: TabActionType.INIT_TAB, pathname: pathname as MenuItemPath })
   }, [dispatch, pathname])
 
   const closeTab = useCallback((index: number) => {
-    const nextTabItem: TabItem | null = tabState.tabs[index + 1]
-      || tabState.tabs[index - 1] || null
+    if (!tabState) return
+    const nextTabItem: TabItem | undefined = tabState.tabs[index + 1]
+      || tabState.tabs[index - 1] || undefined
 
-    dispatch({ type: TabActionType.CLOSE, index })
+    dispatch({ type: TabActionType.CLOSE_TAB, index })
     router.push(nextTabItem === null ? MenuItemPath.HOME : nextTabItem.menuPath)
-  }, [dispatch, router, tabState.tabs])
+  }, [router, tabState])
 
   const showError = useCallback((errorTree: ErrorTree, closeTab?: boolean) => {
     setDialog({
@@ -108,11 +167,11 @@ export const OverlayProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   const hideDialog = useCallback(() => {
-    if (dialog.closeTab && tabState.activeTab !== null) {
+    if (dialog.closeTab && tabState?.activeTab !== undefined) {
       closeTab(tabState.activeTab)
     }
     setDialog({ isOpen: false })
-  }, [closeTab, dialog.closeTab, tabState.activeTab])
+  }, [closeTab, dialog.closeTab, tabState])
 
   return (
     <OverlayContext.Provider

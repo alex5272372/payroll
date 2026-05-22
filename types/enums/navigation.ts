@@ -39,6 +39,7 @@ export enum MenuItemPath {
 }
 
 export enum TabActionType {
-  INIT = 'init',
-  CLOSE = 'close',
+  INIT_TAB = 'init-tab',
+  CLOSE_TAB = 'close-tab',
+  SET_ACTIVE_ROLE = 'set-active-role',
 }
