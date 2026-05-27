@@ -7,6 +7,7 @@ import { Prisma } from '@prisma/client'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
 import { roleMatrix } from '@/lib/data/roleMatrix'
 import { MenuItemPath } from '@/types/enums/navigation'
+import { AuthProvider } from '@/types/enums'
 
 const crypt = (pass: string) => bcrypt.hashSync(pass, bcrypt.genSaltSync(10))
 
@@ -64,9 +65,9 @@ const signUpAction = async (data: SignUpData): Promise<ActionResult> => {
     }
   })
 
-  await signIn('sendgrid-signup', {
+  await signIn(AuthProvider.SendGridSignup, {
     email: data.email,
-    redirectTo: '/email-verified',
+    redirect: false,
   })
 
   return { success: true }

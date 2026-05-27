@@ -2,8 +2,8 @@ import { ErrorTree } from '@/types/layout'
 import { $ZodErrorTree } from 'zod/v4/core'
 
 export const MapErrorTree = (zodError: $ZodErrorTree<Record<string, unknown>>): ErrorTree => {
-  const mapNode = (node: $ZodErrorTree<Record<string, unknown>>): any => {
-    const errorTree: any = {
+  const mapNode = (node: $ZodErrorTree<Record<string, unknown>>): ErrorTree => {
+    const errorTree: ErrorTree = {
       errors: node.errors,
       properties: {}
     }

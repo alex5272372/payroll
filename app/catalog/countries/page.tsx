@@ -70,7 +70,11 @@ const CountriesCatalog = () => {
       {
         title: 'Edit',
         Icon: PencilIcon,
-        onClick: () => { selectedCode && router.push(`/catalog/countries/${selectedCode}`) },
+        onClick: () => {
+          if (selectedCode) {
+            router.push(`/catalog/countries/${selectedCode}`)
+          }
+        },
         permission: CRUD.UPDATE,
         disabled: !selectedCode,
       },

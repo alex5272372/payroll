@@ -1,5 +1,3 @@
-import { HeroIcon } from '@/types'
-
 export enum MenuSection {
   MAIN = 'main',
   USER = 'user',

@@ -5,14 +5,15 @@ import { Field, Input, Label } from '@headlessui/react'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { ButtonGroupState } from '@/types'
 import ModalDialogForm from '@/components/ModalDialog/ModalDialogForm'
+import { AuthProvider } from '@/types/enums'
 
 const ResetPasswordLink = () => {
   const [email, setEmail] = useState('')
 
   const handleSignIn = async () => {
-    await signIn('sendgrid-reset', {
+    await signIn(AuthProvider.SendGridReset, {
       email,
-      redirectTo: '/user/reset-password?email=' + encodeURIComponent(email),
+      redirect: false,
     })
   }
 

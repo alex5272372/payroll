@@ -3,28 +3,22 @@ import { useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Layout from '@/components/Layout'
 import { useLayout } from '@/components/LayoutContext'
+import { AppError } from '@/types/enums'
 
-enum Error {
-  Configuration = 'Configuration',
-  AccessDenied = 'AccessDenied',
-  Verification = 'Verification',
-  Default = 'Default',
-}
-
-const errorMap: Record<Error, { header: string, message: string }> = {
-  [Error.Configuration]: {
+const errorMap: Record<AppError, { header: string, message: string }> = {
+  [AppError.Configuration]: {
     header: 'Configuration Error',
     message: 'There is a problem with the server configuration. Check if your options are correct.',
   },
-  [Error.AccessDenied]: {
+  [AppError.AccessDenied]: {
     header: 'Access Denied',
     message: 'Usually occurs, when you restricted access through the signIn callback, or redirect callback.',
   },
-  [Error.Verification]: {
+  [AppError.Verification]: {
     header: 'Verification Error',
     message: 'Related to the Email provider. The token has expired or has already been used.',
   },
-  [Error.Default]: {
+  [AppError.Default]: {
     header: 'Default Error',
     message: 'Catch all, will apply, if none of the above matched.',
   },
@@ -32,11 +26,11 @@ const errorMap: Record<Error, { header: string, message: string }> = {
 
 const UserError = () => {
   const searchParams = useSearchParams()
-  const error: Error = searchParams.get('error') as Error || Error.Default
+  const error: AppError = searchParams.get('error') as AppError || AppError.Default
   const { showError } = useLayout()
 
   useEffect(() => {
-    const errorInfo = errorMap[error] || errorMap[Error.Default]
+    const errorInfo = errorMap[error] || errorMap[AppError.Default]
     showError({ errors: [errorInfo.header, errorInfo.message] })
   }, [error, showError])
 

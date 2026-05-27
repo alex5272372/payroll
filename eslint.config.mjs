@@ -1,8 +1,10 @@
 import { defineConfig, globalIgnores } from 'eslint/config'
 import nextVitals from 'eslint-config-next/core-web-vitals'
+import typescript from 'eslint-config-next/typescript'
 
 const eslintConfig = defineConfig([
   ...nextVitals,
+  ...typescript,
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
@@ -22,6 +24,14 @@ const eslintConfig = defineConfig([
       'no-tabs': 'error',
       'no-multi-spaces': 'error',
       'no-restricted-imports': ['error', { 'patterns': ['../**/*', './**/*'] }],
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': ['error', {
+        'vars': 'all',
+        'args': 'after-used',
+        'ignoreRestSiblings': true,
+        'varsIgnorePattern': '^_',
+        'argsIgnorePattern': '^_'
+      }],
       'eol-last': 'error',
       'comma-spacing': ['error', { 'before': false, 'after': true }],
       'array-bracket-spacing': ['error', 'never'],

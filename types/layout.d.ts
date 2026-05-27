@@ -1,4 +1,4 @@
-import type { ButtonGroupState, HeroIcon } from '@/types'
+import type { HeroIcon } from '@/types'
 import type { TabState } from '@/types/navigation'
 
 export type ErrorTree = {

@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import { ReactNode, useState } from 'react'
 import { Menu, MenuButton, MenuItems } from '@headlessui/react'
 import { MenuSection } from '@/types/enums/navigation'
 import { navigation } from '@/lib/data/navigation'

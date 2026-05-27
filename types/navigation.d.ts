@@ -1,5 +1,4 @@
 import type { HeroIcon } from '@/types'
-import type { DialogState } from '@/types/layout'
 import type { MenuItemPath, MenuItemType, MenuSection } from '@/types/enums/navigation'
 import type { UserRole } from '@/types/enums/roleMatrix'
 import { TabActionType } from '@/types/enums/navigation'
@@ -7,7 +6,7 @@ import { TabActionType } from '@/types/enums/navigation'
 export type NavMenuItem = {
   type: MenuItemType;
   path: MenuItemPath;
-  component?: React.ComponentType<{}>;
+  component?: React.ComponentType<object>;
   section: MenuSection;
   name: string;
   icon: HeroIcon;

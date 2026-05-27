@@ -9,6 +9,7 @@ import crypto from 'crypto'
 import prisma from '@/lib/prisma'
 import { sendVerificationRequest } from '@/lib/authSendRequest'
 import { UserRole } from '@/types/enums/roleMatrix'
+import { AuthProvider } from '@/types/enums'
 
 const CustomPrismaAdapter = (prismaClient: typeof prisma): Adapter => {
   const prismaAdapter: Adapter = PrismaAdapter(prismaClient)
@@ -35,13 +36,6 @@ const adapter = CustomPrismaAdapter(prisma)
 export const { handlers, signIn, signOut, auth } = NextAuth({
   // debug: process.env.NODE_ENV === 'development',
   adapter,
-  pages: {
-    error: '/user/error',
-    signIn: '/user/sign-in',
-    signOut: '/user/sign-out',
-    newUser: '/user/sign-up',
-    verifyRequest: '/user/verify-request',
-  },
 
   providers: [
     Credentials({
@@ -73,7 +67,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
 
     {
-      id: 'sendgrid-signup',
+      id: AuthProvider.SendGridSignup,
       type: 'email',
       name: 'SendGrid Sign Up',
       maxAge: 24 * 60 * 60,
@@ -85,7 +79,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
 
     {
-      id: 'sendgrid-reset',
+      id: AuthProvider.SendGridReset,
       type: 'email',
       name: 'SendGrid Reset Password',
       maxAge: 24 * 60 * 60,
@@ -99,7 +93,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
   callbacks: {
     jwt: ({ token, account }) => {
-      if (account?.provider === 'credentials') {
+      if (account?.provider === AuthProvider.Credentials) {
         token.credentials = true
       }
       return token

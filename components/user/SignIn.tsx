@@ -1,37 +1,39 @@
 'use client'
-import { useState } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { signIn, useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
+import { signIn, SignInResponse, useSession } from 'next-auth/react'
 import { Field, Input, Label } from '@headlessui/react'
 import { ArrowRightEndOnRectangleIcon } from '@heroicons/react/24/outline'
 import { ButtonGroupState } from '@/types'
 import PasswordField from '@/components/inputs/PasswordField'
 import { useLayout } from '@/components/LayoutContext'
 import ModalDialogForm from '@/components/ModalDialog/ModalDialogForm'
+import { AuthProvider } from '@/types/enums'
 
 const SignIn = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const { showError } = useLayout()
+  const { showError, hideDialog } = useLayout()
 
-  const searchParams = useSearchParams()
   const { data: session } = useSession()
 
-  if (session) {
-    showError({ errors: ['You are already signed in.'] })
-  }
-
-  const error = searchParams.get('error')
-  if (error) {
-    showError({ errors: ['Invalid email or password. Please try again.'] })
-  }
+  useEffect(() => {
+    if (session) {
+      showError({ errors: ['You are already signed in.'] })
+    }
+  }, [session, showError])
 
   const handleSignIn = async () => {
-    await signIn('credentials', {
+    const result: SignInResponse = await signIn(AuthProvider.Credentials, {
       email,
       password,
-      redirectTo: '/',
+      redirect: false,
     })
+
+    if (result?.ok) {
+      hideDialog()
+    } else {
+      showError({ errors: [result?.error || 'An unknown error occurred.'] })
+    }
   }
 
   const buttonGroup: ButtonGroupState = {

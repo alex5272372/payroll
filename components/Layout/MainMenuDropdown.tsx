@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { Menu, MenuButton, MenuItems } from '@headlessui/react'
 import type { NavMenuItem } from '@/types/navigation'
 import { navigation } from '@/lib/data/navigation'

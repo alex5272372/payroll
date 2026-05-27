@@ -6,7 +6,7 @@ import ModalDialogButtons from '@/components/ModalDialog/ModalDialogButtons'
 
 const SignOut = () => {
   const handleSignOut = async () => {
-    await signOut({ redirectTo: '/' })
+    await signOut({ redirect: false })
   }
 
   const buttonGroup: ButtonGroupState = {

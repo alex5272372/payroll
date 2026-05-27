@@ -1,4 +1,3 @@
-import type { $ZodErrorTree } from 'zod/v4/core'
 import type { CRUD, UserRole } from '@/types/enums/roleMatrix'
 import { ErrorTree } from '@/types/layout'
 
