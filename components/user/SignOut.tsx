@@ -3,10 +3,14 @@ import { signOut } from 'next-auth/react'
 import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/outline'
 import { ButtonGroupState } from '@/types'
 import ModalDialogButtons from '@/components/ModalDialog/ModalDialogButtons'
+import { useLayout } from '@/components/LayoutContext'
 
 const SignOut = () => {
+  const { hideDialog } = useLayout()
+
   const handleSignOut = async () => {
     await signOut({ redirect: false })
+    hideDialog()
   }
 
   const buttonGroup: ButtonGroupState = {

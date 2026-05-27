@@ -43,6 +43,9 @@ const roleTabReducer = (state: RoleTabState, action: TabAction): RoleTabState =>
           }
         }
       }
+      if (newState.redirectTo) {
+        delete newState.redirectTo
+      }
       break
     }
 
@@ -67,8 +70,17 @@ const roleTabReducer = (state: RoleTabState, action: TabAction): RoleTabState =>
     }
 
     case TabActionType.SET_ACTIVE_ROLE: {
-      newState.activeRole = action.role
-      if (!state[action.role]) newState[action.role] = { tabs: [] }
+      if (newState.activeRole !== action.role) {
+        newState.activeRole = action.role
+
+        if (!state[action.role]) {
+          newState[action.role] = { tabs: [] }
+        }
+
+        if (state[action.role]?.activeTab !== undefined) {
+          newState.redirectTo = state[action.role]?.tabs?.[state[action.role]?.activeTab ?? 0]?.menuPath
+        }
+      }
       break
     }
 
@@ -107,6 +119,12 @@ export const LayoutProvider = ({ children }: { children: ReactNode }) => {
 
     dispatch({ type: TabActionType.SET_ACTIVE_ROLE, role })
   }, [session])
+
+  useEffect(() => {
+    if (roleTabState.redirectTo) {
+      router.push(roleTabState.redirectTo)
+    }
+  }, [roleTabState.redirectTo, router])
 
   useEffect(() => {
     dispatch({ type: TabActionType.INIT_TAB, pathname: pathname as MenuItemPath })

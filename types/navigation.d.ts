@@ -25,6 +25,7 @@ export type TabState = {
 
 export type RoleTabState = Partial<Record<UserRole, TabState>> & {
   activeRole?: UserRole;
+  redirectTo?: string;
 }
 
 export type TabAction =
