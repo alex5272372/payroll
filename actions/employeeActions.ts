@@ -1,28 +1,16 @@
 'use server'
 import prisma from '@/lib/prisma'
-import { Prisma } from '@prisma/client'
 import { ActionResult } from '@/types'
-import { auth } from '@/lib/auth'
-import { CRUD, UserRole } from '@/types/enums/roleMatrix'
-import { roleMatrix } from '@/data/roleMatrix'
+import { CRUD } from '@/types/enums/roleMatrix'
 import { MenuItemPath } from '@/types/enums/layout'
+import { authorize } from '@/lib'
+import { EmployeeResponse } from '@/types/models/employeeModels'
 
-export type EmployeeWithPersonAndDepartment = Prisma.EmployeeGetPayload<{
-  include: {
-    person: { select: { firstName: boolean, lastName: boolean }},
-    department: { select: { name: boolean }}
-  }
-}>
+const getAllEmployees = async (): Promise<ActionResult<EmployeeResponse[]>> => {
+  const guard = await authorize(MenuItemPath.EMPLOYEES, CRUD.READ)
+  if (guard) return guard
 
-const getAllEmployees = async (): Promise<ActionResult<EmployeeWithPersonAndDepartment[]>> => {
-  const session = await auth()
-  if (!session || !session.roles) {
-    return { success: false, errorTree: { errors: ['Unauthorized'] }}
-  } else if (!session.roles.some((role: UserRole) => !!roleMatrix[MenuItemPath.EMPLOYEES]?.[role]?.[CRUD.READ])) {
-    return { success: false, errorTree: { errors: ['Forbidden'] }}
-  }
-
-  const employees: EmployeeWithPersonAndDepartment[] = await prisma.employee.findMany({
+  const employees = await prisma.employee.findMany({
     include: {
       person: { select: { firstName: true, lastName: true }},
       department: { select: { name: true }}
@@ -31,7 +19,14 @@ const getAllEmployees = async (): Promise<ActionResult<EmployeeWithPersonAndDepa
 
   return {
     success: true,
-    value: employees,
+    value: employees.map(e => ({
+      id: e.id,
+      departmentId: e.departmentId,
+      personId: e.personId,
+      firstName: e.person.firstName,
+      lastName: e.person.lastName,
+      departmentName: e.department.name,
+    })),
   }
 }
 

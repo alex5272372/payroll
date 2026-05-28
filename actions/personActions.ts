@@ -1,25 +1,27 @@
 'use server'
 import prisma from '@/lib/prisma'
-import { Person } from '@prisma/client'
 import { ActionResult } from '@/types'
-import { auth } from '@/lib/auth'
-import { CRUD, UserRole } from '@/types/enums/roleMatrix'
-import { roleMatrix } from '@/data/roleMatrix'
+import { CRUD } from '@/types/enums/roleMatrix'
 import { MenuItemPath } from '@/types/enums/layout'
+import { authorize } from '@/lib'
+import { PersonResponse } from '@/types/models/personModels'
 
-const getAllPeople = async (): Promise<ActionResult<Person[]>> => {
-  const session = await auth()
-  if (!session || !session.roles) {
-    return { success: false, errorTree: { errors: ['Unauthorized'] }}
-  } else if (!session.roles.some((role: UserRole) => !!roleMatrix[MenuItemPath.PEOPLE]?.[role]?.[CRUD.READ])) {
-    return { success: false, errorTree: { errors: ['Forbidden'] }}
-  }
+const getAllPeople = async (): Promise<ActionResult<PersonResponse[]>> => {
+  const guard = await authorize(MenuItemPath.PEOPLE, CRUD.READ)
+  if (guard) return guard
 
-  const people: Person[] = await prisma.person.findMany()
+  const people = await prisma.person.findMany()
 
   return {
     success: true,
-    value: people,
+    value: people.map(p => ({
+      id: p.id,
+      firstName: p.firstName,
+      lastName: p.lastName,
+      middleName: p.middleName,
+      gender: p.gender,
+      birthdate: p.birthdate,
+    })),
   }
 }
 

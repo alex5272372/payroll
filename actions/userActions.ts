@@ -1,36 +1,21 @@
 'use server'
 import prisma from '@/lib/prisma'
-import { auth, signIn } from '@/lib/auth'
+import { signIn } from '@/lib/auth'
 import bcrypt from 'bcryptjs'
 import { ActionResult, SignUpData } from '@/types'
-import { Prisma } from '@prisma/client'
-import { CRUD, UserRole } from '@/types/enums/roleMatrix'
-import { roleMatrix } from '@/data/roleMatrix'
+import { CRUD } from '@/types/enums/roleMatrix'
 import { MenuItemPath } from '@/types/enums/layout'
+import { authorize } from '@/lib'
 import { AuthProvider } from '@/types/enums'
+import { UserResponse } from '@/types/models/userModels'
 
 const crypt = (pass: string) => bcrypt.hashSync(pass, bcrypt.genSaltSync(10))
 
-export type UserWithPerson = Prisma.UserGetPayload<{
-  select: {
-    id: boolean,
-    email: boolean,
-    personId: boolean,
-    person: { select: { firstName: boolean, lastName: boolean }}
-    emailVerified: boolean,
-    userRoles: { select: { role: boolean }},
-  }
-}>
+const getAllUsers = async (): Promise<ActionResult<UserResponse[]>> => {
+  const guard = await authorize(MenuItemPath.USERS, CRUD.READ)
+  if (guard) return guard
 
-const getAllUsers = async (): Promise<ActionResult<UserWithPerson[]>> => {
-  const session = await auth()
-  if (!session || !session.roles) {
-    return { success: false, errorTree: { errors: ['Unauthorized'] }}
-  } else if (!session.roles.some((role: UserRole) => !!roleMatrix[MenuItemPath.USERS]?.[role]?.[CRUD.READ])) {
-    return { success: false, errorTree: { errors: ['Forbidden'] }}
-  }
-
-  const users: UserWithPerson[] = await prisma.user.findMany({
+  const users = await prisma.user.findMany({
     select: {
       id: true,
       email: true,
@@ -43,7 +28,15 @@ const getAllUsers = async (): Promise<ActionResult<UserWithPerson[]>> => {
 
   return {
     success: true,
-    value: users,
+    value: users.map(u => ({
+      id: u.id,
+      email: u.email,
+      personId: u.personId,
+      emailVerified: u.emailVerified,
+      firstName: u.person.firstName,
+      lastName: u.person.lastName,
+      roles: u.userRoles.map(ur => ur.role),
+    })),
   }
 }
 

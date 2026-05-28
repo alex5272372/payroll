@@ -1,10 +1,11 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { UserWithPerson, getAllUsers } from '@/actions/userActions'
+import { getAllUsers } from '@/actions/userActions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import DataTable from '@/components/dataDisplay/DataTable'
 import { ActionResult, ButtonGroupState, TableData } from '@/types'
+import { UserResponse } from '@/types/models/userModels'
 import { MenuItemPath } from '@/types/enums/layout'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { CRUD } from '@/types/enums/roleMatrix'
@@ -34,7 +35,7 @@ const UsersCatalog = () => {
   const { showError } = useLayout()
 
   useEffect(() => {
-    getAllUsers().then((users: ActionResult<UserWithPerson[]>) => {
+    getAllUsers().then((users: ActionResult<UserResponse[]>) => {
       if (!users.success) {
         showError(users.errorTree)
         return
@@ -42,12 +43,12 @@ const UsersCatalog = () => {
 
       setTableData((prev: TableData) => ({
         ...prev,
-        rows: users.value?.map((user: UserWithPerson) => ({ cells: [
+        rows: users.value?.map((user: UserResponse) => ({ cells: [
           String(user.id),
           user.email,
-          `${user.person.firstName} ${user.person.lastName} (${user.personId})`,
+          `${user.firstName} ${user.lastName} (${user.personId})`,
           user.emailVerified?.toISOString() || '',
-          user.userRoles.map(userRole => userRole.role).join(', '),
+          user.roles.join(', '),
         ] })) || []
       }))
     })

@@ -1,25 +1,20 @@
 'use server'
 import prisma from '@/lib/prisma'
-import { Company } from '@prisma/client'
 import { ActionResult } from '@/types'
-import { auth } from '@/lib/auth'
-import { CRUD, UserRole } from '@/types/enums/roleMatrix'
-import { roleMatrix } from '@/data/roleMatrix'
+import { CRUD } from '@/types/enums/roleMatrix'
 import { MenuItemPath } from '@/types/enums/layout'
+import { authorize } from '@/lib'
+import { CompanyResponse } from '@/types/models/companyModels'
 
-const getAllCompanies = async (): Promise<ActionResult<Company[]>> => {
-  const session = await auth()
-  if (!session || !session.roles) {
-    return { success: false, errorTree: { errors: ['Unauthorized'] }}
-  } else if (!session.roles.some((role: UserRole) => !!roleMatrix[MenuItemPath.COMPANIES]?.[role]?.[CRUD.READ])) {
-    return { success: false, errorTree: { errors: ['Forbidden'] }}
-  }
+const getAllCompanies = async (): Promise<ActionResult<CompanyResponse[]>> => {
+  const guard = await authorize(MenuItemPath.COMPANIES, CRUD.READ)
+  if (guard) return guard
 
-  const companies: Company[] = await prisma.company.findMany()
+  const companies = await prisma.company.findMany()
 
   return {
     success: true,
-    value: companies,
+    value: companies.map(c => ({ id: c.id, name: c.name, countryCode: c.countryCode })),
   }
 }
 

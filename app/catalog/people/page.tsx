@@ -5,7 +5,7 @@ import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import DataTable from '@/components/dataDisplay/DataTable'
 import { ActionResult, ButtonGroupState, TableData } from '@/types'
-import { Person } from '@prisma/client'
+import { PersonResponse } from '@/types/models/personModels'
 import { MenuItemPath } from '@/types/enums/layout'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { CRUD } from '@/types/enums/roleMatrix'
@@ -36,7 +36,7 @@ const PeopleCatalog = () => {
   const { showError } = useLayout()
 
   useEffect(() => {
-    getAllPeople().then((people: ActionResult<Person[]>) => {
+    getAllPeople().then((people: ActionResult<PersonResponse[]>) => {
       if (!people.success) {
         showError(people.errorTree)
         return
@@ -44,7 +44,7 @@ const PeopleCatalog = () => {
 
       setTableData((prev: TableData) => ({
         ...prev,
-        rows: people.value?.map((person: Person) => ({ cells: [
+        rows: people.value?.map((person: PersonResponse) => ({ cells: [
           String(person.id),
           person.firstName,
           person.lastName,

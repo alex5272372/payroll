@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { Company } from '@prisma/client'
 import { getAllCompanies } from '@/actions/companyActions'
 import Layout from '@/components/Layout'
 import DataTable from '@/components/dataDisplay/DataTable'
@@ -10,6 +9,7 @@ import { MenuItemPath } from '@/types/enums/layout'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { CRUD } from '@/types/enums/roleMatrix'
 import { useLayout } from '@/components/LayoutContext'
+import { CompanyResponse } from '@/types/models/companyModels'
 
 const buttonGroup: ButtonGroupState = {
   buttons: [
@@ -33,7 +33,7 @@ const CompaniesCatalog = () => {
   const { showError } = useLayout()
 
   useEffect(() => {
-    getAllCompanies().then((companies: ActionResult<Company[]>) => {
+    getAllCompanies().then((companies: ActionResult<CompanyResponse[]>) => {
       if (!companies.success) {
         showError(companies.errorTree)
         return
@@ -41,7 +41,7 @@ const CompaniesCatalog = () => {
 
       setTableData((prev: TableData) => ({
         ...prev,
-        rows: companies.value?.map((company: Company) => ({ cells: [
+        rows: companies.value?.map((company: CompanyResponse) => ({ cells: [
           String(company.id),
           company.name, company.countryCode,
         ] })) || []

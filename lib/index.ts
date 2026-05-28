@@ -1,7 +1,21 @@
+import { auth } from '@/lib/auth'
+import { roleMatrix } from '@/data/roleMatrix'
+import { MenuItemPath } from '@/types/enums/layout'
+import { CRUD, UserRole } from '@/types/enums/roleMatrix'
+import { ActionResult } from '@/types'
 import { ErrorTree } from '@/types/layout'
 import { $ZodErrorTree } from 'zod/v4/core'
 
-export const MapErrorTree = (zodError: $ZodErrorTree<Record<string, unknown>>): ErrorTree => {
+export const authorize = async (path: MenuItemPath, crud: CRUD): Promise<ActionResult<never> | null> => {
+  const session = await auth()
+  if (!session?.roles)
+    return { success: false, errorTree: { errors: ['Unauthorized'] }}
+  if (!session.roles.some((role: UserRole) => !!roleMatrix[path]?.[role]?.[crud]))
+    return { success: false, errorTree: { errors: ['Forbidden'] }}
+  return null
+}
+
+export const mapErrorTree = (zodError: $ZodErrorTree<Record<string, unknown>>): ErrorTree => {
   const mapNode = (node: $ZodErrorTree<Record<string, unknown>>): ErrorTree => {
     const errorTree: ErrorTree = {
       errors: node.errors,

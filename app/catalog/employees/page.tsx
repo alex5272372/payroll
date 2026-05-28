@@ -1,10 +1,11 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { EmployeeWithPersonAndDepartment, getAllEmployees } from '@/actions/employeeActions'
+import { getAllEmployees } from '@/actions/employeeActions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import DataTable from '@/components/dataDisplay/DataTable'
 import { ActionResult, ButtonGroupState, TableData } from '@/types'
+import { EmployeeResponse } from '@/types/models/employeeModels'
 import { MenuItemPath } from '@/types/enums/layout'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { CRUD } from '@/types/enums/roleMatrix'
@@ -32,7 +33,7 @@ const EmployeesCatalog = () => {
   const { showError } = useLayout()
 
   useEffect(() => {
-    getAllEmployees().then((employees: ActionResult<EmployeeWithPersonAndDepartment[]>) => {
+    getAllEmployees().then((employees: ActionResult<EmployeeResponse[]>) => {
       if (!employees.success) {
         showError(employees.errorTree)
         return
@@ -40,10 +41,10 @@ const EmployeesCatalog = () => {
 
       setTableData((prev: TableData) => ({
         ...prev,
-        rows: employees.value?.map((employee: EmployeeWithPersonAndDepartment) => ({ cells: [
+        rows: employees.value?.map((employee: EmployeeResponse) => ({ cells: [
           String(employee.id),
-          `${employee.person.firstName} ${employee.person.lastName} (${employee.personId})`,
-          `${employee.department.name} (${employee.departmentId})`,
+          `${employee.firstName} ${employee.lastName} (${employee.personId})`,
+          `${employee.departmentName} (${employee.departmentId})`,
         ] })) || []
       }))
     })

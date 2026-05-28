@@ -1,10 +1,11 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { DepartmentWithCompany, getAllDepartments } from '@/actions/departmentActions'
+import { getAllDepartments } from '@/actions/departmentActions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import DataTable from '@/components/dataDisplay/DataTable'
 import { ActionResult, ButtonGroupState, TableData } from '@/types'
+import { DepartmentResponse } from '@/types/models/departmentModels'
 import { MenuItemPath } from '@/types/enums/layout'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { CRUD } from '@/types/enums/roleMatrix'
@@ -33,7 +34,7 @@ const DepartmentsCatalog = () => {
   const { showError } = useLayout()
 
   useEffect(() => {
-    getAllDepartments().then((departments: ActionResult<DepartmentWithCompany[]>) => {
+    getAllDepartments().then((departments: ActionResult<DepartmentResponse[]>) => {
       if (!departments.success) {
         showError(departments.errorTree)
         return
@@ -41,10 +42,10 @@ const DepartmentsCatalog = () => {
 
       setTableData((prev: TableData) => ({
         ...prev,
-        rows: departments.value?.map((department: DepartmentWithCompany) => ({ cells: [
+        rows: departments.value?.map((department: DepartmentResponse) => ({ cells: [
           String(department.id),
           department.name,
-          `${department.company.name} (${department.companyId})`,
+          `${department.companyName} (${department.companyId})`,
           department.countryCode,
         ] })) || []
       }))

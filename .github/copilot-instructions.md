@@ -42,10 +42,10 @@ import { ActionResult } from '@/types'
 Always guard actions against the role matrix:
 
 ```ts
-const session = await auth()
-if (!session?.roles) return { success: false, errorTree: { errors: ['Unauthorized'] } }
-if (!session.roles.some((role: UserRole) => !!roleMatrix[MenuItemPath.X]?.[role]?.[CRUD.READ]))
-  return { success: false, errorTree: { errors: ['Forbidden'] } }
+import { authorize } from '@/lib'
+
+const guard = await authorize(MenuItemPath.X, CRUD.READ)
+if (guard) return guard
 ```
 
 ### Types
