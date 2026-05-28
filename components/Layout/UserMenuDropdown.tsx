@@ -1,10 +1,10 @@
 import Image from 'next/image'
 import { Menu, MenuButton, MenuItems } from '@headlessui/react'
-import { MenuSection } from '@/types/enums/navigation'
-import { navigation } from '@/lib/data/navigation'
+import { MenuSection } from '@/types/enums/layout'
+import { navigation } from '@/data/navigation'
 import { User } from 'next-auth'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
-import { roleMatrix } from '@/lib/data/roleMatrix'
+import { roleMatrix } from '@/data/roleMatrix'
 import MenuDropdownItem from '@/components/Layout/MenuDropdownItem'
 
 const UserMenuDropdown = ({ user, roles }: { user?: User, roles?: UserRole[] }) => {

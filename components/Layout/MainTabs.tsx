@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import type { NavMenuItem, TabItem } from '@/types/navigation'
-import { navigation } from '@/lib/data/navigation'
+import type { NavMenuItem, TabItem } from '@/types/layout'
+import { navigation } from '@/data/navigation'
 import { useLayout } from '@/components/LayoutContext'
 
 const MainTabs = () => {

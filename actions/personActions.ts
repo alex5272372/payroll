@@ -4,8 +4,8 @@ import { Person } from '@prisma/client'
 import { ActionResult } from '@/types'
 import { auth } from '@/lib/auth'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
-import { roleMatrix } from '@/lib/data/roleMatrix'
-import { MenuItemPath } from '@/types/enums/navigation'
+import { roleMatrix } from '@/data/roleMatrix'
+import { MenuItemPath } from '@/types/enums/layout'
 
 const getAllPeople = async (): Promise<ActionResult<Person[]>> => {
   const session = await auth()

@@ -2,14 +2,14 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
-import { MenuSection } from '@/types/enums/navigation'
-import type { NavMenuItem } from '@/types/navigation'
-import { navigation } from '@/lib/data/navigation'
+import { MenuSection } from '@/types/enums/layout'
+import type { NavMenuItem } from '@/types/layout'
+import { navigation } from '@/data/navigation'
 import MainTabs from '@/components/Layout/MainTabs'
 import MainMenuDropdown from '@/components/Layout/MainMenuDropdown'
 import UserMenuDropdown from '@/components/Layout/UserMenuDropdown'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
-import { roleMatrix } from '@/lib/data/roleMatrix'
+import { roleMatrix } from '@/data/roleMatrix'
 import ModalDialog from '@/components/ModalDialog'
 
 const Layout = ({ children }: { children: React.ReactNode; }) => {

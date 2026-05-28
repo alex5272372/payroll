@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Button, MenuItem } from '@headlessui/react'
-import type { NavMenuItem } from '@/types/navigation'
-import { MenuItemType } from '@/types/enums/navigation'
+import type { NavMenuItem } from '@/types/layout'
+import { MenuItemType } from '@/types/enums/layout'
 import { useLayout } from '@/components/LayoutContext'
 
 const MenuDropdownItem = ({ item }: { item: NavMenuItem }) => {

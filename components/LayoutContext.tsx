@@ -3,9 +3,16 @@ import { createContext, useContext, useEffect, useReducer, useState, ReactNode, 
 import { usePathname, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import type { HeroIcon } from '@/types'
-import type { DialogState, ErrorTree, LayoutContextType } from '@/types/layout'
-import { MenuItemPath, TabActionType } from '@/types/enums/navigation'
-import type { RoleTabState, TabAction, TabItem, TabState } from '@/types/navigation'
+import type {
+  DialogState,
+  ErrorTree,
+  LayoutContextType,
+  RoleTabState,
+  TabAction,
+  TabItem,
+  TabState
+} from '@/types/layout'
+import { MenuItemPath, TabActionType } from '@/types/enums/layout'
 import { UserRole } from '@/types/enums/roleMatrix'
 import { ExclamationTriangleIcon, InformationCircleIcon } from '@heroicons/react/24/outline'
 import ErrorDialog from '@/components/ModalDialog/ErrorDialog'
@@ -136,7 +143,7 @@ export const LayoutProvider = ({ children }: { children: ReactNode }) => {
       || tabState.tabs[index - 1] || undefined
 
     dispatch({ type: TabActionType.CLOSE_TAB, index })
-    router.push(nextTabItem === null ? MenuItemPath.HOME : nextTabItem.menuPath)
+    router.push(nextTabItem?.menuPath ?? MenuItemPath.HOME)
   }, [router, tabState])
 
   const showError = useCallback((errorTree: ErrorTree, closeTab?: boolean) => {

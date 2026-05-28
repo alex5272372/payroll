@@ -2,8 +2,8 @@ import ResetPasswordLink from '@/components/user/ResetPasswordLink'
 import SignIn from '@/components/user/SignIn'
 import SignOut from '@/components/user/SignOut'
 import SignUp from '@/components/user/SignUp'
-import { MenuItemPath, MenuItemType, MenuSection } from '@/types/enums/navigation'
-import type { NavMenuItem } from '@/types/navigation'
+import { MenuItemPath, MenuItemType, MenuSection } from '@/types/enums/layout'
+import type { NavMenuItem } from '@/types/layout'
 import {
   ArrowPathIcon,
   ArrowRightEndOnRectangleIcon,

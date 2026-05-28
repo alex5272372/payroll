@@ -1,4 +1,4 @@
-import { MenuItemPath } from '@/types/enums/navigation'
+import { MenuItemPath } from '@/types/enums/layout'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
 import type { RoleMatrix } from '@/types/roleMatrix'
 

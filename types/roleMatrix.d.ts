@@ -1,4 +1,4 @@
-import { MenuItemPath } from '@/types/enums/navigation'
+import { MenuItemPath } from '@/types/enums/layout'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
 
 export type Permission = {

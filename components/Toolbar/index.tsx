@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { Button } from '@headlessui/react'
-import { MenuItemPath } from '@/types/enums/navigation'
+import { MenuItemPath } from '@/types/enums/layout'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
 import type { Permission } from '@/types/roleMatrix'
-import { roleMatrix } from '@/lib/data/roleMatrix'
+import { roleMatrix } from '@/data/roleMatrix'
 import { ButtonGroupState, ButtonState } from '@/types'
 
 const Toolbar = ({ buttonGroup, menuPath }: { buttonGroup: ButtonGroupState; menuPath: MenuItemPath; }) => {
