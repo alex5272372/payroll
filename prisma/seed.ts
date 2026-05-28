@@ -1,3 +1,5 @@
+import 'dotenv/config'
+import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient } from '@prisma/client'
 import companies from '@/data/prisma/companies'
 import countries from '@/data/prisma/countries'
@@ -6,7 +8,8 @@ import employees from '@/data/prisma/employees'
 import people from '@/data/prisma/people'
 import users from '@/data/prisma/users'
 
-const prisma = new PrismaClient()
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
+const prisma = new PrismaClient({ adapter })
 
 const mapElement = (element: Record<string, unknown>): Record<string, unknown> => {
   const resEl: Record<string, unknown> = {}

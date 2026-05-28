@@ -84,7 +84,9 @@ const roleTabReducer = (state: RoleTabState, action: TabAction): RoleTabState =>
           newState[action.role] = { tabs: [] }
         }
 
-        if (state[action.role]?.activeTab !== undefined) {
+        if (state[action.role]?.activeTab === undefined) {
+          newState.redirectTo = MenuItemPath.HOME
+        } else {
           newState.redirectTo = state[action.role]?.tabs?.[state[action.role]?.activeTab ?? 0]?.menuPath
         }
       }
