@@ -1,12 +1,12 @@
 import 'dotenv/config'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient } from '@prisma/client'
-import companies from '@/data/prisma/companies'
-import countries from '@/data/prisma/countries'
-import departments from '@/data/prisma/departments'
-import employees from '@/data/prisma/employees'
-import people from '@/data/prisma/people'
-import users from '@/data/prisma/users'
+import companies from '@/data/seed/companies'
+import countries from '@/data/seed/countries'
+import departments from '@/data/seed/departments'
+import employees from '@/data/seed/employees'
+import people from '@/data/seed/people'
+import users from '@/data/seed/users'
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
 const prisma = new PrismaClient({ adapter })

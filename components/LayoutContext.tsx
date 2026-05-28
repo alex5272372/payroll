@@ -2,10 +2,9 @@
 import { createContext, useContext, useEffect, useReducer, useState, ReactNode, useCallback } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import type { HeroIcon } from '@/types'
+import type { HeroIcon, ErrorTree } from '@/types'
 import type {
   DialogState,
-  ErrorTree,
   LayoutContextType,
   RoleTabState,
   TabAction,

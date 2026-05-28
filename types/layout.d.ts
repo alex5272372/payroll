@@ -1,15 +1,9 @@
 import type { HeroIcon } from '@/types'
+import type { ErrorTree } from '@/types'
 import type { TabState } from '@/types/navigation'
 import type { MenuItemPath, MenuItemType, MenuSection } from '@/types/enums/layout'
 import type { UserRole } from '@/types/enums/roleMatrix'
 import { TabActionType } from '@/types/enums/layout'
-
-export type ErrorTree = {
-  errors: string[]
-  properties?: {
-    [K in keyof Record<string, ErrorTree>]?: ErrorTree
-  }
-}
 
 export interface DialogState {
   isOpen: boolean

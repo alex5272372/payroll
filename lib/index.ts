@@ -3,7 +3,7 @@ import { roleMatrix } from '@/data/roleMatrix'
 import { MenuItemPath } from '@/types/enums/layout'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
 import { ActionResult } from '@/types'
-import { ErrorTree } from '@/types/layout'
+import { ErrorTree } from '@/types'
 import { $ZodErrorTree } from 'zod/v4/core'
 
 export const authorize = async (path: MenuItemPath, crud: CRUD): Promise<ActionResult<never> | null> => {

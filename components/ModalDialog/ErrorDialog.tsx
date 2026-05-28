@@ -1,6 +1,6 @@
 import { CheckIcon } from '@heroicons/react/24/outline'
 import type { ButtonGroupState } from '@/types'
-import { ErrorTree } from '@/types/layout'
+import { ErrorTree } from '@/types'
 import ModalDialogButtons from '@/components/ModalDialog/ModalDialogButtons'
 import { useLayout } from '@/components/LayoutContext'
 

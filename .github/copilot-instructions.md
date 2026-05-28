@@ -12,7 +12,7 @@ See [README.md](../README.md) for the full specification.
 - `actions/` — all data mutations via Next.js Server Actions (`'use server'`)
 - `components/` — reusable UI components
 - `data/navigation.ts` — navigation tree; `data/roleMatrix.ts` — CRUD permission matrix
-- `data/prisma/` — seed data files per entity
+- `data/seed/` — seed data files per entity
 - `lib/` — singletons: `prisma.ts`, `auth.ts`, `authSendRequest.ts`
 - `types/` — shared TypeScript types and enums
 - `prisma/schema.prisma` — single source of truth for the data model
