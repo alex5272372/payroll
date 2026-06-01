@@ -1,94 +1,86 @@
 # Payroll Platform – Copilot Instructions
-
 ## Project Overview
+Multi-tenant payroll web application built with Next.js 16 App Router, React 19, TypeScript, Prisma 7, PostgreSQL, NextAuth v5, Tailwind CSS 4, Zod 4, and npm.
 
-Multi-tenant payroll web application. Next.js 16 App Router, React 19, TypeScript, Prisma 7 + PostgreSQL, NextAuth v5, Tailwind CSS 4, Zod 4, npm.
-
-See [README.md](../README.md) for the full specification.
+This project also migrates selected functionality from 1C:Enterprise to a modern web application.
+ 
+## Core Rules
+- Preserve business behavior from 1C, not its UI.
+- Prefer explicit domain modeling over generic CRUD.
+- Protect payroll, period-close, and audit-sensitive logic from simplification.
+- Use existing project conventions before introducing new patterns.
+- If source behavior is unclear, state assumptions instead of inventing rules.
 
 ## Architecture
+- `app/` — pages, layouts, route handlers, React Server Components
+- `actions/` — all mutations via Next.js Server Actions
+- `components/` — reusable UI
+- `lib/` — shared helpers and singletons
+- `types/` — shared types and enums
+- `data/roleMatrix.ts` — permission matrix
+- `prisma/schema.prisma` — source of truth for data model
+- `docs/` — business rules, 1C mapping, architecture decisions
 
-- `app/` — pages and API routes (React Server Components)
-- `actions/` — all data mutations via Next.js Server Actions (`'use server'`)
-- `components/` — reusable UI components
-- `data/navigation.ts` — navigation tree; `data/roleMatrix.ts` — CRUD permission matrix
-- `data/seed/` — seed data files per entity
-- `lib/` — singletons: `prisma.ts`, `auth.ts`, `authSendRequest.ts`
-- `types/` — shared TypeScript types and enums
-- `prisma/schema.prisma` — single source of truth for the data model
+## Server Actions
+Every action file must:
+1. Start with `'use server'`
+2. Authenticate with `auth()`
+3. Authorize with `authorize(...)` or `roleMatrix`
+4. Validate input with Zod
+5. Map validation errors with `MapErrorTree`
+6. Use Prisma via `@/lib/prisma`
+7. Return `ActionResult<T>`
 
-## Conventions
+## Permissions
+- Always enforce permissions server-side.
+- Never hardcode roles or CRUD strings.
+- Use enums and `authorize(...)`.
 
-### Server Actions
+## Validation and Types
+- Validate all external input with Zod.
+- Return `ActionResult<T>` from all server actions.
+- Use types and enums from `types/`; avoid `any` and raw strings.
 
-Every action file starts with `'use server'` and follows this pattern:
+## Database
+- Use the Prisma singleton from `@/lib/prisma`.
+- Never instantiate `PrismaClient` directly.
+- Use transactions for multi-step mutations.
+- Preserve tenant isolation in every query.
+- Avoid destructive updates for finalized payroll data.
 
-1. Call `auth()` and check session + roles against `roleMatrix`
-2. Validate input with a Zod schema; map errors via `MapErrorTree` from `@/lib`
-3. Execute Prisma query
-4. Return `ActionResult<T>` — always `{ success: boolean; errorTree?: ErrorTree; value?: T }`
+## 1C Migration Rules
+- Catalogs → reference/master entities
+- Documents → transactional aggregates
+- Registers → explicit history, balances, or movement models
+- Do not copy 1C forms literally into React
+- Preserve status flows, recalculations, and period-sensitive behavior
+- Keep source-to-target traceability when practical
 
-```ts
-'use server'
-import { auth } from '@/lib/auth'
-import { roleMatrix } from '@/data/roleMatrix'
-import { MenuItemPath } from '@/types/enums/layout'
-import { CRUD, UserRole } from '@/types/enums/roleMatrix'
-import { ActionResult } from '@/types'
-```
+## UI Rules
+- Prefer Server Components by default.
+- Use Client Components only when needed.
+- Keep business rules out of UI when possible.
+- Prefer server actions for forms.
 
-### Permissions
+## Review Priorities
+Flag these issues aggressively:
+- cross-tenant data leaks
+- missing authorization
+- missing Zod validation
+- raw string roles/permissions
+- direct `PrismaClient` usage
+- silent business-rule changes
+- destructive changes to closed/finalized payroll periods
 
-Always guard actions against the role matrix:
+## Knowledge Sources
+Prefer repo knowledge in this order:
+1. `docs/`
+2. `README.md`
+3. existing code patterns
 
-```ts
-import { authorize } from '@/lib'
-
-const guard = await authorize(MenuItemPath.X, CRUD.READ)
-if (guard) return guard
-```
-
-### Types
-
-- Use `ActionResult<T>` for all server action return types
-- Request/response models live in `types/models/` as `*Models.d.ts`
-- UI types (`HeroIcon`, `ButtonState`, `ToolbarItem`, etc.) are in `types/index.d.ts`
-- Enums live in `types/enums/`; import them — never use raw strings for roles, paths, or CRUD ops
-
-### Path Aliases
-
-Use `@/` for all internal imports. Never use relative paths that go above the project root.
-
-### Validation
-
-Use Zod schemas in action files. Convert Zod error trees with `MapErrorTree` from `@/lib`:
-
-```ts
-import { z } from 'zod'
-import { MapErrorTree } from '@/lib'
-const result = schema.safeParse(input)
-if (!result.success) return { success: false, errorTree: MapErrorTree(result.error.format()) }
-```
-
-### Database
-
-Use the Prisma client singleton from `@/lib/prisma`. Never instantiate `PrismaClient` directly.
-
-### Roles
-
-Four roles: `ADMINISTRATOR`, `MODERATOR`, `USER`, `UNAUTHORIZED` (from `types/enums/roleMatrix.ts`).
-Check permissions via `roleMatrix[path][role][crud]` — do not hardcode role checks.
-
-## Build & Run
-
-```bash
-npm run dev        # dev server (Turbopack)
-npm run build      # production build
-npm start          # production server
-npm run lint       # ESLint
-
-npx prisma migrate dev    # apply migrations
-npx prisma migrate reset  # reset DB + re-seed
-npx prisma db seed        # seed only
-npx prisma studio         # DB GUI
-```
+## Output Expectations
+For non-trivial changes:
+- explain intent briefly
+- name affected entities
+- state key assumptions
+- keep changes small and composable
