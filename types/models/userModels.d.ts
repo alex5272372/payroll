@@ -9,3 +9,15 @@ export interface UserResponse {
   lastName: string;
   roles: Role[];
 }
+
+export interface UserCreateRequest {
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+}
+
+export interface UserUpdateRequest {
+  email: string;
+  personId: number;
+}

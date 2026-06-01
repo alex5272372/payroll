@@ -7,7 +7,7 @@ import { CRUD } from '@/types/enums/roleMatrix'
 import { MenuItemPath } from '@/types/enums/layout'
 import { authorize, mapErrorTree } from '@/lib'
 import { AuthProvider } from '@/types/enums'
-import { UserResponse } from '@/types/models/userModels'
+import { UserCreateRequest, UserResponse, UserUpdateRequest } from '@/types/models/userModels'
 import { z } from 'zod'
 
 const crypt = (pass: string) => bcrypt.hashSync(pass, bcrypt.genSaltSync(10))
@@ -109,8 +109,92 @@ const resetPasswordAction = async (email: string, password: string): Promise<Act
   return { success: true }
 }
 
+const userUpdateSchema = z.object({
+  email: z.string().email().max(100),
+  personId: z.number().int().positive(),
+})
+
+const getUserById = async (id: number): Promise<ActionResult<UserResponse>> => {
+  const guard = await authorize(MenuItemPath.USERS, CRUD.READ)
+  if (guard) return guard
+
+  const u = await prisma.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      email: true,
+      personId: true,
+      person: { select: { firstName: true, lastName: true }},
+      emailVerified: true,
+      userRoles: { select: { role: true }},
+    },
+  })
+  if (!u) return { success: false, errorTree: { errors: ['User not found'] }}
+
+  return {
+    success: true,
+    value: {
+      id: u.id,
+      email: u.email,
+      personId: u.personId,
+      emailVerified: u.emailVerified,
+      firstName: u.person.firstName,
+      lastName: u.person.lastName,
+      roles: u.userRoles.map(ur => ur.role),
+    },
+  }
+}
+
+const createUserAdmin = async (data: UserCreateRequest): Promise<ActionResult> => {
+  const guard = await authorize(MenuItemPath.USERS, CRUD.CREATE)
+  if (guard) return guard
+
+  const validation = signUpSchema.safeParse(data)
+  if (!validation.success) return { success: false, errorTree: mapErrorTree(z.treeifyError(validation.error)) }
+
+  const existing = await prisma.user.findFirst({ where: { email: data.email }})
+  if (existing) return { success: false, errorTree: { errors: ['User already exists'] }}
+
+  await prisma.user.create({
+    data: {
+      email: data.email,
+      password: crypt(data.password),
+      person: { create: { firstName: data.firstName, lastName: data.lastName }},
+      userRoles: { create: [{ role: 'USER' }] },
+    },
+  })
+
+  return { success: true }
+}
+
+const updateUserAdmin = async (id: number, data: UserUpdateRequest): Promise<ActionResult> => {
+  const guard = await authorize(MenuItemPath.USERS, CRUD.UPDATE)
+  if (guard) return guard
+
+  const validation = userUpdateSchema.safeParse(data)
+  if (!validation.success) return { success: false, errorTree: mapErrorTree(z.treeifyError(validation.error)) }
+
+  await prisma.user.update({ where: { id }, data: { email: data.email, personId: data.personId }})
+
+  return { success: true }
+}
+
+const deleteUser = async (id: number): Promise<ActionResult> => {
+  const guard = await authorize(MenuItemPath.USERS, CRUD.DELETE)
+  if (guard) return guard
+
+  await prisma.user.delete({ where: { id }})
+
+  return { success: true }
+}
+
 export {
   getAllUsers,
+  getUserById,
+  createUserAdmin,
+  updateUserAdmin,
+  deleteUser,
   signUpAction,
-  resetPasswordAction
+  resetPasswordAction,
 }
+

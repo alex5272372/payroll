@@ -56,6 +56,7 @@ export type TableDataColumn = {
 
 export type TableDataRow = {
   cells: string[]
+  id: string
 }
 
 export type TableData = {

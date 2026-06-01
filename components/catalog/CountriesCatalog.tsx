@@ -24,7 +24,7 @@ const CountriesCatalog = ({ countries }: { countries: CountryResponse[] }) => {
 
   const tableData: TableData = {
     columns,
-    rows: countries.map(c => ({ cells: [c.code, c.name] }))
+    rows: countries.map(c => ({ id: c.code, cells: [c.code, c.name] }))
   }
 
   const deleteConfirmed = useCallback(async (codes: string[]): Promise<void> => {
