@@ -1,64 +1,9 @@
-'use client'
-import { useEffect, useState } from 'react'
+import EmployeesCatalog from '@/components/catalog/EmployeesCatalog'
 import { getAllEmployees } from '@/actions/employeeActions'
-import Layout from '@/components/Layout'
-import Toolbar from '@/components/Toolbar'
-import DataTable from '@/components/dataDisplay/DataTable'
-import { ActionResult, ButtonGroupState, TableData } from '@/types'
-import { EmployeeResponse } from '@/types/models/employeeModels'
-import { MenuItemPath } from '@/types/enums/layout'
-import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { CRUD } from '@/types/enums/roleMatrix'
-import { useLayout } from '@/components/LayoutContext'
 
-const buttonGroup: ButtonGroupState = {
-  buttons: [
-    { title: 'New', Icon: PlusIcon, onClick: () => {}, permission: CRUD.CREATE },
-    { title: 'Edit', Icon: PencilIcon, onClick: () => {}, permission: CRUD.UPDATE },
-    { title: 'Delete', Icon: TrashIcon, onClick: () => {}, permission: CRUD.DELETE },
-  ],
+const EmployeesPage = async () => {
+  const result = await getAllEmployees()
+  return <EmployeesCatalog employees={result.value ?? []} />
 }
 
-const initialData: TableData = {
-  columns: [
-    { header: 'ID', width: 80 },
-    { header: 'Person', width: 300 },
-    { header: 'Department', width: 300 },
-  ],
-  rows: []
-}
-
-const EmployeesCatalog = () => {
-  const [tableData, setTableData] = useState<TableData>(initialData)
-  const { showError } = useLayout()
-
-  useEffect(() => {
-    getAllEmployees().then((employees: ActionResult<EmployeeResponse[]>) => {
-      if (!employees.success) {
-        showError(employees.errorTree)
-        return
-      }
-
-      setTableData((prev: TableData) => ({
-        ...prev,
-        rows: employees.value?.map((employee: EmployeeResponse) => ({ cells: [
-          String(employee.id),
-          `${employee.firstName} ${employee.lastName} (${employee.personId})`,
-          `${employee.departmentName} (${employee.departmentId})`,
-        ] })) || []
-      }))
-    })
-  }, [showError])
-
-  return <Layout>
-    <main>
-      <Toolbar buttonGroup={buttonGroup} menuPath={MenuItemPath.EMPLOYEES} />
-      <DataTable
-        tableData={tableData}
-        setTableData={setTableData}
-      />
-    </main>
-  </Layout>
-}
-
-export default EmployeesCatalog
+export default EmployeesPage

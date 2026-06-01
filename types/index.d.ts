@@ -55,8 +55,7 @@ export type TableDataColumn = {
 }
 
 export type TableDataRow = {
-  cells: string[];
-  selected?: boolean;
+  cells: string[]
 }
 
 export type TableData = {

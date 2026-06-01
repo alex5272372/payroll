@@ -1,29 +1,23 @@
 'use client'
-import { Dispatch, SetStateAction } from 'react'
 import { TableData, TableDataColumn, TableDataRow } from '@/types'
 
 const DataTable = ({
   tableData,
-  setTableData,
-  onRowSelect,
-} : {
+  selectedRows = new Set<string>(),
+  onSelectionChange,
+}: {
   tableData: TableData
-  setTableData: Dispatch<SetStateAction<TableData>>
-  onRowSelect?: (row?: TableDataRow) => void
+  selectedRows?: Set<string>
+  onSelectionChange?: (selected: Set<string>) => void
 }) => {
 
-  const handleRowSelect = (rowIdx: number) => {
-    const previousRow = tableData.rows[rowIdx]
-    const nowSelected = !previousRow?.selected
-
-    setTableData((prev: TableData) => ({
-      ...prev,
-      rows: prev.rows.map((row: TableDataRow, idx: number) =>
-        idx === rowIdx ? { ...row, selected: nowSelected } : { ...row, selected: false }
-      )
-    }))
-
-    onRowSelect?.(nowSelected ? previousRow : undefined)
+  const handleRowSelect = (row: TableDataRow) => {
+    if (!onSelectionChange) return
+    const key = row.cells[0]
+    const next = new Set(selectedRows)
+    if (next.has(key)) next.delete(key)
+    else next.add(key)
+    onSelectionChange(next)
   }
 
   return <table className="m-2">
@@ -39,8 +33,8 @@ const DataTable = ({
       {tableData.rows.map((row: TableDataRow, rowIdx: number) =>
         <tr
           key={rowIdx}
-          onClick={() => handleRowSelect(rowIdx)}
-          className={row.selected ? 'bg-blue-400' : ''}
+          onClick={() => handleRowSelect(row)}
+          className={selectedRows.has(row.cells[0]) ? 'bg-blue-400' : ''}
         >
           {row.cells.map((cell: string, cellIdx: number) =>
             <td key={cellIdx} className="px-2 border">
