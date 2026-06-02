@@ -9,7 +9,9 @@
     "dev": "prisma generate && next dev --turbopack",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "npx eslint ."
+    "lint": "eslint .",
+    "onec:gen": "prisma generate --config=./onec-prisma.config.ts",
+    "onec:push": "prisma db push --config=./onec-prisma.config.ts --force-reset"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.2",

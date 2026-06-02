@@ -78,6 +78,9 @@ Prefer repo knowledge in this order:
 2. `README.md`
 3. existing code patterns
 
+## Skills
+- **1C:Enterprise Migration:** `.github/skills/1c-migration/SKILL.md` — Comprehensive guide for mapping 1C:Enterprise concepts (catalogs, documents, registers, periods) to Next.js/Prisma patterns. Reference when migrating payroll workflows, designing state machines, or establishing historical data models.
+
 ## Output Expectations
 For non-trivial changes:
 - explain intent briefly

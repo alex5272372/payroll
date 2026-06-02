@@ -1,0 +1,184 @@
+generator onecClient {
+  provider = "prisma-client-js"
+  output   = "../node_modules/@prisma/onec-client"
+}
+
+datasource onecDb {
+  provider = "postgresql"
+}
+
+model OnecSourceSnapshot {
+  id             BigInt    @id @default(autoincrement())
+  sourceName     String    @map("source_name") @onecDb.VarChar(255)
+  sourcePath     String    @map("source_path")
+  sourceChecksum String    @map("source_checksum") @onecDb.VarChar(128)
+  parserVersion  String    @map("parser_version") @onecDb.VarChar(64)
+  importedAt     DateTime  @map("imported_at") @default(now()) @onecDb.Timestamptz(6)
+  isActive       Boolean   @map("is_active") @default(false)
+  importNote     String?   @map("import_note")
+
+  metadataNodes         OnecMetadataNode[]
+  metadataRelations     OnecMetadataRelation[]
+  objectMatchCandidates OnecObjectMatchCandidate[]
+  objectMatchDecisions  OnecObjectMatchDecision[]
+  migrationTasks        OnecMigrationTask[]
+
+  @@unique([sourceChecksum, parserVersion], map: "source_snapshot_checksum_unique")
+  @@map("source_snapshot")
+}
+
+model OnecMetadataNode {
+  id             BigInt    @id @default(autoincrement())
+  snapshotId     BigInt    @map("snapshot_id")
+  parentId       BigInt?   @map("parent_id")
+  nodeType       String    @map("node_type") @onecDb.VarChar(64)
+  nodeName       String    @map("node_name") @onecDb.VarChar(255)
+  fullPath       String    @map("full_path")
+  sourceObjectId String?   @map("source_object_id") @onecDb.VarChar(255)
+  orderIndex     Int       @map("order_index") @default(0)
+  isDeleted      Boolean   @map("is_deleted") @default(false)
+  createdAt      DateTime  @map("created_at") @default(now()) @onecDb.Timestamptz(6)
+  updatedAt      DateTime  @map("updated_at") @default(now()) @onecDb.Timestamptz(6)
+
+  snapshot             OnecSourceSnapshot         @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+  parent               OnecMetadataNode?          @relation("MetadataNodeTree", fields: [parentId], references: [id], onDelete: Cascade)
+  children             OnecMetadataNode[]         @relation("MetadataNodeTree")
+  objectDetails        OnecMetadataObjectDetail[]
+  relationSources      OnecMetadataRelation[]     @relation("MetadataRelationFrom")
+  relationTargets      OnecMetadataRelation[]     @relation("MetadataRelationTo")
+  matchCandidates      OnecObjectMatchCandidate[]
+  matchDecisions       OnecObjectMatchDecision[]
+  migrationTasks       OnecMigrationTask[]
+
+  @@unique([snapshotId, fullPath], map: "metadata_node_snapshot_path_unique")
+  @@index([snapshotId, parentId], map: "metadata_node_snapshot_parent_idx")
+  @@index([snapshotId, nodeType], map: "metadata_node_snapshot_type_idx")
+  @@index([snapshotId, nodeName], map: "metadata_node_snapshot_name_idx")
+  @@index([snapshotId, sourceObjectId], map: "metadata_node_snapshot_source_id_idx")
+  @@map("metadata_node")
+}
+
+model OnecMetadataObjectDetail {
+  id              BigInt   @id @default(autoincrement())
+  nodeId          BigInt   @map("node_id")
+  detailKey       String   @map("detail_key") @onecDb.VarChar(128)
+  detailValueJson Json     @map("detail_value_json")
+
+  node OnecMetadataNode @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+
+  @@unique([nodeId, detailKey], map: "metadata_object_detail_node_key_unique")
+  @@index([nodeId], map: "metadata_object_detail_node_idx")
+  @@map("metadata_object_detail")
+}
+
+model OnecMetadataRelation {
+  id              BigInt   @id @default(autoincrement())
+  snapshotId      BigInt   @map("snapshot_id")
+  fromNodeId      BigInt   @map("from_node_id")
+  relationType    String   @map("relation_type") @onecDb.VarChar(64)
+  toNodeId        BigInt   @map("to_node_id")
+  relationPayload Json?    @map("relation_payload")
+
+  snapshot OnecSourceSnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+  fromNode OnecMetadataNode   @relation("MetadataRelationFrom", fields: [fromNodeId], references: [id], onDelete: Cascade)
+  toNode   OnecMetadataNode   @relation("MetadataRelationTo", fields: [toNodeId], references: [id], onDelete: Cascade)
+
+  @@unique([snapshotId, fromNodeId, relationType, toNodeId], map: "metadata_relation_unique")
+  @@index([snapshotId], map: "metadata_relation_snapshot_idx")
+  @@index([fromNodeId], map: "metadata_relation_from_idx")
+  @@index([toNodeId], map: "metadata_relation_to_idx")
+  @@map("metadata_relation")
+}
+
+model OnecTargetObject {
+  id              BigInt   @id @default(autoincrement())
+  targetType      String   @map("target_type") @onecDb.VarChar(64)
+  targetName      String   @map("target_name") @onecDb.VarChar(255)
+  targetLocation  String   @map("target_location")
+  targetSignature Json?    @map("target_signature")
+  status          String   @default("ACTIVE") @onecDb.VarChar(32)
+
+  matchCandidates OnecObjectMatchCandidate[]
+  matchDecisions  OnecObjectMatchDecision[]
+  migrationTasks  OnecMigrationTask[]
+
+  @@unique([targetType, targetName, targetLocation], map: "target_object_unique")
+  @@index([targetType, targetName], map: "target_object_type_name_idx")
+  @@map("target_object")
+}
+
+model OnecObjectMatchCandidate {
+  id             BigInt   @id @default(autoincrement())
+  snapshotId     BigInt   @map("snapshot_id")
+  sourceNodeId   BigInt   @map("source_node_id")
+  targetObjectId BigInt   @map("target_object_id")
+  score          Decimal  @onecDb.Decimal(5, 2)
+  reasonJson     Json     @map("reason_json")
+  createdAt      DateTime @map("created_at") @default(now()) @onecDb.Timestamptz(6)
+
+  snapshot     OnecSourceSnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+  sourceNode   OnecMetadataNode   @relation(fields: [sourceNodeId], references: [id], onDelete: Cascade)
+  targetObject OnecTargetObject   @relation(fields: [targetObjectId], references: [id], onDelete: Cascade)
+
+  @@unique([snapshotId, sourceNodeId, targetObjectId], map: "object_match_candidate_unique")
+  @@index([snapshotId, score(sort: Desc)], map: "object_match_candidate_score_idx")
+  @@map("object_match_candidate")
+}
+
+model OnecObjectMatchDecision {
+  id                 BigInt   @id @default(autoincrement())
+  snapshotId         BigInt   @map("snapshot_id")
+  sourceNodeId       BigInt   @map("source_node_id")
+  targetObjectId     BigInt?  @map("target_object_id")
+  decisionStatus     String   @map("decision_status") @onecDb.VarChar(32)
+  decisionNote       String?  @map("decision_note")
+  decidedBy          String   @map("decided_by") @onecDb.VarChar(255)
+  decidedAt          DateTime @map("decided_at") @default(now()) @onecDb.Timestamptz(6)
+  sourceIdentityHash String?  @map("source_identity_hash") @onecDb.VarChar(128)
+
+  snapshot     OnecSourceSnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+  sourceNode   OnecMetadataNode   @relation(fields: [sourceNodeId], references: [id], onDelete: Cascade)
+  targetObject OnecTargetObject?  @relation(fields: [targetObjectId], references: [id], onDelete: SetNull)
+
+  @@unique([snapshotId, sourceNodeId], map: "object_match_decision_unique")
+  @@index([snapshotId, decisionStatus], map: "object_match_decision_status_idx")
+  @@map("object_match_decision")
+}
+
+model OnecMigrationTask {
+  id             BigInt   @id @default(autoincrement())
+  snapshotId     BigInt   @map("snapshot_id")
+  sourceNodeId   BigInt   @map("source_node_id")
+  targetObjectId BigInt?  @map("target_object_id")
+  taskType       String   @map("task_type") @onecDb.VarChar(64)
+  title          String   @onecDb.VarChar(255)
+  detailsJson    Json?    @map("details_json")
+  priority       Int      @default(3) @onecDb.SmallInt
+  status         String   @default("NEW") @onecDb.VarChar(32)
+  owner          String?  @onecDb.VarChar(255)
+  createdAt      DateTime @map("created_at") @default(now()) @onecDb.Timestamptz(6)
+  updatedAt      DateTime @map("updated_at") @default(now()) @onecDb.Timestamptz(6)
+
+  snapshot     OnecSourceSnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+  sourceNode   OnecMetadataNode   @relation(fields: [sourceNodeId], references: [id], onDelete: Cascade)
+  targetObject OnecTargetObject?  @relation(fields: [targetObjectId], references: [id], onDelete: SetNull)
+
+  @@index([status, priority, createdAt], map: "migration_task_status_priority_idx")
+  @@map("migration_task")
+}
+
+model OnecAuditEvent {
+  id          BigInt   @id @default(autoincrement())
+  actor       String   @onecDb.VarChar(255)
+  action      String   @onecDb.VarChar(128)
+  entityType  String   @map("entity_type") @onecDb.VarChar(64)
+  entityId    String   @map("entity_id") @onecDb.VarChar(128)
+  payloadJson Json?    @map("payload_json")
+  createdAt   DateTime @map("created_at") @default(now()) @onecDb.Timestamptz(6)
+
+  @@index([createdAt(sort: Desc)], map: "audit_event_created_at_idx")
+  @@map("audit_event")
+}
+
+
+
