@@ -4,23 +4,23 @@ import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { MenuSection } from '@/types/enums/layout'
 import type { NavMenuItem } from '@/types/layout'
-import { navigation } from '@/data/navigation'
+import { NAVIGATION } from '@/data/navigation'
 import MainTabs from '@/components/Layout/MainTabs'
 import MainMenuDropdown from '@/components/Layout/MainMenuDropdown'
 import UserMenuDropdown from '@/components/Layout/UserMenuDropdown'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
-import { roleMatrix } from '@/data/roleMatrix'
+import { ROLE_MATRIX } from '@/data/roleMatrix'
 import ModalDialog from '@/components/ModalDialog'
 
 const Layout = ({ children }: { children: React.ReactNode; }) => {
   const { data: session } = useSession()
-  const authNavigation = navigation.filter((item: NavMenuItem) => {
+  const authNavigation = NAVIGATION.filter((item: NavMenuItem) => {
     if (item.section !== MenuSection.MAIN || item.parent)
       return false
     else if (session?.roles) {
-      return session.roles.some((value: UserRole) => !!roleMatrix[item.path]?.[value]?.[CRUD.READ])
+      return session.roles.some((value: UserRole) => !!ROLE_MATRIX[item.path]?.[value]?.[CRUD.READ])
     } else {
-      return !!roleMatrix[item.path]?.[UserRole.UNAUTHORIZED]?.[CRUD.READ]
+      return !!ROLE_MATRIX[item.path]?.[UserRole.UNAUTHORIZED]?.[CRUD.READ]
     }
   })
 

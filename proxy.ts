@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
-import { roleMatrix } from '@/data/roleMatrix'
+import { ROLE_MATRIX } from '@/data/roleMatrix'
 import { MenuItemPath } from '@/types/enums/layout'
 
 export const proxy = async (request: NextRequest) => {
@@ -42,7 +42,7 @@ export const proxy = async (request: NextRequest) => {
 
   const path = matched as MenuItemPath | undefined
 
-  if (path && !userRoles.some((role: UserRole) => !!roleMatrix[path]?.[role]?.[CRUD.READ])) {
+  if (path && !userRoles.some((role: UserRole) => !!ROLE_MATRIX[path]?.[role]?.[CRUD.READ])) {
     const errorUrl = new URL('/user/error', request.url)
     errorUrl.searchParams.set('error', 'AccessDenied')
     return NextResponse.redirect(errorUrl)

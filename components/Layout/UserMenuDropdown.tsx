@@ -1,20 +1,20 @@
 import Image from 'next/image'
 import { Menu, MenuButton, MenuItems } from '@headlessui/react'
 import { MenuSection } from '@/types/enums/layout'
-import { navigation } from '@/data/navigation'
+import { NAVIGATION } from '@/data/navigation'
 import { User } from 'next-auth'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
-import { roleMatrix } from '@/data/roleMatrix'
+import { ROLE_MATRIX } from '@/data/roleMatrix'
 import MenuDropdownItem from '@/components/Layout/MenuDropdownItem'
 
 const UserMenuDropdown = ({ user, roles }: { user?: User, roles?: UserRole[] }) => {
-  const authNavigation = navigation.filter(item => {
+  const authNavigation = NAVIGATION.filter(item => {
     if (item.section !== MenuSection.USER)
       return false
     else if (roles) {
-      return roles.some((value: UserRole) => !!roleMatrix[item.path]?.[value]?.[CRUD.READ])
+      return roles.some((value: UserRole) => !!ROLE_MATRIX[item.path]?.[value]?.[CRUD.READ])
     } else {
-      return !!roleMatrix[item.path]?.[UserRole.UNAUTHORIZED]?.[CRUD.READ]
+      return !!ROLE_MATRIX[item.path]?.[UserRole.UNAUTHORIZED]?.[CRUD.READ]
     }
   })
 

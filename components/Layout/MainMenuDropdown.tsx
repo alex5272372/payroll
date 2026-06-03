@@ -1,18 +1,18 @@
 import { Menu, MenuButton, MenuItems } from '@headlessui/react'
 import type { NavMenuItem } from '@/types/layout'
-import { navigation } from '@/data/navigation'
+import { NAVIGATION } from '@/data/navigation'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
-import { roleMatrix } from '@/data/roleMatrix'
+import { ROLE_MATRIX } from '@/data/roleMatrix'
 import MenuDropdownItem from '@/components/Layout/MenuDropdownItem'
 
 const MainMenuDropdown = ({ menuItem, roles }: { menuItem: NavMenuItem, roles?: UserRole[] }) => {
-  const authNavigation = navigation.filter(item => {
+  const authNavigation = NAVIGATION.filter(item => {
     if (item.parent !== menuItem.path)
       return false
     else if (roles) {
-      return roles.some((value: UserRole) => !!roleMatrix[item.path]?.[value]?.[CRUD.READ])
+      return roles.some((value: UserRole) => !!ROLE_MATRIX[item.path]?.[value]?.[CRUD.READ])
     } else {
-      return !!roleMatrix[item.path]?.[UserRole.UNAUTHORIZED]?.[CRUD.READ]
+      return !!ROLE_MATRIX[item.path]?.[UserRole.UNAUTHORIZED]?.[CRUD.READ]
     }
   })
 

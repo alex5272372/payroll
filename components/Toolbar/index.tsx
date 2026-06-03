@@ -4,7 +4,7 @@ import { Button } from '@headlessui/react'
 import { MenuItemPath } from '@/types/enums/layout'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
 import type { Permission } from '@/types/roleMatrix'
-import { roleMatrix } from '@/data/roleMatrix'
+import { ROLE_MATRIX } from '@/data/roleMatrix'
 import { ButtonGroupState, ButtonState } from '@/types'
 
 const Toolbar = ({ buttonGroup, menuPath }: { buttonGroup: ButtonGroupState; menuPath: MenuItemPath; }) => {
@@ -13,7 +13,7 @@ const Toolbar = ({ buttonGroup, menuPath }: { buttonGroup: ButtonGroupState; men
   return <nav className={'flex space-x-2 pt-2 px-2 bg-gray-100'}>
     {buttonGroup.buttons.map((button: ButtonState, index: number) => {
       const disabled = button.disabled || !button.permission || !session?.roles?.some((role: UserRole) =>
-        !!(roleMatrix[menuPath]?.[role] as Permission | undefined)?.[button.permission as CRUD])
+        !!(ROLE_MATRIX[menuPath]?.[role] as Permission | undefined)?.[button.permission as CRUD])
 
       if (button.href) {
         if (disabled) {

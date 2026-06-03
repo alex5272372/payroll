@@ -11,7 +11,7 @@ const allPerms = (v: boolean) => ({
 
 const readOnly = (v = true) => ({ [CRUD.READ]: v })
 
-export const roleMatrix: RoleMatrix = {
+export const ROLE_MATRIX: RoleMatrix = {
   [MenuItemPath.HOME]: {
     [UserRole.ADMINISTRATOR]: readOnly(true),
     [UserRole.MODERATOR]: readOnly(true),

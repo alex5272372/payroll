@@ -44,10 +44,13 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "prisma/seed.ts",
-    "prisma/onec/seed.ts",
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "prisma/onec/**",
+    "types/onec.d.ts",
+    "types/enums/onec.ts",
+    "data/onec.ts"
   ]
 }

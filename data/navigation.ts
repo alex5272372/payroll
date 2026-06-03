@@ -21,7 +21,7 @@ import {
   ViewColumnsIcon,
 } from '@heroicons/react/24/outline'
 
-export const navigation: NavMenuItem[] = [
+export const NAVIGATION: NavMenuItem[] = [
   {
     type: MenuItemType.PATH,
     path: MenuItemPath.CALENDAR,

@@ -1,5 +1,5 @@
 import { auth } from '@/lib/auth'
-import { roleMatrix } from '@/data/roleMatrix'
+import { ROLE_MATRIX } from '@/data/roleMatrix'
 import { MenuItemPath } from '@/types/enums/layout'
 import { CRUD, UserRole } from '@/types/enums/roleMatrix'
 import { ActionResult } from '@/types'
@@ -10,7 +10,7 @@ export const authorize = async (path: MenuItemPath, crud: CRUD): Promise<ActionR
   const session = await auth()
   if (!session?.roles)
     return { success: false, errorTree: { errors: ['Unauthorized'] }}
-  if (!session.roles.some((role: UserRole) => !!roleMatrix[path]?.[role]?.[crud]))
+  if (!session.roles.some((role: UserRole) => !!ROLE_MATRIX[path]?.[role]?.[crud]))
     return { success: false, errorTree: { errors: ['Forbidden'] }}
   return null
 }

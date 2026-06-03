@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import type { NavMenuItem, TabItem } from '@/types/layout'
-import { navigation } from '@/data/navigation'
+import { NAVIGATION } from '@/data/navigation'
 import { useLayout } from '@/components/LayoutContext'
 
 const MainTabs = () => {
@@ -13,7 +13,7 @@ const MainTabs = () => {
   }
 
   const mapTabs = (tab: TabItem, index: number) => {
-    const menuItem: NavMenuItem | undefined = navigation.find((item: NavMenuItem) => tab.menuPath === item.path)
+    const menuItem: NavMenuItem | undefined = NAVIGATION.find((item: NavMenuItem) => tab.menuPath === item.path)
 
     return <div
       key={index}
