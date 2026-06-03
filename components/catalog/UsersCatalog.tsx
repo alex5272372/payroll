@@ -1,7 +1,7 @@
 'use client'
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { deleteUser } from '@/actions/userActions'
+import { deleteUser } from '@/app/catalog/users/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import DataTable from '@/components/dataDisplay/DataTable'

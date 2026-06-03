@@ -1,7 +1,7 @@
 'use client'
 import { useCallback, useEffect, useState } from 'react'
 import { PencilIcon } from '@heroicons/react/24/outline'
-import { getCountryByCode, updateCountry } from '@/actions/countryActions'
+import { getCountryByCode, updateCountry } from '@/app/catalog/countries/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'

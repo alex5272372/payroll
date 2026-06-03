@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { PlusIcon } from '@heroicons/react/24/outline'
-import { createUserAdmin } from '@/actions/userActions'
+import { createUserAdmin } from '@/app/catalog/users/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'

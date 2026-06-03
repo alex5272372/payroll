@@ -1,5 +1,5 @@
 import UsersCatalog from '@/components/catalog/UsersCatalog'
-import { getAllUsers } from '@/actions/userActions'
+import { getAllUsers } from '@/app/catalog/users/actions'
 
 const UsersPage = async () => {
   const result = await getAllUsers()

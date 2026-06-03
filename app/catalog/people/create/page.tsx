@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { PlusIcon } from '@heroicons/react/24/outline'
-import { createPerson } from '@/actions/personActions'
+import { createPerson } from '@/app/catalog/people/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'

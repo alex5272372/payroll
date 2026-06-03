@@ -1,7 +1,7 @@
 'use client'
 import { useCallback, useEffect, useState } from 'react'
 import { PencilIcon } from '@heroicons/react/24/outline'
-import { getPersonById, updatePerson } from '@/actions/personActions'
+import { getPersonById, updatePerson } from '@/app/catalog/people/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'

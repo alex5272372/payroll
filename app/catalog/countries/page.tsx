@@ -1,5 +1,5 @@
 import CountriesCatalog from '@/components/catalog/CountriesCatalog'
-import { getAllCountries } from '@/actions/countryActions'
+import { getAllCountries } from '@/app/catalog/countries/actions'
 
 const CountriesPage = async () => {
   const result = await getAllCountries()

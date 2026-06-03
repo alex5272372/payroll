@@ -1,5 +1,5 @@
 import CompaniesCatalog from '@/components/catalog/CompaniesCatalog'
-import { getAllCompanies } from '@/actions/companyActions'
+import { getAllCompanies } from '@/app/catalog/companies/actions'
 
 const CompaniesPage = async () => {
   const result = await getAllCompanies()
