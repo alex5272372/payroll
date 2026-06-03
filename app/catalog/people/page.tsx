@@ -1,9 +1,9 @@
 import PeopleCatalog from '@/components/catalog/PeopleCatalog'
-import { getAllPeople } from '@/app/catalog/people/actions'
+import { getCachedAllPeople } from '@/app/catalog/people/data'
 
 const PeoplePage = async () => {
-  const result = await getAllPeople()
-  return <PeopleCatalog people={result.value ?? []} />
+  const people = await getCachedAllPeople()
+  return <PeopleCatalog people={people} />
 }
 
 export default PeoplePage

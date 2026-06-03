@@ -1,9 +1,9 @@
 import CountriesCatalog from '@/components/catalog/CountriesCatalog'
-import { getAllCountries } from '@/app/catalog/countries/actions'
+import { getCachedAllCountries } from '@/app/catalog/countries/data'
 
 const CountriesPage = async () => {
-  const result = await getAllCountries()
-  return <CountriesCatalog countries={result.value ?? []} />
+  const countries = await getCachedAllCountries()
+  return <CountriesCatalog countries={countries} />
 }
 
 export default CountriesPage

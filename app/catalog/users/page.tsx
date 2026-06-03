@@ -1,9 +1,9 @@
 import UsersCatalog from '@/components/catalog/UsersCatalog'
-import { getAllUsers } from '@/app/catalog/users/actions'
+import { getCachedAllUsers } from '@/app/catalog/users/data'
 
 const UsersPage = async () => {
-  const result = await getAllUsers()
-  return <UsersCatalog users={result.value ?? []} />
+  const users = await getCachedAllUsers()
+  return <UsersCatalog users={users} />
 }
 
 export default UsersPage

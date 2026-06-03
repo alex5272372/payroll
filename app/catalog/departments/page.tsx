@@ -1,9 +1,9 @@
 import DepartmentsCatalog from '@/components/catalog/DepartmentsCatalog'
-import { getAllDepartments } from '@/app/catalog/departments/actions'
+import { getCachedAllDepartments } from '@/app/catalog/departments/data'
 
 const DepartmentsPage = async () => {
-  const result = await getAllDepartments()
-  return <DepartmentsCatalog departments={result.value ?? []} />
+  const departments = await getCachedAllDepartments()
+  return <DepartmentsCatalog departments={departments} />
 }
 
 export default DepartmentsPage

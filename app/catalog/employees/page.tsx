@@ -1,9 +1,9 @@
 import EmployeesCatalog from '@/components/catalog/EmployeesCatalog'
-import { getAllEmployees } from '@/app/catalog/employees/actions'
+import { getCachedAllEmployees } from '@/app/catalog/employees/data'
 
 const EmployeesPage = async () => {
-  const result = await getAllEmployees()
-  return <EmployeesCatalog employees={result.value ?? []} />
+  const employees = await getCachedAllEmployees()
+  return <EmployeesCatalog employees={employees} />
 }
 
 export default EmployeesPage
