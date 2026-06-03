@@ -1,3 +1,4 @@
+'use client'
 import CalendarDay from '@/components/calendar/CalendarDay'
 import Layout from '@/components/Layout'
 
