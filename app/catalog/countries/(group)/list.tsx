@@ -17,7 +17,7 @@ const columns = [
   { header: 'Name', width: 400 },
 ]
 
-const CountriesCatalog = ({ countries }: { countries: CountryResponse[] }) => {
+const CountriesList = ({ countries }: { countries: CountryResponse[] }) => {
   const [selectedCodes, setSelectedCodes] = useState<Set<string>>(new Set())
   const router = useRouter()
   const { showError, showOk, showOkCancel, hideDialog } = useLayout()
@@ -87,4 +87,4 @@ const CountriesCatalog = ({ countries }: { countries: CountryResponse[] }) => {
   </Layout>
 }
 
-export default CountriesCatalog
+export default CountriesList

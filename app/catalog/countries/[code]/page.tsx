@@ -1,17 +1,17 @@
-import { getCachedCountryByCode } from '@/app/catalog/countries/data'
 import CountryForm from '@/app/catalog/countries/[code]/form'
 import { notFound } from 'next/navigation'
+import { getCountryByCode } from '@/app/catalog/countries/manager'
 
 const CountryUpdatePage = async ({ params }: { params: Promise<{ code: string }> }) => {
   const { code } = await params
 
-  const country = await getCachedCountryByCode(code)
+  const country = await getCountryByCode(code)
 
-  if (!country) {
+  if (country) {
+    return <CountryForm country={country} />
+  } else {
     notFound()
   }
-
-  return <CountryForm country={country} />
 }
 
 export default CountryUpdatePage

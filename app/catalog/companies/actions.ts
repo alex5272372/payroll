@@ -4,35 +4,13 @@ import { ActionResult } from '@/types'
 import { CRUD } from '@/types/enums/roleMatrix'
 import { MenuItemPath } from '@/types/enums/layout'
 import { authorize, mapErrorTree } from '@/lib'
-import { CompanyRequest, CompanyResponse } from '@/types/models/companyModels'
+import { CompanyRequest } from '@/types/models/companyModels'
 import { z } from 'zod'
 
 const companySchema = z.object({
   name: z.string().min(1).max(120),
   countryCode: z.string().length(2),
 })
-
-const getAllCompanies = async (): Promise<ActionResult<CompanyResponse[]>> => {
-  const guard = await authorize(MenuItemPath.COMPANIES, CRUD.READ)
-  if (guard) return guard
-
-  const companies = await prisma.company.findMany()
-
-  return {
-    success: true,
-    value: companies.map(c => ({ id: c.id, name: c.name, countryCode: c.countryCode })),
-  }
-}
-
-const getCompanyById = async (id: number): Promise<ActionResult<CompanyResponse>> => {
-  const guard = await authorize(MenuItemPath.COMPANIES, CRUD.READ)
-  if (guard) return guard
-
-  const company = await prisma.company.findUnique({ where: { id }})
-  if (!company) return { success: false, errorTree: { errors: ['Company not found'] }}
-
-  return { success: true, value: { id: company.id, name: company.name, countryCode: company.countryCode }}
-}
 
 const createCompany = async (company: CompanyRequest): Promise<ActionResult> => {
   const guard = await authorize(MenuItemPath.COMPANIES, CRUD.CREATE)
@@ -72,8 +50,6 @@ const deleteCompany = async (id: number): Promise<ActionResult> => {
 }
 
 export {
-  getAllCompanies,
-  getCompanyById,
   createCompany,
   updateCompany,
   deleteCompany,

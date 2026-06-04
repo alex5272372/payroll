@@ -1,6 +1,8 @@
-import { getCachedEmployeeById, getCachedAllDepartments, getCachedAllPeople } from '@/app/catalog/employees/data'
 import EmployeeForm from '@/app/catalog/employees/[id]/form'
 import { notFound } from 'next/navigation'
+import { getEmployeeById } from '@/app/catalog/employees/manager'
+import { getAllPeople } from '@/app/catalog/people/manager'
+import { getAllDepartments } from '@/app/catalog/departments/manager'
 
 const EmployeeUpdatePage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params
@@ -11,9 +13,9 @@ const EmployeeUpdatePage = async ({ params }: { params: Promise<{ id: string }> 
   }
 
   const [employee, departments, people] = await Promise.all([
-    getCachedEmployeeById(employeeId),
-    getCachedAllDepartments(),
-    getCachedAllPeople(),
+    getEmployeeById(employeeId),
+    getAllDepartments(),
+    getAllPeople(),
   ])
 
   if (!employee) {

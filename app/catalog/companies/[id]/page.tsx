@@ -1,5 +1,5 @@
-import { getCachedCompanyById } from '@/app/catalog/companies/data'
-import { getCachedAllCountries } from '@/app/catalog/countries/data'
+import { getCompanyById } from '@/app/catalog/companies/manager'
+import { getAllCountries } from '@/app/catalog/countries/manager'
 import CompanyForm from '@/app/catalog/companies/[id]/form'
 import { notFound } from 'next/navigation'
 
@@ -12,15 +12,15 @@ const CompanyUpdatePage = async ({ params }: { params: Promise<{ id: string }> }
   }
 
   const [company, countries] = await Promise.all([
-    getCachedCompanyById(companyId),
-    getCachedAllCountries(),
+    getCompanyById(companyId),
+    getAllCountries(),
   ])
 
-  if (!company) {
+  if (company) {
+    return <CompanyForm company={company} countries={countries} />
+  } else {
     notFound()
   }
-
-  return <CompanyForm company={company} countries={countries} />
 }
 
 export default CompanyUpdatePage

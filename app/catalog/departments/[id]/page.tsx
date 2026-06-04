@@ -1,6 +1,8 @@
-import { getCachedDepartmentById, getCachedAllCompanies, getCachedAllCountries } from '@/app/catalog/departments/data'
 import DepartmentForm from '@/app/catalog/departments/[id]/form'
 import { notFound } from 'next/navigation'
+import { getDepartmentById } from '@/app/catalog/departments/manager'
+import { getAllCompanies } from '@/app/catalog/companies/manager'
+import { getAllCountries } from '@/app/catalog/countries/manager'
 
 const DepartmentUpdatePage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params
@@ -11,16 +13,21 @@ const DepartmentUpdatePage = async ({ params }: { params: Promise<{ id: string }
   }
 
   const [department, companies, countries] = await Promise.all([
-    getCachedDepartmentById(departmentId),
-    getCachedAllCompanies(),
-    getCachedAllCountries(),
+    getDepartmentById(departmentId),
+    getAllCompanies(),
+    getAllCountries(),
   ])
 
-  if (!department) {
+  if (department) {
+    return <DepartmentForm
+      department={department}
+      companies={companies}
+      countries={countries}
+    />
+
+  } else {
     notFound()
   }
-
-  return <DepartmentForm department={department} companies={companies} countries={countries} />
 }
 
 export default DepartmentUpdatePage

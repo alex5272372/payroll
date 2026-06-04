@@ -1,10 +1,9 @@
 'use server'
 import prisma from '@/lib/prisma'
-import { Country } from '@prisma/client'
 import { ActionResult } from '@/types'
 import { CRUD } from '@/types/enums/roleMatrix'
 import { MenuItemPath } from '@/types/enums/layout'
-import { CountryRequest, CountryResponse } from '@/types/models/countryModels'
+import { CountryRequest } from '@/types/models/countryModels'
 import { z } from 'zod'
 import { mapErrorTree, authorize } from '@/lib'
 
@@ -12,33 +11,6 @@ const countrySchema = z.object({
   code: z.string().min(1).max(2),
   name: z.string().min(1).max(60),
 })
-
-const getAllCountries = async (): Promise<ActionResult<CountryResponse[]>> => {
-  const guard = await authorize(MenuItemPath.COUNTRIES, CRUD.READ)
-  if (guard) return guard
-
-  const countries: Country[] = await prisma.country.findMany()
-
-  return {
-    success: true,
-    value: countries.map((country) => ({ code: country.code, name: country.name })),
-  }
-}
-
-const getCountryByCode = async (code: string): Promise<ActionResult<CountryResponse>> => {
-  const guard = await authorize(MenuItemPath.COUNTRIES, CRUD.READ)
-  if (guard) return guard
-
-  const country = await prisma.country.findUnique({ where: { code }})
-  if (!country) {
-    return { success: false, errorTree: { errors: ['Country not found'] }}
-  }
-
-  return {
-    success: true,
-    value: { code: country.code, name: country.name },
-  }
-}
 
 const createCountry = async (country: CountryRequest): Promise<ActionResult> => {
   const guard = await authorize(MenuItemPath.COUNTRIES, CRUD.CREATE)
@@ -92,8 +64,6 @@ const deleteCountry = async (code: string): Promise<ActionResult> => {
 }
 
 export {
-  getAllCountries,
-  getCountryByCode,
   createCountry,
   updateCountry,
   deleteCountry,

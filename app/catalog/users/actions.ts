@@ -7,7 +7,7 @@ import { CRUD } from '@/types/enums/roleMatrix'
 import { MenuItemPath } from '@/types/enums/layout'
 import { authorize, mapErrorTree } from '@/lib'
 import { AuthProvider } from '@/types/enums'
-import { UserCreateRequest, UserResponse, UserUpdateRequest } from '@/types/models/userModels'
+import { UserCreateRequest, UserUpdateRequest } from '@/types/models/userModels'
 import { z } from 'zod'
 
 const crypt = (pass: string) => bcrypt.hashSync(pass, bcrypt.genSaltSync(10))
@@ -28,35 +28,6 @@ const resetPasswordSchema = z.object({
   email: z.string().email().max(100),
   password: passwordSchema,
 })
-
-const getAllUsers = async (): Promise<ActionResult<UserResponse[]>> => {
-  const guard = await authorize(MenuItemPath.USERS, CRUD.READ)
-  if (guard) return guard
-
-  const users = await prisma.user.findMany({
-    select: {
-      id: true,
-      email: true,
-      personId: true,
-      person: { select: { firstName: true, lastName: true }},
-      emailVerified: true,
-      userRoles: { select: { role: true }}
-    }
-  })
-
-  return {
-    success: true,
-    value: users.map(u => ({
-      id: u.id,
-      email: u.email,
-      personId: u.personId,
-      emailVerified: u.emailVerified,
-      firstName: u.person.firstName,
-      lastName: u.person.lastName,
-      roles: u.userRoles.map(ur => ur.role),
-    })),
-  }
-}
 
 const signUpAction = async (data: SignUpData): Promise<ActionResult> => {
   const validation = signUpSchema.safeParse(data)
@@ -114,37 +85,6 @@ const userUpdateSchema = z.object({
   personId: z.number().int().positive(),
 })
 
-const getUserById = async (id: number): Promise<ActionResult<UserResponse>> => {
-  const guard = await authorize(MenuItemPath.USERS, CRUD.READ)
-  if (guard) return guard
-
-  const u = await prisma.user.findUnique({
-    where: { id },
-    select: {
-      id: true,
-      email: true,
-      personId: true,
-      person: { select: { firstName: true, lastName: true }},
-      emailVerified: true,
-      userRoles: { select: { role: true }},
-    },
-  })
-  if (!u) return { success: false, errorTree: { errors: ['User not found'] }}
-
-  return {
-    success: true,
-    value: {
-      id: u.id,
-      email: u.email,
-      personId: u.personId,
-      emailVerified: u.emailVerified,
-      firstName: u.person.firstName,
-      lastName: u.person.lastName,
-      roles: u.userRoles.map(ur => ur.role),
-    },
-  }
-}
-
 const createUserAdmin = async (data: UserCreateRequest): Promise<ActionResult> => {
   const guard = await authorize(MenuItemPath.USERS, CRUD.CREATE)
   if (guard) return guard
@@ -189,8 +129,6 @@ const deleteUser = async (id: number): Promise<ActionResult> => {
 }
 
 export {
-  getAllUsers,
-  getUserById,
   createUserAdmin,
   updateUserAdmin,
   deleteUser,

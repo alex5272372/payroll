@@ -11,25 +11,38 @@ This project also migrates selected functionality from 1C:Enterprise to a modern
 - Use existing project conventions before introducing new patterns.
 - If source behavior is unclear, state assumptions instead of inventing rules.
 
-## Architecture
-- `app/` — pages, layouts, route handlers, React Server Components
-- `actions/` — all mutations via Next.js Server Actions
-- `components/` — reusable UI
-- `lib/` — shared helpers and singletons
-- `types/` — shared types and enums
-- `data/roleMatrix.ts` — permission matrix
-- `prisma/schema.prisma` — source of truth for data model
-- `docs/` — business rules, 1C mapping, architecture decisions
+## Architecture: Manager-Only Pattern
 
-## Server Actions
-Every action file must:
-1. Start with `'use server'`
+Colocated structure (no repository layer):
+- **`app/segment/object/`** — domain colocated with routes
+  - `manager.ts` — business logic, caching, Prisma queries (called by Server Components and actions)
+  - `actions.ts` — mutations with auth/authorization (RPC boundary, `'use server'`)
+  - `(group)/`, etc. — route groups for different views (no URL impact)
+  - `create/`, `[id]/`, etc. — nested forms or workflows
+- **`app/`** — pages, layouts, Server Components (call managers directly, no auth)
+- **`components/`** — reusable UI
+- **`lib/`** — shared helpers and singletons
+- **`types/`** — shared types and enums (global + payroll-specific in domain/)
+- **`data/roleMatrix.ts`** — permission matrix
+- **`prisma/schema.prisma`** — source of truth for data model
+- **`docs/`** — business rules, 1C mapping, architecture decisions
+
+**Data Flow:**
+- Server Component → calls `manager.ts` (direct) → Prisma
+- Client Component → calls `actions.ts` (RPC) → calls `manager.ts` → Prisma
+- `actions.ts` owns auth/authorization; `manager.ts` owns caching + domain logic
+
+## Server Actions (mutations layer)
+Every `actions.ts` file must:
+1. Start with `'use server'` (RPC boundary)
 2. Authenticate with `auth()`
 3. Authorize with `authorize(...)` or `roleMatrix`
 4. Validate input with Zod
 5. Map validation errors with `MapErrorTree`
-6. Use Prisma via `@/lib/prisma`
+6. Call manager methods, NOT Prisma directly
 7. Return `ActionResult<T>`
+
+Example: `app/catalog/companies/actions.ts` → calls `manager.ts` → Prisma
 
 ## Permissions
 - Always enforce permissions server-side.
@@ -57,10 +70,11 @@ Every action file must:
 - Keep source-to-target traceability when practical
 
 ## UI Rules
-- Prefer Server Components by default.
-- Use Client Components only when needed.
-- Keep business rules out of UI when possible.
-- Prefer server actions for forms.
+- Prefer Server Components by default (call `manager.ts` directly).
+- Use Client Components only when needed (call `actions.ts` via form action or `useTransition`).
+- Keep business rules out of UI; move to `manager.ts`.
+- Prefer server actions for mutations; use `manager.ts` for reads in Server Components.
+- Use route groups `(group)` to organize views without URL structure impact.
 
 ## Review Priorities
 Flag these issues aggressively:

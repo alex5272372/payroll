@@ -20,7 +20,7 @@ const columns = [
   { header: 'Roles', width: 300 },
 ]
 
-const UsersCatalog = ({ users }: { users: UserResponse[] }) => {
+const UsersList = ({ users }: { users: UserResponse[] }) => {
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set())
   const router = useRouter()
   const { showError, showOk, showOkCancel, hideDialog } = useLayout()
@@ -91,4 +91,4 @@ const UsersCatalog = ({ users }: { users: UserResponse[] }) => {
   </Layout>
 }
 
-export default UsersCatalog
+export default UsersList

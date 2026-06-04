@@ -4,7 +4,7 @@ import { ActionResult } from '@/types'
 import { CRUD } from '@/types/enums/roleMatrix'
 import { MenuItemPath } from '@/types/enums/layout'
 import { authorize, mapErrorTree } from '@/lib'
-import { DepartmentRequest, DepartmentResponse } from '@/types/models/departmentModels'
+import { DepartmentRequest } from '@/types/models/departmentModels'
 import { z } from 'zod'
 
 const departmentSchema = z.object({
@@ -12,42 +12,6 @@ const departmentSchema = z.object({
   companyId: z.number().int().positive(),
   countryCode: z.string().length(2),
 })
-
-const getAllDepartments = async (): Promise<ActionResult<DepartmentResponse[]>> => {
-  const guard = await authorize(MenuItemPath.DEPARTMENTS, CRUD.READ)
-  if (guard) return guard
-
-  const departments = await prisma.department.findMany({
-    include: { company: { select: { name: true }}}
-  })
-
-  return {
-    success: true,
-    value: departments.map(d => ({
-      id: d.id,
-      name: d.name,
-      companyId: d.companyId,
-      countryCode: d.countryCode,
-      companyName: d.company.name,
-    })),
-  }
-}
-
-const getDepartmentById = async (id: number): Promise<ActionResult<DepartmentResponse>> => {
-  const guard = await authorize(MenuItemPath.DEPARTMENTS, CRUD.READ)
-  if (guard) return guard
-
-  const d = await prisma.department.findUnique({
-    where: { id },
-    include: { company: { select: { name: true }}},
-  })
-  if (!d) return { success: false, errorTree: { errors: ['Department not found'] }}
-
-  return {
-    success: true,
-    value: { id: d.id, name: d.name, companyId: d.companyId, countryCode: d.countryCode, companyName: d.company.name },
-  }
-}
 
 const createDepartment = async (dept: DepartmentRequest): Promise<ActionResult> => {
   const guard = await authorize(MenuItemPath.DEPARTMENTS, CRUD.CREATE)
@@ -92,8 +56,6 @@ const deleteDepartment = async (id: number): Promise<ActionResult> => {
 }
 
 export {
-  getAllDepartments,
-  getDepartmentById,
   createDepartment,
   updateDepartment,
   deleteDepartment,

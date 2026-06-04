@@ -1,8 +1,8 @@
-import { getCachedAllCountries } from '@/app/catalog/countries/data'
 import CompanyCreateForm from '@/app/catalog/companies/create/form'
+import { getAllCountries } from '@/app/catalog/countries/manager'
 
 const CompanyCreatePage = async () => {
-  const countries = await getCachedAllCountries()
+  const countries = await getAllCountries()
   return <CompanyCreateForm countries={countries} />
 }
 

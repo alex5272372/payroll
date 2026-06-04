@@ -21,7 +21,7 @@ const columns = [
   { header: 'Birthdate', width: 150 },
 ]
 
-const PeopleCatalog = ({ people }: { people: PersonResponse[] }) => {
+const PeopleList = ({ people }: { people: PersonResponse[] }) => {
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set())
   const router = useRouter()
   const { showError, showOk, showOkCancel, hideDialog } = useLayout()
@@ -91,4 +91,4 @@ const PeopleCatalog = ({ people }: { people: PersonResponse[] }) => {
   </Layout>
 }
 
-export default PeopleCatalog
+export default PeopleList

@@ -4,7 +4,7 @@ import { ActionResult } from '@/types'
 import { CRUD } from '@/types/enums/roleMatrix'
 import { MenuItemPath } from '@/types/enums/layout'
 import { authorize, mapErrorTree } from '@/lib'
-import { PersonRequest, PersonResponse } from '@/types/models/personModels'
+import { PersonRequest } from '@/types/models/personModels'
 import { Gender } from '@prisma/client'
 import { z } from 'zod'
 
@@ -15,45 +15,6 @@ const personSchema = z.object({
   gender: z.enum(['MALE', 'FEMALE', 'OTHER']).nullable().optional(),
   birthdate: z.string().nullable().optional(),
 })
-
-const getAllPeople = async (): Promise<ActionResult<PersonResponse[]>> => {
-  const guard = await authorize(MenuItemPath.PEOPLE, CRUD.READ)
-  if (guard) return guard
-
-  const people = await prisma.person.findMany()
-
-  return {
-    success: true,
-    value: people.map(p => ({
-      id: p.id,
-      firstName: p.firstName,
-      lastName: p.lastName,
-      middleName: p.middleName,
-      gender: p.gender,
-      birthdate: p.birthdate,
-    })),
-  }
-}
-
-const getPersonById = async (id: number): Promise<ActionResult<PersonResponse>> => {
-  const guard = await authorize(MenuItemPath.PEOPLE, CRUD.READ)
-  if (guard) return guard
-
-  const p = await prisma.person.findUnique({ where: { id }})
-  if (!p) return { success: false, errorTree: { errors: ['Person not found'] }}
-
-  return {
-    success: true,
-    value: {
-      id: p.id,
-      firstName: p.firstName,
-      lastName: p.lastName,
-      middleName: p.middleName,
-      gender: p.gender,
-      birthdate: p.birthdate,
-    },
-  }
-}
 
 const createPerson = async (person: PersonRequest): Promise<ActionResult> => {
   const guard = await authorize(MenuItemPath.PEOPLE, CRUD.CREATE)
@@ -110,8 +71,6 @@ const deletePerson = async (id: number): Promise<ActionResult> => {
 }
 
 export {
-  getAllPeople,
-  getPersonById,
   createPerson,
   updatePerson,
   deletePerson,

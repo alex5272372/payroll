@@ -1,6 +1,6 @@
 
 ---
-applyTo: "actions/payroll/**/*.ts,app/**/payroll/**/*.tsx,components/**/payroll/**/*.tsx,lib/**/*.ts,types/**/*.d.ts"
+applyTo: "app/**/*manager.ts, app/**/*actions.ts"
 ---
 
 # Payroll Domain Rules

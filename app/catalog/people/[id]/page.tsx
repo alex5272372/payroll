@@ -1,6 +1,6 @@
-import { getCachedPersonById } from '@/app/catalog/people/data'
 import PersonForm from '@/app/catalog/people/[id]/form'
 import { notFound } from 'next/navigation'
+import { getPersonById } from '@/app/catalog/people/manager'
 
 const PersonUpdatePage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params
@@ -10,7 +10,7 @@ const PersonUpdatePage = async ({ params }: { params: Promise<{ id: string }> })
     notFound()
   }
 
-  const person = await getCachedPersonById(personId)
+  const person = await getPersonById(personId)
 
   if (!person) {
     notFound()

@@ -1,11 +1,11 @@
 import { cacheLife } from 'next/cache'
 import prisma from '@/lib/prisma'
 import { UserResponse } from '@/types/models/userModels'
-import { PersonResponse } from '@/types/models/personModels'
 
-export async function getCachedAllUsers(): Promise<UserResponse[]> {
+const getAllUsers = async (): Promise<UserResponse[]> => {
   'use cache'
   cacheLife('minutes')
+
   const users = await prisma.user.findMany({
     select: {
       id: true,
@@ -16,6 +16,7 @@ export async function getCachedAllUsers(): Promise<UserResponse[]> {
       userRoles: { select: { role: true }}
     }
   })
+
   return users.map(u => ({
     id: u.id,
     email: u.email,
@@ -27,9 +28,10 @@ export async function getCachedAllUsers(): Promise<UserResponse[]> {
   }))
 }
 
-export async function getCachedUserById(id: number): Promise<UserResponse | null> {
+const getUserById = async (id: number): Promise<UserResponse | null> => {
   'use cache'
   cacheLife('minutes')
+
   const u = await prisma.user.findUnique({
     where: { id },
     select: {
@@ -41,6 +43,7 @@ export async function getCachedUserById(id: number): Promise<UserResponse | null
       userRoles: { select: { role: true }}
     }
   })
+
   return u ? {
     id: u.id,
     email: u.email,
@@ -52,16 +55,7 @@ export async function getCachedUserById(id: number): Promise<UserResponse | null
   } : null
 }
 
-export async function getCachedAllPeople(): Promise<PersonResponse[]> {
-  'use cache'
-  cacheLife('minutes')
-  const people = await prisma.person.findMany()
-  return people.map(p => ({
-    id: p.id,
-    firstName: p.firstName,
-    lastName: p.lastName,
-    middleName: p.middleName,
-    gender: p.gender,
-    birthdate: p.birthdate,
-  }))
+export {
+  getAllUsers,
+  getUserById,
 }
