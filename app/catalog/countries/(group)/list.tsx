@@ -5,14 +5,14 @@ import { deleteCountry } from '@/app/catalog/countries/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import DataTable from '@/components/dataDisplay/DataTable'
-import { ButtonGroupState, TableData } from '@/types'
+import { ButtonGroupState, TableData, TableDataColumn } from '@/types'
 import { MenuItemPath } from '@/types/enums/layout'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { CRUD } from '@/types/enums/roleMatrix'
 import { useLayout } from '@/components/LayoutContext'
 import { CountryResponse } from '@/types/models/countryModels'
 
-const columns = [
+const columns: TableDataColumn[] = [
   { header: 'Code', width: 80 },
   { header: 'Name', width: 400 },
 ]

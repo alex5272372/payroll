@@ -5,14 +5,14 @@ import { deleteUser } from '@/app/catalog/users/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import DataTable from '@/components/dataDisplay/DataTable'
-import { ButtonGroupState } from '@/types'
+import { ButtonGroupState, TableDataColumn } from '@/types'
 import { MenuItemPath } from '@/types/enums/layout'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { CRUD } from '@/types/enums/roleMatrix'
 import { UserResponse } from '@/types/models/userModels'
 import { useLayout } from '@/components/LayoutContext'
 
-const columns = [
+const columns: TableDataColumn[] = [
   { header: 'ID', width: 80 },
   { header: 'Email', width: 300 },
   { header: 'Person', width: 300 },

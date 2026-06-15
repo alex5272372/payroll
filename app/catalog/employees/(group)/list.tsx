@@ -5,14 +5,14 @@ import { deleteEmployee } from '@/app/catalog/employees/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import DataTable from '@/components/dataDisplay/DataTable'
-import { ButtonGroupState } from '@/types'
+import { ButtonGroupState, TableDataColumn } from '@/types'
 import { MenuItemPath } from '@/types/enums/layout'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { CRUD } from '@/types/enums/roleMatrix'
 import { EmployeeResponse } from '@/types/models/employeeModels'
 import { useLayout } from '@/components/LayoutContext'
 
-const columns = [
+const columns: TableDataColumn[] = [
   { header: 'ID', width: 80 },
   { header: 'Person', width: 300 },
   { header: 'Department', width: 300 },

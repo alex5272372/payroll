@@ -1,6 +1,6 @@
 
 ---
-applyTo: "prisma/**/*.prisma, lib/prisma.ts, app/**/*manager.ts"
+applyTo: "prisma/**/*.prisma, lib/prisma.ts, app/**/*repository.ts"
 ---
 
 # GitHub Copilot Instructions for Prisma Workspace

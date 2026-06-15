@@ -1,36 +1,21 @@
 import { cacheLife } from 'next/cache'
-import prisma from '@/lib/prisma'
 import { PersonResponse } from '@/types/models/personModels'
-import { Gender } from '@/types/enums'
+import { getAllPeopleDb, getPersonByIdDb } from '@/app/catalog/people/repository'
 
 const getAllPeople = async (): Promise<PersonResponse[]> => {
   'use cache'
   cacheLife('minutes')
 
-  const people = await prisma.person.findMany()
-  return people.map(p => ({
-    id: p.id,
-    firstName: p.firstName,
-    lastName: p.lastName,
-    middleName: p.middleName,
-    gender: p.gender as Gender,
-    birthdate: p.birthdate,
-  }))
+  const people = await getAllPeopleDb()
+  return people
 }
 
 const getPersonById = async (id: number): Promise<PersonResponse | null> => {
   'use cache'
   cacheLife('minutes')
 
-  const p = await prisma.person.findUnique({ where: { id }})
-  return p ? {
-    id: p.id,
-    firstName: p.firstName,
-    lastName: p.lastName,
-    middleName: p.middleName,
-    gender: p.gender as Gender,
-    birthdate: p.birthdate,
-  } : null
+  const person = await getPersonByIdDb(id)
+  return person
 }
 
 export {
