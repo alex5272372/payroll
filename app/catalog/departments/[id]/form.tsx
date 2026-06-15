@@ -1,7 +1,7 @@
 'use client'
 import { useCallback, useState } from 'react'
 import { PencilIcon } from '@heroicons/react/24/outline'
-import { updateDepartment } from '@/app/catalog/departments/actions'
+import { updateDepartmentAction } from '@/app/catalog/departments/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
@@ -31,7 +31,7 @@ const DepartmentForm = ({ department, companies, countries }: DepartmentFormProp
 
   const submitConfirmed = useCallback(async (): Promise<void> => {
     hideDialog()
-    const result = await updateDepartment(department.id, { name, companyId: Number(companyId), countryCode })
+    const result = await updateDepartmentAction(department.id, { name, companyId: Number(companyId), countryCode })
     if (result.success) {
       showOk('Department updated', 'Department has been updated successfully')
     } else {

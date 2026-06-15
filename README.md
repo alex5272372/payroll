@@ -60,13 +60,22 @@ Key capabilities:
 
 ## Architecture
 
-The application follows the **Next.js App Router** conventions:
+The application follows a **three-layer colocated pattern** under `app/segment/object/`:
 
-- **`app/`** — pages and API routes using React Server Components
-- **`actions/`** — Next.js Server Actions for all data mutations
+- **`repository.ts`** — Prisma queries and data transformation (database access only)
+- **`manager.ts`** — business logic, caching, and orchestration (calls repository)
+- **`actions.ts`** — server actions for mutations with auth/authz/validation (calls manager)
+
+**Data flow:**
+- Server Components call `manager.ts` directly for cached reads
+- Client Components call `actions.ts` (RPC) for writes
+- `actions.ts` calls `manager.ts`, which calls `repository.ts`
+- `repository.ts` is the only layer with direct Prisma access
+
+Other layers:
 - **`components/`** — reusable UI components (layout, modals, inputs, data tables, calendars)
-- **`data/`** — static configuration (navigation tree, role-permission matrix, Prisma query helpers)
-- **`lib/`** — shared utilities (Prisma client singleton, NextAuth config, email transport)
+- **`data/`** — static configuration (navigation tree, role-permission matrix)
+- **`lib/`** — shared utilities (Prisma singleton, NextAuth config, email transport)
 - **`prisma/`** — database schema, migrations, and seed script
 - **`types/`** — TypeScript type definitions and enums
 
@@ -184,18 +193,30 @@ Selected permission highlights:
 
 ```text
 payroll/
-├── actions/            # Server Actions (CRUD per entity)
-├── app/                # Next.js App Router
+├── app/                # Next.js App Router (colocated per-segment architecture)
 │   ├── api/auth/       # NextAuth.js API route
-│   ├── calendar/       # Calendar pages
-│   ├── catalog/        # Catalog pages
-│   ├── document/       # Document pages
-│   ├── report/         # Report pages
+│   ├── calendar/
+│   │   ├── country-calendar/
+│   │   │   ├── repository.ts  # Database queries
+│   │   │   ├── manager.ts     # Business logic + caching
+│   │   │   ├── actions.ts     # Server actions (auth/authz/validation)
+│   │   │   └── page.tsx       # UI page
+│   │   ├── company-calendar/, department-calendar/, employee-calendar/  # Similar pattern
+│   │   └── ...
+│   ├── catalog/
+│   │   ├── countries/, companies/, departments/, employees/, people/, users/
+│   │   └── ... (each with repository.ts, manager.ts, actions.ts)
+│   ├── document/
+│   │   ├── calendar-filling/, payroll-calculation/  # Transactional documents
+│   │   └── ...
+│   ├── report/
+│   │   ├── payslip/    # Report pages
+│   │   └── ...
 │   └── user/           # Auth pages (profile, verify, error)
 ├── components/
 │   ├── calendar/       # CalendarDay, CalendarHour
 │   ├── dataDisplay/    # DataTable, PasswordPolicy
-│   ├── inputs/         # TextField, PasswordField
+│   ├── inputs/         # TextField, PasswordField, SelectField
 │   ├── Layout/         # Shell, tabs, dropdowns
 │   ├── ModalDialog/    # Modal primitives
 │   ├── Toolbar/        # Page toolbars
@@ -203,14 +224,32 @@ payroll/
 ├── data/
 │   ├── navigation.ts   # App navigation tree
 │   ├── roleMatrix.ts   # Role-permission matrix
-│   └── prisma/         # Prisma query helpers per entity
-├── lib/                # auth.ts, prisma.ts, authSendRequest.ts
+│   ├── onec.ts         # 1C:Enterprise reference data
+│   └── seed/           # Seed data scripts
+├── lib/                # Shared utilities
+│   ├── auth.ts         # NextAuth configuration
+│   ├── prisma.ts       # Prisma client singleton
+│   ├── authSendRequest.ts  # Email transport
+│   └── index.ts        # Helper exports
 ├── prisma/
-│   ├── schema.prisma
-│   ├── seed.ts
-│   └── migrations/
+│   ├── schema.prisma   # Database schema
+│   ├── seed.ts         # Database seeding
+│   ├── migrations/     # Migration history
+│   └── onec/           # 1C:Enterprise mapping schema
 ├── types/              # TypeScript types and enums
-└── public/
+│   ├── index.d.ts
+│   ├── layout.d.ts, onec.d.ts, roleMatrix.d.ts
+│   ├── enums/          # Role, Gender, etc.
+│   └── models/         # Domain models
+├── docs/               # Architecture and domain documentation
+│   ├── 1c-mapping/     # 1C:Enterprise mapping guides
+│   ├── architecture/   # System design decisions
+│   ├── business-rules/ # Payroll domain rules
+│   ├── subsystems/     # Payroll, reporting subsystems
+│   └── glossary/       # Domain terminology
+├── public/             # Static assets
+└── .github/
+    └── instructions/   # Domain-specific instruction files
 ```
 
 ---

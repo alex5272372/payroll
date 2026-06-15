@@ -1,7 +1,5 @@
 'use server'
-import prisma from '@/lib/prisma'
 import { signIn } from '@/lib/auth'
-import bcrypt from 'bcryptjs'
 import { ActionResult, SignUpData } from '@/types'
 import { CRUD } from '@/types/enums/roleMatrix'
 import { MenuItemPath } from '@/types/enums/layout'
@@ -9,8 +7,7 @@ import { authorize, mapErrorTree } from '@/lib'
 import { AuthProvider } from '@/types/enums'
 import { UserCreateRequest, UserUpdateRequest } from '@/types/models/userModels'
 import { z } from 'zod'
-
-const crypt = (pass: string) => bcrypt.hashSync(pass, bcrypt.genSaltSync(10))
+import { createUser, deleteUser, getUserByEmail, updatePassword, updateUser } from '@/app/catalog/users/manager'
 
 const passwordSchema = z.string().min(8).max(80)
   .regex(/[a-z]/, 'Must contain a lowercase letter')
@@ -29,109 +26,86 @@ const resetPasswordSchema = z.object({
   password: passwordSchema,
 })
 
+const userUpdateSchema = z.object({
+  email: z.string().email().max(100),
+  personId: z.number().int().positive(),
+})
+
 const signUpAction = async (data: SignUpData): Promise<ActionResult> => {
   const validation = signUpSchema.safeParse(data)
-  if (!validation.success) return { success: false, errorTree: mapErrorTree(z.treeifyError(validation.error)) }
+  if (!validation.success) {
+    return { success: false, errorTree: mapErrorTree(z.treeifyError(validation.error)) }
+  }
 
-  const dbUser = await prisma.user.findFirst({ where: { email: data.email }})
-  if (dbUser) return { success: false, errorTree: { errors: ['User already exists'] }}
+  const user = await getUserByEmail(data.email)
+  if (user) {
+    return { success: false, errorTree: { errors: ['User already exists'] }}
+  }
 
-  await prisma.user.create({
-    data: {
-      email: data.email,
-      password: crypt(data.password),
-      person: { create: {
-        firstName: data.firstName,
-        lastName: data.lastName,
-      }},
-      userRoles: { create: [
-        { role: 'USER' }
-      ] }
-    }
-  })
+  const result = await createUser(data)
+  if (!result.success) return result
 
   await signIn(AuthProvider.SendGridSignup, {
     email: data.email,
     redirect: false,
   })
 
-  return { success: true }
+  return result
 }
 
 const resetPasswordAction = async (email: string, password: string): Promise<ActionResult> => {
   const validation = resetPasswordSchema.safeParse({ email, password })
-  if (!validation.success) return { success: false, errorTree: mapErrorTree(z.treeifyError(validation.error)) }
+  if (!validation.success) {
+    return { success: false, errorTree: mapErrorTree(z.treeifyError(validation.error)) }
+  }
 
-  const user = await prisma.user.findUnique({
-    where: { email }
-  })
-
+  const user = await getUserByEmail(email)
   if (!user) {
     return { success: false, errorTree: { errors: ['User not found'] }}
   }
 
-  await prisma.user.update({
-    where: { email },
-    data: {
-      password: crypt(password)
-    }
-  })
-
-  return { success: true }
+  const result = await updatePassword(email, password)
+  return result
 }
 
-const userUpdateSchema = z.object({
-  email: z.string().email().max(100),
-  personId: z.number().int().positive(),
-})
-
-const createUserAdmin = async (data: UserCreateRequest): Promise<ActionResult> => {
+const createUserAction = async (data: UserCreateRequest): Promise<ActionResult> => {
   const guard = await authorize(MenuItemPath.USERS, CRUD.CREATE)
   if (guard) return guard
 
   const validation = signUpSchema.safeParse(data)
-  if (!validation.success) return { success: false, errorTree: mapErrorTree(z.treeifyError(validation.error)) }
+  if (!validation.success) {
+    return { success: false, errorTree: mapErrorTree(z.treeifyError(validation.error)) }
+  }
 
-  const existing = await prisma.user.findFirst({ where: { email: data.email }})
-  if (existing) return { success: false, errorTree: { errors: ['User already exists'] }}
-
-  await prisma.user.create({
-    data: {
-      email: data.email,
-      password: crypt(data.password),
-      person: { create: { firstName: data.firstName, lastName: data.lastName }},
-      userRoles: { create: [{ role: 'USER' }] },
-    },
-  })
-
-  return { success: true }
+  const result = await createUser(data)
+  return result
 }
 
-const updateUserAdmin = async (id: number, data: UserUpdateRequest): Promise<ActionResult> => {
+const updateUserAction = async (id: number, data: UserUpdateRequest): Promise<ActionResult> => {
   const guard = await authorize(MenuItemPath.USERS, CRUD.UPDATE)
   if (guard) return guard
 
   const validation = userUpdateSchema.safeParse(data)
-  if (!validation.success) return { success: false, errorTree: mapErrorTree(z.treeifyError(validation.error)) }
+  if (!validation.success) {
+    return { success: false, errorTree: mapErrorTree(z.treeifyError(validation.error)) }
+  }
 
-  await prisma.user.update({ where: { id }, data: { email: data.email, personId: data.personId }})
-
-  return { success: true }
+  const result = await updateUser(id, data)
+  return result
 }
 
-const deleteUser = async (id: number): Promise<ActionResult> => {
+const deleteUserAction = async (id: number): Promise<ActionResult> => {
   const guard = await authorize(MenuItemPath.USERS, CRUD.DELETE)
   if (guard) return guard
 
-  await prisma.user.delete({ where: { id }})
-
-  return { success: true }
+  const result = await deleteUser(id)
+  return result
 }
 
 export {
-  createUserAdmin,
-  updateUserAdmin,
-  deleteUser,
+  createUserAction,
+  updateUserAction,
+  deleteUserAction,
   signUpAction,
   resetPasswordAction,
 }

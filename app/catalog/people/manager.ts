@@ -1,6 +1,13 @@
 import { cacheLife } from 'next/cache'
-import { PersonResponse } from '@/types/models/personModels'
-import { getAllPeopleDb, getPersonByIdDb } from '@/app/catalog/people/repository'
+import { PersonRequest, PersonResponse } from '@/types/models/personModels'
+import {
+  createPersonDb,
+  deletePersonDb,
+  getAllPeopleDb,
+  getPersonByIdDb,
+  updatePersonDb
+} from '@/app/catalog/people/repository'
+import { ActionResult } from '@/types'
 
 const getAllPeople = async (): Promise<PersonResponse[]> => {
   'use cache'
@@ -18,7 +25,25 @@ const getPersonById = async (id: number): Promise<PersonResponse | null> => {
   return person
 }
 
+const createPerson = async (person: PersonRequest): Promise<ActionResult> => {
+  const result = await createPersonDb(person)
+  return result
+}
+
+const updatePerson = async (id: number, person: PersonRequest): Promise<ActionResult> => {
+  const result = await updatePersonDb(id, person)
+  return result
+}
+
+const deletePerson = async (id: number): Promise<ActionResult> => {
+  const result = await deletePersonDb(id)
+  return result
+}
+
 export {
   getAllPeople,
   getPersonById,
+  createPerson,
+  updatePerson,
+  deletePerson,
 }

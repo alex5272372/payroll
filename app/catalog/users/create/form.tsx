@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { PlusIcon } from '@heroicons/react/24/outline'
-import { createUserAdmin } from '@/app/catalog/users/actions'
+import { createUserAction } from '@/app/catalog/users/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
@@ -19,7 +19,7 @@ const UserCreateForm = () => {
   const { showOk, showError } = useLayout()
 
   const handleSubmit = async () => {
-    const result = await createUserAdmin({ email, firstName, lastName, password })
+    const result = await createUserAction({ email, firstName, lastName, password })
     if (result.success) {
       showOk('Create user', `User "${email}" has been created successfully`)
     } else {

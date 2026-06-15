@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { PlusIcon } from '@heroicons/react/24/outline'
-import { createDepartment } from '@/app/catalog/departments/actions'
+import { createDepartmentAction } from '@/app/catalog/departments/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
@@ -28,7 +28,7 @@ const DepartmentCreateForm = ({ companies, countries }: DepartmentCreateFormProp
   const countryOptions = countries.map(c => ({ value: c.code, label: `${c.code} – ${c.name}` }))
 
   const handleSubmit = async () => {
-    const result = await createDepartment({ name, companyId: Number(companyId), countryCode })
+    const result = await createDepartmentAction({ name, companyId: Number(companyId), countryCode })
     if (result.success) {
       showOk('Create department', `Department "${name}" has been created successfully`)
     } else {

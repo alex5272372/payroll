@@ -1,7 +1,7 @@
 'use client'
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { deletePerson } from '@/app/catalog/people/actions'
+import { deletePersonAction } from '@/app/catalog/people/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import DataTable from '@/components/dataDisplay/DataTable'
@@ -38,7 +38,7 @@ const PeopleList = ({ people }: { people: PersonResponse[] }) => {
   const deleteConfirmed = useCallback(async (ids: string[]): Promise<void> => {
     hideDialog()
     for (const id of ids) {
-      const result = await deletePerson(Number(id))
+      const result = await deletePersonAction(Number(id))
       if (!result.success) {
         showError(result.errorTree)
         return

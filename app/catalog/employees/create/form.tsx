@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { PlusIcon } from '@heroicons/react/24/outline'
-import { createEmployee } from '@/app/catalog/employees/actions'
+import { createEmployeeAction } from '@/app/catalog/employees/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import SelectField from '@/components/inputs/SelectField'
@@ -26,7 +26,7 @@ const EmployeeCreateForm = ({ departments, people }: EmployeeCreateFormProps) =>
   const personOptions = people.map(p => ({ value: String(p.id), label: `${p.firstName} ${p.lastName}` }))
 
   const handleSubmit = async () => {
-    const result = await createEmployee({ departmentId: Number(departmentId), personId: Number(personId) })
+    const result = await createEmployeeAction({ departmentId: Number(departmentId), personId: Number(personId) })
     if (result.success) {
       showOk('Create employee', 'Employee has been created successfully')
     } else {

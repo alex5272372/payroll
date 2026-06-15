@@ -1,18 +1,18 @@
 'use server'
-import prisma from '@/lib/prisma'
 import { ActionResult } from '@/types'
 import { CRUD } from '@/types/enums/roleMatrix'
 import { MenuItemPath } from '@/types/enums/layout'
 import { authorize, mapErrorTree } from '@/lib'
 import { CompanyRequest } from '@/types/models/companyModels'
 import { z } from 'zod'
+import { createCompany, deleteCompany, updateCompany } from '@/app/catalog/companies/manager'
 
 const companySchema = z.object({
   name: z.string().min(1).max(120),
   countryCode: z.string().length(2),
 })
 
-const createCompany = async (company: CompanyRequest): Promise<ActionResult> => {
+const createCompanyAction = async (company: CompanyRequest): Promise<ActionResult> => {
   const guard = await authorize(MenuItemPath.COMPANIES, CRUD.CREATE)
   if (guard) return guard
 
@@ -21,12 +21,11 @@ const createCompany = async (company: CompanyRequest): Promise<ActionResult> => 
     return { success: false, errorTree: mapErrorTree(z.treeifyError(validation.error)) }
   }
 
-  await prisma.company.create({ data: { name: company.name, countryCode: company.countryCode }})
-
-  return { success: true }
+  const result = await createCompany(company)
+  return result
 }
 
-const updateCompany = async (id: number, company: CompanyRequest): Promise<ActionResult> => {
+const updateCompanyAction = async (id: number, company: CompanyRequest): Promise<ActionResult> => {
   const guard = await authorize(MenuItemPath.COMPANIES, CRUD.UPDATE)
   if (guard) return guard
 
@@ -35,22 +34,20 @@ const updateCompany = async (id: number, company: CompanyRequest): Promise<Actio
     return { success: false, errorTree: mapErrorTree(z.treeifyError(validation.error)) }
   }
 
-  await prisma.company.update({ where: { id }, data: { name: company.name, countryCode: company.countryCode }})
-
-  return { success: true }
+  const result = await updateCompany(id, company)
+  return result
 }
 
-const deleteCompany = async (id: number): Promise<ActionResult> => {
+const deleteCompanyAction = async (id: number): Promise<ActionResult> => {
   const guard = await authorize(MenuItemPath.COMPANIES, CRUD.DELETE)
   if (guard) return guard
 
-  await prisma.company.delete({ where: { id }})
-
-  return { success: true }
+  const result = await deleteCompany(id)
+  return result
 }
 
 export {
-  createCompany,
-  updateCompany,
-  deleteCompany,
+  createCompanyAction,
+  updateCompanyAction,
+  deleteCompanyAction,
 }

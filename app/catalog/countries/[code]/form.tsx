@@ -1,7 +1,7 @@
 'use client'
 import { useCallback, useState } from 'react'
 import { PencilIcon } from '@heroicons/react/24/outline'
-import { updateCountry } from '@/app/catalog/countries/actions'
+import { updateCountryAction } from '@/app/catalog/countries/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
@@ -21,7 +21,7 @@ const CountryForm = ({ country }: CountryFormProps) => {
 
   const submitConfirmed = useCallback(async (): Promise<void> => {
     hideDialog()
-    const result = await updateCountry({ code: country.code, name })
+    const result = await updateCountryAction({ code: country.code, name })
     if (result.success) {
       showOk('Country updated', 'Country has been updated successfully')
     } else {

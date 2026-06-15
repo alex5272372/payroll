@@ -1,11 +1,11 @@
 'use server'
-import prisma from '@/lib/prisma'
 import { ActionResult } from '@/types'
 import { CRUD } from '@/types/enums/roleMatrix'
 import { MenuItemPath } from '@/types/enums/layout'
 import { authorize, mapErrorTree } from '@/lib'
 import { DepartmentRequest } from '@/types/models/departmentModels'
 import { z } from 'zod'
+import { createDepartment, deleteDepartment, updateDepartment } from '@/app/catalog/departments/manager'
 
 const departmentSchema = z.object({
   name: z.string().min(1).max(120),
@@ -13,7 +13,7 @@ const departmentSchema = z.object({
   countryCode: z.string().length(2),
 })
 
-const createDepartment = async (dept: DepartmentRequest): Promise<ActionResult> => {
+const createDepartmentAction = async (dept: DepartmentRequest): Promise<ActionResult> => {
   const guard = await authorize(MenuItemPath.DEPARTMENTS, CRUD.CREATE)
   if (guard) return guard
 
@@ -22,14 +22,11 @@ const createDepartment = async (dept: DepartmentRequest): Promise<ActionResult> 
     return { success: false, errorTree: mapErrorTree(z.treeifyError(validation.error)) }
   }
 
-  await prisma.department.create({
-    data: { name: dept.name, companyId: dept.companyId, countryCode: dept.countryCode },
-  })
-
-  return { success: true }
+  const result = await createDepartment(dept)
+  return result
 }
 
-const updateDepartment = async (id: number, dept: DepartmentRequest): Promise<ActionResult> => {
+const updateDepartmentAction = async (id: number, dept: DepartmentRequest): Promise<ActionResult> => {
   const guard = await authorize(MenuItemPath.DEPARTMENTS, CRUD.UPDATE)
   if (guard) return guard
 
@@ -38,25 +35,20 @@ const updateDepartment = async (id: number, dept: DepartmentRequest): Promise<Ac
     return { success: false, errorTree: mapErrorTree(z.treeifyError(validation.error)) }
   }
 
-  await prisma.department.update({
-    where: { id },
-    data: { name: dept.name, companyId: dept.companyId, countryCode: dept.countryCode },
-  })
-
-  return { success: true }
+  const result = await updateDepartment(id, dept)
+  return result
 }
 
-const deleteDepartment = async (id: number): Promise<ActionResult> => {
+const deleteDepartmentAction = async (id: number): Promise<ActionResult> => {
   const guard = await authorize(MenuItemPath.DEPARTMENTS, CRUD.DELETE)
   if (guard) return guard
 
-  await prisma.department.delete({ where: { id }})
-
-  return { success: true }
+  const result = await deleteDepartment(id)
+  return result
 }
 
 export {
-  createDepartment,
-  updateDepartment,
-  deleteDepartment,
+  createDepartmentAction,
+  updateDepartmentAction,
+  deleteDepartmentAction,
 }

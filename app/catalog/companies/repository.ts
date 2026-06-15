@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma'
-import { CompanyResponse } from '@/types/models/companyModels'
+import { ActionResult } from '@/types'
+import { CompanyRequest, CompanyResponse } from '@/types/models/companyModels'
 
 const getAllCompaniesDb = async (): Promise<CompanyResponse[]> => {
   const companies = await prisma.company.findMany()
@@ -11,7 +12,25 @@ const getCompanyByIdDb = async (id: number): Promise<CompanyResponse | null> => 
   return company ? { id: company.id, name: company.name, countryCode: company.countryCode } : null
 }
 
+const createCompanyDb = async (company: CompanyRequest): Promise<ActionResult> => {
+  await prisma.company.create({ data: { name: company.name, countryCode: company.countryCode }})
+  return { success: true }
+}
+
+const updateCompanyDb = async (id: number, company: CompanyRequest): Promise<ActionResult> => {
+  await prisma.company.update({ where: { id }, data: { name: company.name, countryCode: company.countryCode }})
+  return { success: true }
+}
+
+const deleteCompanyDb = async (id: number): Promise<ActionResult> => {
+  await prisma.company.delete({ where: { id }})
+  return { success: true }
+}
+
 export {
   getAllCompaniesDb,
   getCompanyByIdDb,
+  createCompanyDb,
+  updateCompanyDb,
+  deleteCompanyDb,
 }

@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { PlusIcon } from '@heroicons/react/24/outline'
-import { createCountry } from '@/app/catalog/countries/actions'
+import { createCountryAction } from '@/app/catalog/countries/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
@@ -16,7 +16,7 @@ const CountryCreateForm = () => {
   const { showOk, showError } = useLayout()
 
   const handleSubmit = async () => {
-    const result = await createCountry({ code, name })
+    const result = await createCountryAction({ code, name })
     if (result.success) {
       showOk('Create country', `Country ${code} has been created successfully`)
     } else {

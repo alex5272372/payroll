@@ -1,103 +1,117 @@
-# Payroll Platform – Copilot Instructions
-## Project Overview
-Multi-tenant payroll web application built with Next.js 16 App Router, React 19, TypeScript, Prisma 7, PostgreSQL, NextAuth v5, Tailwind CSS 4, Zod 4, and npm.
+# Payroll Platform - Copilot Instructions
 
-This project also migrates selected functionality from 1C:Enterprise to a modern web application.
- 
-## Core Rules
-- Preserve business behavior from 1C, not its UI.
-- Prefer explicit domain modeling over generic CRUD.
-- Protect payroll, period-close, and audit-sensitive logic from simplification.
-- Use existing project conventions before introducing new patterns.
-- If source behavior is unclear, state assumptions instead of inventing rules.
+## Scope
+These instructions govern code generation and code review for this repository.
 
-## Architecture: Manager-Only Pattern
+## Stack Snapshot (2026-06)
+- Next.js 16 App Router
+- React 19
+- TypeScript
+- Prisma 7 + PostgreSQL
+- NextAuth v5
+- Tailwind CSS 4
+- Zod 4
+- npm
 
-Colocated structure (no repository layer):
-- **`app/segment/object/`** — domain colocated with routes
-  - `manager.ts` — business logic, caching, Prisma queries (called by Server Components and actions)
-  - `actions.ts` — mutations with auth/authorization (RPC boundary, `'use server'`)
-  - `(group)/`, etc. — route groups for different views (no URL impact)
-  - `create/`, `[id]/`, etc. — nested forms or workflows
-- **`app/`** — pages, layouts, Server Components (call managers directly, no auth)
-- **`components/`** — reusable UI
-- **`lib/`** — shared helpers and singletons
-- **`types/`** — shared types and enums (global + payroll-specific in domain/)
-- **`data/roleMatrix.ts`** — permission matrix
-- **`prisma/schema.prisma`** — source of truth for data model
-- **`docs/`** — business rules, 1C mapping, architecture decisions
+The product is a multi-tenant payroll platform and includes migration of selected logic from 1C:Enterprise.
 
-**Data Flow:**
-- Server Component → calls `manager.ts` (direct) → Prisma
-- Client Component → calls `actions.ts` (RPC) → calls `manager.ts` → Prisma
-- `actions.ts` owns auth/authorization; `manager.ts` owns caching + domain logic
+## Non-Negotiables
+- Preserve business behavior from 1C, not 1C UI forms.
+- Prioritize payroll correctness, period integrity, and auditability over convenience.
+- Do not simplify lifecycle-driven workflows into generic CRUD.
+- Do not invent unclear business rules; state assumptions explicitly.
+- Keep changes small, composable, and traceable to domain intent.
 
-## Server Actions (mutations layer)
-Every `actions.ts` file must:
-1. Start with `'use server'` (RPC boundary)
-2. Authenticate with `auth()`
-3. Authorize with `authorize(...)` or `roleMatrix`
-4. Validate input with Zod
-5. Map validation errors with `MapErrorTree`
-6. Call manager methods, NOT Prisma directly
-7. Return `ActionResult<T>`
-
-Example: `app/catalog/companies/actions.ts` → calls `manager.ts` → Prisma
-
-## Permissions
-- Always enforce permissions server-side.
-- Never hardcode roles or CRUD strings.
-- Use enums and `authorize(...)`.
-
-## Validation and Types
-- Validate all external input with Zod.
-- Return `ActionResult<T>` from all server actions.
-- Use types and enums from `types/`; avoid `any` and raw strings.
-
-## Database
-- Use the Prisma singleton from `@/lib/prisma`.
-- Never instantiate `PrismaClient` directly.
-- Use transactions for multi-step mutations.
-- Preserve tenant isolation in every query.
-- Avoid destructive updates for finalized payroll data.
-
-## 1C Migration Rules
-- Catalogs → reference/master entities
-- Documents → transactional aggregates
-- Registers → explicit history, balances, or movement models
-- Do not copy 1C forms literally into React
-- Preserve status flows, recalculations, and period-sensitive behavior
-- Keep source-to-target traceability when practical
-
-## UI Rules
-- Prefer Server Components by default (call `manager.ts` directly).
-- Use Client Components only when needed (call `actions.ts` via form action or `useTransition`).
-- Keep business rules out of UI; move to `manager.ts`.
-- Prefer server actions for mutations; use `manager.ts` for reads in Server Components.
-- Use route groups `(group)` to organize views without URL structure impact.
-
-## Review Priorities
-Flag these issues aggressively:
-- cross-tenant data leaks
-- missing authorization
-- missing Zod validation
-- raw string roles/permissions
-- direct `PrismaClient` usage
-- silent business-rule changes
-- destructive changes to closed/finalized payroll periods
-
-## Knowledge Sources
-Prefer repo knowledge in this order:
+## Source of Truth Order
+Use repository knowledge in this order:
 1. `docs/`
 2. `README.md`
-3. existing code patterns
+3. Existing implementation patterns
 
-## Skills
-- **1C:Enterprise Migration:** `.github/skills/1c-migration/SKILL.md` — Comprehensive guide for mapping 1C:Enterprise concepts (catalogs, documents, registers, periods) to Next.js/Prisma patterns. Reference when migrating payroll workflows, designing state machines, or establishing historical data models.
+## Architecture Contract (Three-Layer Pattern)
+Colocation under `app/segment/object/`:
+- `repository.ts`: Prisma queries, data transformation, no business logic
+- `manager.ts`: domain logic, caching with `'use cache'` + `cacheLife()`, calls repository methods
+- `actions.ts`: mutation RPC boundary (`'use server'`), authn/authz, input validation, calls manager methods
+- route groups and nested routes for UX workflows only
 
-## Output Expectations
-For non-trivial changes:
-- explain intent briefly
-- name affected entities
-- state key assumptions
-- keep changes small and composable
+Data flow contract:
+- Server Components call `manager.ts` directly for reads (cached).
+- Client Components call `actions.ts` for writes.
+- `actions.ts` calls `manager.ts`, which calls `repository.ts`.
+- `repository.ts` is the only layer with direct Prisma access.
+- Never call `repository.ts` or Prisma directly from `actions.ts` or Server Components.
+
+## Mandatory Rules for `actions.ts`
+Every server action must:
+1. Start with `'use server'`
+2. Authenticate via `auth()`
+3. Authorize via `authorize(...)` or `roleMatrix`
+4. Validate all external input with Zod
+5. Map validation failures via `MapErrorTree`
+6. Call manager methods only (no direct repository or Prisma access)
+7. Return `ActionResult<T>`
+
+## Mandatory Rules for `manager.ts`
+Every manager function must:
+1. Call `repository.ts` methods for Prisma access (never direct Prisma calls).
+2. Use `'use cache'` + `cacheLife('minutes')` for read operations.
+3. Contain business logic and domain transformations.
+4. Be callable from Server Components and `actions.ts`.
+
+## Mandatory Rules for `repository.ts`
+Every repository function must:
+1. Contain only Prisma queries and data transformation.
+2. Accept domain parameters (no framework-specific cache directives).
+3. Return transformed/mapped data, not raw Prisma results.
+4. Never contain business logic or authorization checks.
+5. Be the only layer with direct `PrismaClient` access.
+
+## Data and Tenant Safety
+- All Prisma access must flow through `repository.ts`.
+- Always use the Prisma singleton from `@/lib/prisma` (repository-only).
+- Never instantiate `PrismaClient` directly outside `repository.ts`.
+- Enforce tenant isolation in every repository query and mutation.
+- Use explicit transactions for multi-step mutations in `repository.ts`.
+- Avoid destructive updates for finalized or closed payroll periods.
+- Use `'use cache'` in `manager.ts` for read performance, not in `repository.ts`.
+
+## Domain Modeling and 1C Migration
+- Catalogs -> reference/master entities.
+- Documents -> transactional aggregates and status flows.
+- Registers -> explicit history/balance/movement models.
+- Preserve recalculation and period boundary behavior.
+- Maintain source-to-target traceability when practical.
+
+## UI and Routing
+- Prefer Server Components unless interactivity requires a Client Component.
+- Keep business rules out of UI; place them in `manager.ts`.
+- Use route groups to structure views without changing URL semantics.
+
+## Review Priorities (Blockers)
+Treat the following as high-severity defects:
+- Cross-tenant data leakage
+- Missing authorization in `actions.ts`
+- Missing Zod validation for external inputs
+- Hardcoded role or permission strings
+- Direct Prisma access outside `repository.ts`
+- Calling `repository.ts` or Prisma from `actions.ts` (must call `manager.ts`)
+- Calling `repository.ts` or Prisma directly from Server Components (must call `manager.ts`)
+- Missing business logic in `manager.ts` or `repository.ts`
+- Silent changes to payroll invariants
+- Mutations affecting closed/finalized periods without explicit rules
+
+## Working Expectations for Non-Trivial Changes
+When generating substantial updates:
+- Briefly state intent
+- List affected entities/modules
+- Call out assumptions and invariants
+- Note side effects and migration impact
+- Keep diffs focused and reviewable
+
+## Related Local Instruction Files
+- `.github/instructions/next.instructions.md` (Next.js patterns)
+- `.github/instructions/payroll-domain.instructions.md` (domain rules for `manager.ts`)
+- `.github/instructions/prisma.instructions.md` (Prisma rules for `repository.ts`)
+
+Apply relevant rule files based on edited path patterns.

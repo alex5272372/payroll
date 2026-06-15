@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { PlusIcon } from '@heroicons/react/24/outline'
-import { createPerson } from '@/app/catalog/people/actions'
+import { createPersonAction } from '@/app/catalog/people/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
@@ -27,7 +27,7 @@ const PersonCreateForm = () => {
   const { showOk, showError } = useLayout()
 
   const handleSubmit = async () => {
-    const result = await createPerson({
+    const result = await createPersonAction({
       firstName,
       lastName,
       middleName: middleName || null,

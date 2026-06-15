@@ -1,6 +1,13 @@
 import { cacheLife } from 'next/cache'
-import { DepartmentResponse } from '@/types/models/departmentModels'
-import { getAllDepartmentsDb, getDepartmentByIdDb } from '@/app/catalog/departments/repository'
+import { DepartmentRequest, DepartmentResponse } from '@/types/models/departmentModels'
+import {
+  createDepartmentDb,
+  deleteDepartmentDb,
+  getAllDepartmentsDb,
+  getDepartmentByIdDb,
+  updateDepartmentDb
+} from '@/app/catalog/departments/repository'
+import { ActionResult } from '@/types'
 
 const getAllDepartments = async (): Promise<DepartmentResponse[]> => {
   'use cache'
@@ -18,7 +25,25 @@ const getDepartmentById = async (id: number): Promise<DepartmentResponse | null>
   return department
 }
 
+const createDepartment = async (dept: DepartmentRequest): Promise<ActionResult> => {
+  const result = await createDepartmentDb(dept)
+  return result
+}
+
+const updateDepartment = async (id: number, dept: DepartmentRequest): Promise<ActionResult> => {
+  const result = await updateDepartmentDb(id, dept)
+  return result
+}
+
+const deleteDepartment = async (id: number): Promise<ActionResult> => {
+  const result = await deleteDepartmentDb(id)
+  return result
+}
+
 export {
   getAllDepartments,
   getDepartmentById,
+  createDepartment,
+  updateDepartment,
+  deleteDepartment,
 }

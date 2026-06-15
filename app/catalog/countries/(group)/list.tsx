@@ -1,7 +1,7 @@
 'use client'
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { deleteCountry } from '@/app/catalog/countries/actions'
+import { deleteCountryAction } from '@/app/catalog/countries/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import DataTable from '@/components/dataDisplay/DataTable'
@@ -30,7 +30,7 @@ const CountriesList = ({ countries }: { countries: CountryResponse[] }) => {
   const deleteConfirmed = useCallback(async (codes: string[]): Promise<void> => {
     hideDialog()
     for (const code of codes) {
-      const result = await deleteCountry(code)
+      const result = await deleteCountryAction(code)
       if (!result.success) {
         showError(result.errorTree)
         return

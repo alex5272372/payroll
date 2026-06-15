@@ -1,6 +1,13 @@
 import { cacheLife } from 'next/cache'
-import { EmployeeResponse } from '@/types/models/employeeModels'
-import { getAllEmployeesDb, getEmployeeByIdDb } from '@/app/catalog/employees/repository'
+import { EmployeeRequest, EmployeeResponse } from '@/types/models/employeeModels'
+import {
+  createEmployeeDb,
+  deleteEmployeeDb,
+  getAllEmployeesDb,
+  getEmployeeByIdDb,
+  updateEmployeeDb
+} from '@/app/catalog/employees/repository'
+import { ActionResult } from '@/types'
 
 const getAllEmployees = async (): Promise<EmployeeResponse[]> => {
   'use cache'
@@ -18,7 +25,25 @@ const getEmployeeById = async (id: number): Promise<EmployeeResponse | null> => 
   return employee
 }
 
+const createEmployee = async (emp: EmployeeRequest): Promise<ActionResult> => {
+  const result = await createEmployeeDb(emp)
+  return result
+}
+
+const updateEmployee = async (id: number, emp: EmployeeRequest): Promise<ActionResult> => {
+  const result = await updateEmployeeDb(id, emp)
+  return result
+}
+
+const deleteEmployee = async (id: number): Promise<ActionResult> => {
+  const result = await deleteEmployeeDb(id)
+  return result
+}
+
 export {
   getAllEmployees,
   getEmployeeById,
+  createEmployee,
+  updateEmployee,
+  deleteEmployee,
 }

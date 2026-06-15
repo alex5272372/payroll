@@ -1,12 +1,11 @@
 'use server'
-import prisma from '@/lib/prisma'
 import { ActionResult } from '@/types'
 import { CRUD } from '@/types/enums/roleMatrix'
 import { MenuItemPath } from '@/types/enums/layout'
 import { authorize, mapErrorTree } from '@/lib'
 import { PersonRequest } from '@/types/models/personModels'
-import { Gender } from '@prisma/client'
 import { z } from 'zod'
+import { createPerson, deletePerson, updatePerson } from '@/app/catalog/people/manager'
 
 const personSchema = z.object({
   firstName: z.string().min(1).max(80),
@@ -16,7 +15,7 @@ const personSchema = z.object({
   birthdate: z.string().nullable().optional(),
 })
 
-const createPerson = async (person: PersonRequest): Promise<ActionResult> => {
+const createPersonAction = async (person: PersonRequest): Promise<ActionResult> => {
   const guard = await authorize(MenuItemPath.PEOPLE, CRUD.CREATE)
   if (guard) return guard
 
@@ -25,20 +24,11 @@ const createPerson = async (person: PersonRequest): Promise<ActionResult> => {
     return { success: false, errorTree: mapErrorTree(z.treeifyError(validation.error)) }
   }
 
-  await prisma.person.create({
-    data: {
-      firstName: person.firstName,
-      lastName: person.lastName,
-      middleName: person.middleName || null,
-      gender: (person.gender as Gender) || null,
-      birthdate: person.birthdate ? new Date(person.birthdate) : null,
-    },
-  })
-
-  return { success: true }
+  const result = await createPerson(person)
+  return result
 }
 
-const updatePerson = async (id: number, person: PersonRequest): Promise<ActionResult> => {
+const updatePersonAction = async (id: number, person: PersonRequest): Promise<ActionResult> => {
   const guard = await authorize(MenuItemPath.PEOPLE, CRUD.UPDATE)
   if (guard) return guard
 
@@ -47,31 +37,20 @@ const updatePerson = async (id: number, person: PersonRequest): Promise<ActionRe
     return { success: false, errorTree: mapErrorTree(z.treeifyError(validation.error)) }
   }
 
-  await prisma.person.update({
-    where: { id },
-    data: {
-      firstName: person.firstName,
-      lastName: person.lastName,
-      middleName: person.middleName || null,
-      gender: (person.gender as Gender) || null,
-      birthdate: person.birthdate ? new Date(person.birthdate) : null,
-    },
-  })
-
-  return { success: true }
+  const result = await updatePerson(id, person)
+  return result
 }
 
-const deletePerson = async (id: number): Promise<ActionResult> => {
+const deletePersonAction = async (id: number): Promise<ActionResult> => {
   const guard = await authorize(MenuItemPath.PEOPLE, CRUD.DELETE)
   if (guard) return guard
 
-  await prisma.person.delete({ where: { id }})
-
-  return { success: true }
+  const result = await deletePerson(id)
+  return result
 }
 
 export {
-  createPerson,
-  updatePerson,
-  deletePerson,
+  createPersonAction,
+  updatePersonAction,
+  deletePersonAction,
 }

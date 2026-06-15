@@ -1,6 +1,13 @@
 import { cacheLife } from 'next/cache'
-import { CompanyResponse } from '@/types/models/companyModels'
-import { getAllCompaniesDb, getCompanyByIdDb } from '@/app/catalog/companies/repository'
+import { CompanyRequest, CompanyResponse } from '@/types/models/companyModels'
+import {
+  createCompanyDb,
+  deleteCompanyDb,
+  getAllCompaniesDb,
+  getCompanyByIdDb,
+  updateCompanyDb
+} from '@/app/catalog/companies/repository'
+import { ActionResult } from '@/types'
 
 const getAllCompanies = async (): Promise<CompanyResponse[]> => {
   'use cache'
@@ -18,7 +25,25 @@ const getCompanyById = async (id: number): Promise<CompanyResponse | null> => {
   return company
 }
 
+const createCompany = async (company: CompanyRequest): Promise<ActionResult> => {
+  const result = await createCompanyDb(company)
+  return result
+}
+
+const updateCompany = async (id: number, company: CompanyRequest): Promise<ActionResult> => {
+  const result = await updateCompanyDb(id, company)
+  return result
+}
+
+const deleteCompany = async (id: number): Promise<ActionResult> => {
+  const result = await deleteCompanyDb(id)
+  return result
+}
+
 export {
   getAllCompanies,
   getCompanyById,
+  createCompany,
+  updateCompany,
+  deleteCompany,
 }

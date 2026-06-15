@@ -1,7 +1,7 @@
 'use client'
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { deleteEmployee } from '@/app/catalog/employees/actions'
+import { deleteEmployeeAction } from '@/app/catalog/employees/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import DataTable from '@/components/dataDisplay/DataTable'
@@ -29,7 +29,7 @@ const EmployeesList = ({ employees }: { employees: EmployeeResponse[] }) => {
   const deleteConfirmed = useCallback(async (ids: string[]): Promise<void> => {
     hideDialog()
     for (const id of ids) {
-      const result = await deleteEmployee(Number(id))
+      const result = await deleteEmployeeAction(Number(id))
       if (!result.success) {
         showError(result.errorTree)
         return

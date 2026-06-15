@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { PlusIcon } from '@heroicons/react/24/outline'
-import { createCompany } from '@/app/catalog/companies/actions'
+import { createCompanyAction } from '@/app/catalog/companies/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
@@ -24,7 +24,7 @@ const CompanyCreateForm = ({ countries }: CompanyCreateFormProps) => {
   const countryOptions = countries.map(c => ({ value: c.code, label: `${c.code} – ${c.name}` }))
 
   const handleSubmit = async () => {
-    const result = await createCompany({ name, countryCode })
+    const result = await createCompanyAction({ name, countryCode })
     if (result.success) {
       showOk('Create company', `Company "${name}" has been created successfully`)
     } else {

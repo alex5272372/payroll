@@ -1,7 +1,7 @@
 'use client'
 import { useCallback, useState } from 'react'
 import { PencilIcon } from '@heroicons/react/24/outline'
-import { updateCompany } from '@/app/catalog/companies/actions'
+import { updateCompanyAction } from '@/app/catalog/companies/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
@@ -27,7 +27,7 @@ const CompanyForm = ({ company, countries }: CompanyFormProps) => {
 
   const submitConfirmed = useCallback(async (): Promise<void> => {
     hideDialog()
-    const result = await updateCompany(company.id, { name, countryCode })
+    const result = await updateCompanyAction(company.id, { name, countryCode })
     if (result.success) {
       showOk('Company updated', 'Company has been updated successfully')
     } else {

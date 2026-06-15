@@ -1,7 +1,7 @@
 'use client'
 import { useCallback, useState } from 'react'
 import { PencilIcon } from '@heroicons/react/24/outline'
-import { updatePerson } from '@/app/catalog/people/actions'
+import { updatePersonAction } from '@/app/catalog/people/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
@@ -35,7 +35,7 @@ const PersonForm = ({ person }: PersonFormProps) => {
 
   const submitConfirmed = useCallback(async (): Promise<void> => {
     hideDialog()
-    const result = await updatePerson(person.id, {
+    const result = await updatePersonAction(person.id, {
       firstName,
       lastName,
       middleName: middleName || null,

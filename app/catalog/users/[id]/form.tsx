@@ -1,7 +1,7 @@
 'use client'
 import { useCallback, useState } from 'react'
 import { PencilIcon } from '@heroicons/react/24/outline'
-import { updateUserAdmin } from '@/app/catalog/users/actions'
+import { updateUserAction } from '@/app/catalog/users/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import TextField from '@/components/inputs/TextField'
@@ -27,7 +27,7 @@ const UserForm = ({ user, people }: UserFormProps) => {
 
   const submitConfirmed = useCallback(async (): Promise<void> => {
     hideDialog()
-    const result = await updateUserAdmin(user.id, { email, personId: Number(personId) })
+    const result = await updateUserAction(user.id, { email, personId: Number(personId) })
     if (result.success) {
       showOk('User updated', 'User has been updated successfully')
     } else {

@@ -1,6 +1,13 @@
 import { cacheLife } from 'next/cache'
-import { CountryResponse } from '@/types/models/countryModels'
-import { getAllCountriesDb, getCountryByCodeDb } from '@/app/catalog/countries/repository'
+import { CountryRequest, CountryResponse } from '@/types/models/countryModels'
+import {
+  createCountryDb,
+  deleteCountryDb,
+  getAllCountriesDb,
+  getCountryByCodeDb,
+  updateCountryDb
+} from '@/app/catalog/countries/repository'
+import { ActionResult } from '@/types'
 
 const getAllCountries = async (): Promise<CountryResponse[]> => {
   'use cache'
@@ -18,7 +25,25 @@ const getCountryByCode = async (code: string): Promise<CountryResponse | null> =
   return country
 }
 
+const createCountry = async (country: CountryRequest): Promise<ActionResult> => {
+  const result = await createCountryDb(country)
+  return result
+}
+
+const updateCountry = async (country: CountryRequest): Promise<ActionResult> => {
+  const result = await updateCountryDb(country)
+  return result
+}
+
+const deleteCountry = async (code: string): Promise<ActionResult> => {
+  const result = await deleteCountryDb(code)
+  return result
+}
+
 export {
   getAllCountries,
   getCountryByCode,
+  createCountry,
+  updateCountry,
+  deleteCountry,
 }

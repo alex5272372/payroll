@@ -1,7 +1,7 @@
 'use client'
 import { useCallback, useState } from 'react'
 import { PencilIcon } from '@heroicons/react/24/outline'
-import { updateEmployee } from '@/app/catalog/employees/actions'
+import { updateEmployeeAction } from '@/app/catalog/employees/actions'
 import Layout from '@/components/Layout'
 import Toolbar from '@/components/Toolbar'
 import SelectField from '@/components/inputs/SelectField'
@@ -29,7 +29,8 @@ const EmployeeForm = ({ employee, departments, people }: EmployeeFormProps) => {
 
   const submitConfirmed = useCallback(async (): Promise<void> => {
     hideDialog()
-    const result = await updateEmployee(employee.id, { departmentId: Number(departmentId), personId: Number(personId) })
+    const result = await updateEmployeeAction(employee.id,
+      { departmentId: Number(departmentId), personId: Number(personId) })
     if (result.success) {
       showOk('Employee updated', 'Employee has been updated successfully')
     } else {
