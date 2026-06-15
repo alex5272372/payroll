@@ -11,11 +11,12 @@ import { MenuItemPath } from '@/types/enums/layout'
 import { CRUD } from '@/types/enums/roleMatrix'
 import { useLayout } from '@/components/LayoutContext'
 import type { PersonResponse } from '@/types/models/personModels'
+import { Gender } from '@/types/enums'
 
-const genderOptions = [
-  { value: 'MALE', label: 'Male' },
-  { value: 'FEMALE', label: 'Female' },
-  { value: 'OTHER', label: 'Other' },
+const genderOptions: Array<{ value: Gender; label: string }> = [
+  { value: Gender.Male, label: 'Male' },
+  { value: Gender.Female, label: 'Female' },
+  { value: Gender.Other, label: 'Other' },
 ]
 
 interface PersonFormProps {
@@ -26,7 +27,7 @@ const PersonForm = ({ person }: PersonFormProps) => {
   const [firstName, setFirstName] = useState(person.firstName)
   const [lastName, setLastName] = useState(person.lastName)
   const [middleName, setMiddleName] = useState(person.middleName || '')
-  const [gender, setGender] = useState(person.gender || '')
+  const [gender, setGender] = useState<Gender | ''>(person.gender || '')
   const [birthdate, setBirthdate] = useState(
     person.birthdate ? new Date(person.birthdate).toISOString().split('T')[0] : ''
   )
@@ -38,7 +39,7 @@ const PersonForm = ({ person }: PersonFormProps) => {
       firstName,
       lastName,
       middleName: middleName || null,
-      gender: (gender as 'MALE' | 'FEMALE' | 'OTHER') || null,
+      gender: gender || null,
       birthdate: birthdate || null,
     })
     if (result.success) {
@@ -65,7 +66,7 @@ const PersonForm = ({ person }: PersonFormProps) => {
         <TextField name="firstName" label="First name" value={firstName} setValue={setFirstName} />
         <TextField name="lastName" label="Last name" value={lastName} setValue={setLastName} />
         <TextField name="middleName" label="Middle name" value={middleName} setValue={setMiddleName} />
-        <SelectField
+        <SelectField<Gender>
           name="gender"
           label="Gender"
           value={gender}

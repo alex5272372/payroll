@@ -10,3 +10,9 @@ export enum AppError {
   Verification = 'Verification',
   Default = 'Default',
 }
+
+export enum Gender {
+  Male = 'MALE',
+  Female = 'FEMALE',
+  Other = 'OTHER',
+}

@@ -1,22 +1,22 @@
-import { Prisma } from '@prisma/client'
+import { Gender, Prisma } from '@prisma/client'
 
 const data: Prisma.PersonUncheckedCreateInput[] = [
   {
     firstName: 'Guillermo',
     lastName: 'Rauch',
-    gender: 'MALE',
+    gender: Gender.MALE,
     birthdate: new Date('2001-01-01')
   },
   {
     firstName: 'Lee',
     lastName: 'Robinson',
-    gender: 'MALE',
+    gender: Gender.MALE,
     birthdate: new Date('2002-01-01')
   },
   {
     firstName: 'Steven',
     lastName: 'Tey',
-    gender: 'MALE',
+    gender: Gender.MALE,
     birthdate: new Date('2003-01-01')
   }
 ]

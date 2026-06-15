@@ -1,4 +1,4 @@
-import type { Role } from '@prisma/client'
+import type { UserRole } from '@/types/roleMatrix'
 
 export interface UserResponse {
   id: number;
@@ -7,7 +7,7 @@ export interface UserResponse {
   emailVerified: Date | null;
   firstName: string;
   lastName: string;
-  roles: Role[];
+  roles: UserRole[];
 }
 
 export interface UserCreateRequest {

@@ -1,4 +1,4 @@
-import type { Gender } from '@prisma/client'
+import type { Gender } from '@/types/enums'
 
 export interface PersonRequest {
   firstName: string;

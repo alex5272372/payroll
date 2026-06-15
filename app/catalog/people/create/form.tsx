@@ -10,18 +10,19 @@ import { ButtonGroupState } from '@/types'
 import { MenuItemPath } from '@/types/enums/layout'
 import { CRUD } from '@/types/enums/roleMatrix'
 import { useLayout } from '@/components/LayoutContext'
+import { Gender } from '@/types/enums'
 
 const genderOptions = [
-  { value: 'MALE', label: 'Male' },
-  { value: 'FEMALE', label: 'Female' },
-  { value: 'OTHER', label: 'Other' },
+  { value: Gender.Male, label: 'Male' },
+  { value: Gender.Female, label: 'Female' },
+  { value: Gender.Other, label: 'Other' },
 ]
 
 const PersonCreateForm = () => {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [middleName, setMiddleName] = useState('')
-  const [gender, setGender] = useState('')
+  const [gender, setGender] = useState<Gender | ''>('')
   const [birthdate, setBirthdate] = useState('')
   const { showOk, showError } = useLayout()
 
@@ -30,7 +31,7 @@ const PersonCreateForm = () => {
       firstName,
       lastName,
       middleName: middleName || null,
-      gender: (gender as 'MALE' | 'FEMALE' | 'OTHER') || null,
+      gender: gender || null,
       birthdate: birthdate || null,
     })
     if (result.success) {
@@ -53,7 +54,7 @@ const PersonCreateForm = () => {
         <TextField name="firstName" label="First name" value={firstName} setValue={setFirstName} />
         <TextField name="lastName" label="Last name" value={lastName} setValue={setLastName} />
         <TextField name="middleName" label="Middle name" value={middleName} setValue={setMiddleName} />
-        <SelectField
+        <SelectField<Gender>
           name="gender"
           label="Gender"
           value={gender}

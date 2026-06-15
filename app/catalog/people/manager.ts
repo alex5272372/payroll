@@ -1,6 +1,7 @@
 import { cacheLife } from 'next/cache'
 import prisma from '@/lib/prisma'
 import { PersonResponse } from '@/types/models/personModels'
+import { Gender } from '@/types/enums'
 
 const getAllPeople = async (): Promise<PersonResponse[]> => {
   'use cache'
@@ -12,7 +13,7 @@ const getAllPeople = async (): Promise<PersonResponse[]> => {
     firstName: p.firstName,
     lastName: p.lastName,
     middleName: p.middleName,
-    gender: p.gender,
+    gender: p.gender as Gender,
     birthdate: p.birthdate,
   }))
 }
@@ -27,7 +28,7 @@ const getPersonById = async (id: number): Promise<PersonResponse | null> => {
     firstName: p.firstName,
     lastName: p.lastName,
     middleName: p.middleName,
-    gender: p.gender,
+    gender: p.gender as Gender,
     birthdate: p.birthdate,
   } : null
 }
