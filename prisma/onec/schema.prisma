@@ -1,6 +1,6 @@
 generator onecClient {
   provider = "prisma-client-js"
-  output   = "../node_modules/@prisma/onec-client"
+  output   = "../../node_modules/@prisma/onec-client"
 }
 
 datasource onecDb {

@@ -232,9 +232,7 @@ payroll/
 │   ├── authSendRequest.ts  # Email transport
 │   └── index.ts        # Helper exports
 ├── prisma/
-│   ├── schema.prisma   # Database schema
-│   ├── seed.ts         # Database seeding
-│   ├── migrations/     # Migration history
+│   ├── default/        # Default schema, seed, and migrations
 │   └── onec/           # 1C:Enterprise mapping schema
 ├── types/              # TypeScript types and enums
 │   ├── index.d.ts

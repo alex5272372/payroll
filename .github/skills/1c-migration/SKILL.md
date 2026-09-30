@@ -574,6 +574,6 @@ export async function canDeleteCatalogItem(
 
 - **Docs:** `docs/1c-mapping/`, `docs/business-rules/`
 - **Examples:** `docs/examples/document-mapping-example.md`
-- **Schema:** `prisma/schema.prisma`
+- **Schema:** `prisma/default/schema.prisma`
 - **Server Actions:** `actions/` directory
 - **Authorization:** `data/roleMatrix.ts`

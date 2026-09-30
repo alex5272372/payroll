@@ -73,7 +73,7 @@ Add to this skill when:
 
 ## Related Resources
 
-- **Schema:** [prisma/schema.prisma](../../prisma/schema.prisma)
+- **Schema:** [prisma/default/schema.prisma](../../prisma/default/schema.prisma)
 - **Docs:** [docs/1c-mapping/](../../docs/1c-mapping/) and [docs/business-rules/](../../docs/business-rules/)
 - **Examples:** [docs/examples/document-mapping-example.md](../../docs/examples/document-mapping-example.md)
 - **Role Matrix:** [data/roleMatrix.ts](../../data/roleMatrix.ts)
