@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import { defineConfig, env } from 'prisma/config'
 
-export default defineConfig({
+const config = defineConfig({
   schema: 'prisma/default/schema.prisma',
   migrations: {
     path: 'prisma/default/migrations',
@@ -11,3 +11,5 @@ export default defineConfig({
     url: env('DATABASE_URL'),
   },
 })
+
+export default config

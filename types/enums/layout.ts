@@ -14,6 +14,7 @@ export enum MenuItemPath {
   CATALOG = '/catalog',
   DOCUMENT = '/document',
   REPORT = '/report',
+  ONEC = '/onec',
   USER_PROFILE = '/user/profile',
   SIGN_OUT = '/user/sign-out',
   SIGN_IN = '/user/sign-in',

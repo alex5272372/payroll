@@ -12,6 +12,7 @@ import {
   ChartBarIcon,
   DocumentIcon,
   DocumentTextIcon,
+  FolderOpenIcon,
   HomeModernIcon,
   GlobeEuropeAfricaIcon,
   IdentificationIcon,
@@ -153,6 +154,13 @@ export const NAVIGATION: NavMenuItem[] = [
     section: MenuSection.MAIN,
     name: 'Reports',
     icon: ChartBarIcon,
+  },
+  {
+    type: MenuItemType.PATH,
+    path: MenuItemPath.ONEC,
+    section: MenuSection.MAIN,
+    name: '1C Configuration',
+    icon: FolderOpenIcon,
   },
   {
     type: MenuItemType.PATH,

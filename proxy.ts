@@ -57,6 +57,7 @@ export const config = {
     '/catalog/:path*',
     '/document/:path*',
     '/report/:path*',
+    '/onec/:path*',
     '/user/profile',
   ],
 }

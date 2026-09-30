@@ -88,6 +88,10 @@ Every repository function must:
 - Keep business rules out of UI; place them in `manager.ts`.
 - Use route groups to structure views without changing URL semantics.
 
+## Function and Export Style
+- Write new or modified functions as arrow-function variables instead of function declarations or expressions.
+- Declare the value first, then export it; never use an inline `export default` declaration or expression.
+
 ## Review Priorities (Blockers)
 Treat the following as high-severity defects:
 - Cross-tenant data leakage

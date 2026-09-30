@@ -42,6 +42,12 @@ export const ROLE_MATRIX: RoleMatrix = {
     [UserRole.USER]: readOnly(true),
     [UserRole.UNAUTHORIZED]: readOnly(false),
   },
+  [MenuItemPath.ONEC]: {
+    [UserRole.ADMINISTRATOR]: readOnly(true),
+    [UserRole.MODERATOR]: readOnly(true),
+    [UserRole.USER]: readOnly(false),
+    [UserRole.UNAUTHORIZED]: readOnly(false),
+  },
   [MenuItemPath.USER_PROFILE]: {
     [UserRole.ADMINISTRATOR]: allPerms(true),
     [UserRole.MODERATOR]: allPerms(true),
